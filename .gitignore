@@ -1,0 +1,22 @@
+##############################
+## Java
+##############################
+*.class
+out/
+bin/
+target/
+
+##############################
+## IDE
+##############################
+
+.idea/
+.idea_modules/
+.settings/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.metadata
+.classpath
+.project
