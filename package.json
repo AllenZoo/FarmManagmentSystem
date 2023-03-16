@@ -1,0 +1,13 @@
+{
+  "name": "project_e4i4a_j8c9p_u6y8q",
+  "version": "1.0.0",
+  "description": "This project is a farm management system that keeps track of many farming utilities and  processes such as facilities, fields, animals, crops, farmers, products, and buyers, with the  intention of helping farm owners manage their farms more efficiently and effectively.",
+  "scripts": {
+    "client": "cd frontend && npm start",
+    "server": "cd backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.students.cs.ubc.ca/CPSC304-2022W-T2/project_e4i4a_j8c9p_u6y8q.git"
+  }
+}

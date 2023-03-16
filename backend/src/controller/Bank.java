@@ -1,11 +1,11 @@
-package ca.ubc.cs304.controller;
+package controller;
 
-import ca.ubc.cs304.database.DatabaseConnectionHandler;
-import ca.ubc.cs304.delegates.LoginWindowDelegate;
-import ca.ubc.cs304.delegates.TerminalTransactionsDelegate;
-import ca.ubc.cs304.model.BranchModel;
-import ca.ubc.cs304.ui.LoginWindow;
-import ca.ubc.cs304.ui.TerminalTransactions;
+import database.DatabaseConnectionHandler;
+import delegates.LoginWindowDelegate;
+import delegates.TerminalTransactionsDelegate;
+import model.BranchModel;
+import ui.LoginWindow; // replace
+import ui.TerminalTransactions; // replace
 
 /**
  * This is the main controller class that will orchestrate everything.

@@ -1,6 +1,6 @@
-package ca.ubc.cs304.delegates;
+package delegates;
 
-import ca.ubc.cs304.model.BranchModel;
+import model.BranchModel;
 
 /**
  * This interface uses the delegation design pattern where instead of having

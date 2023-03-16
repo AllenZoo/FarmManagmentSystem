@@ -1,4 +1,4 @@
-package ca.ubc.cs304.delegates;
+package delegates;
 
 /**
  * This interface uses the delegation design pattern where instead of having

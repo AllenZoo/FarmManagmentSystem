@@ -1,4 +1,4 @@
-package ca.ubc.cs304.database;
+package database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import ca.ubc.cs304.model.BranchModel;
-import ca.ubc.cs304.util.PrintablePreparedStatement;
+import model.BranchModel;
+import util.PrintablePreparedStatement;
 
 /**
  * This class handles all database related transactions
