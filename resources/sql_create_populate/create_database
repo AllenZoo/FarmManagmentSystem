@@ -1,0 +1,51 @@
+*/ Entities
+CREATE TABLE Pen (
+    facilityID INTEGER PRIMARY KEY,
+    age INTEGER,
+    maxCapacity INTEGER NOT NULL,
+    upkeep INTEGER,
+    typeOfAnimals VARCHAR(10) CHECK ( typeOfAnimals IN ('chicken', 'sheep', 'cow', 'pig') )
+);
+
+CREATE TABLE Housing (
+                         facilityID INTEGER PRIMARY KEY,
+                         name VARCHAR(30),
+                         age INTEGER,
+                         maxCapacity INTEGER,
+                         upkeep INTEGER NOT NULL,
+                         rent INTEGER,
+                         distanceToFields INTEGER,
+                         distanceFromPens INTEGER
+);
+
+CREATE TABLE Farmers_1 (
+                           yearsOfEmployment INTEGER PRIMARY KEY,
+                           salary INTEGER
+);
+
+CREATE TABLE Farmers_2 (
+                           farmerID  INTEGER PRIMARY KEY,
+                           fullName VARCHAR(50) NOT NULL,
+                           yearsOfEmployment INTEGER,
+                           FOREIGN KEY (yearsOfEmployment) REFERENCES Farmers_1 (yearsOfEmployment)
+);
+
+CREATE TABLE Crops (
+                       cropType VARCHAR(10) CHECK( cropType IN ('canola','wheat','corn', 'potatoes', 'mustard', 'coconut')),
+                       variant VARCHAR(10) CHECK( variant IN ('pollinated', 'hybrids')),
+                       plantStatus VARCHAR(10) CHECK( plantStatus IN ('planted', 'harvested')),
+                       quantity INTEGER,
+                       PRIMARY KEY (cropType, variant)
+);
+
+CREATE TABLE Fields_3 (
+                          suitableCrops  VARCHAR(30) PRIMARY KEY,
+                          pesticidesAndChemicals  INTEGER
+);
+
+CREATE TABLE Fields_1 (
+                          nutrientLevels  REAL PRIMARY KEY,
+                          suitableCrops  VARCHAR(30),
+                          FOREIGN KEY (suitableCrops) REFERENCES Fields_3 (suitableCrops)
+);
+
