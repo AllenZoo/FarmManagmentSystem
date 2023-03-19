@@ -1,4 +1,4 @@
-package ca.ubc.cs304.util;
+package util;
 
 import java.io.InputStream;
 import java.io.Reader;
