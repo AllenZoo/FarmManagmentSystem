@@ -19,17 +19,14 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "typeRoots": [
-      "node_modules/@types",
-      "src/@types",
-    ],
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [ "src/*" ],
-      "@tests/*": [ "tests/*" ],
-    }
   },
+  "typeRoots": [
+    "node_modules/@types",
+    "src/@types",
+  ],
   "include": [
-    "src"
-, "App.test.tsx"  ]
+    "src",
+    "tests"
+  ],
+  "extends": "./tsconfig.paths.json"
 }
