@@ -1,117 +1,61 @@
 import styled from 'styled-components';
-import { GiWheat } from 'react-icons/gi';
+
+import NavBar from '@/components/NavBar';
 
 
+/* -------------------------------------------------------------------------- */
+/*                                   STYLING                                  */
+/* -------------------------------------------------------------------------- */
 const StyledMainPage = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100vw;
   color: #fff;
   text-align: center;
 
-  h1 {
-    font-size: 2.5rem;
-    font-weight: semibold;
-    margin: 1rem 0 0 0;
-    padding: 1rem;
-  }
-
-  h3 {
-    margin: 0 0 1rem 0;
-  }
-`;
-
-const StyledLoginForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  gap: 2rem;
-  margin-top: 2rem;
-
-  div {
+  main {
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    margin-right: 1rem;
+    gap: 0.5rem;
+    min-height: 50vh;
+    margin: 1rem 2rem;
   }
 
-  label {
+  .ControlPanel {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    margin: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
-
-  input {
-    margin: 0.5rem;
-    padding: 0.5rem;
-    width: 25vw;
-    background-color: transparent;
-    border: 2px solid #fff;
+    width: 50%;
     border-radius: 5px;
-    outline: none;
-    color: #fff;
-    font-size: 1.5rem;
-    transition: 0.4s ease;
+    background-color: rgba(255, 255, 255, 0.25);
   }
 
-  input:focus {
-    border: 2px solid #ff0;
-    transition: 0.4s ease;
-  }
-
-  button {
-    padding: 0.5rem;
-    font-size: 1.5rem;
-    width: 10rem;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    background: transparent;
-    outline: 2px solid #fff;
-    font-weight: bold;
-    color: #fff;
-    transition: 0.4s ease;
-  }
-
-  button:hover {
-    outline: 2px solid transparent;
-    background: #fff;
-    color: #000;
-    transition: 0.4s ease;
+  .DisplayPanel {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.25);
   }
 `;
 
-function MainPage() {
+
+/* -------------------------------------------------------------------------- */
+/*                                  COMPONENT                                 */
+/* -------------------------------------------------------------------------- */
+const MainPage = () => {
   return (
     <StyledMainPage>
-      <h1>Totalitarian Farming System&trade; Login</h1>
-      <h3>The best way to control and manage your farm!</h3>
-      <GiWheat size="30rem" color="#ff0" />
+      <NavBar />
 
-      <StyledLoginForm>
-        <div>
-          <label htmlFor="user">Username</label>
-          <input type="text" id="user" name="user" />
+      <main>
+        {/* CONTROL PANEL */}
+        <div className="ControlPanel">
+          <h2>Control Panel</h2>
         </div>
 
-        <div>
-          <label htmlFor="pass">Password</label>
-          <input type="password" id="pass" name="pass" />
-        </div>
+        {/* DISPLAY PANEL */}
+        <div className="DisplayPanel">
+          <h2>Display Panel</h2>
 
-        <button type="submit">Login</button>
-      </StyledLoginForm>
+        </div>
+      </main>
     </StyledMainPage>
   );
 }

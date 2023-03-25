@@ -6,50 +6,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.NavBar {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  height: 8vh;
-  /* outline: 1px solid rgba(0, 0, 0, 0.1); */
-  background: linear-gradient(0, rgb(99, 209, 237) 0%, rgb(255, 255, 255) 100%);
-  padding: 0 1rem;
-  z-index: 100;
-}
-
-.NavBar svg {
-  width: 2rem;
-  height: 2rem;
-}
-
-main {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  height: calc(92vh - 2rem);
-  background: linear-gradient(180deg, rgb(99, 209, 237) 0%, rgb(99, 209, 237) 80%, rgb(253, 255, 121) 100%);
-  padding: 1rem;
-}
-
-.ControlPanel {
-  display: flex;
-  justify-content: center;
-  width: 50%;
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.75);
-}
-
-.DisplayPanel {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.75);
 }
