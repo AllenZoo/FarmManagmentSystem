@@ -1,25 +1,36 @@
-import { GiFarmTractor, GiFarmer, GiWheat } from 'react-icons/gi';
+import styled from "styled-components";
+
+import MainPage from "./pages/MainPage";
+
+import BackgroundImg from "./assets/background.png";
+
+
+const Background = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: #579E9A;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
+  }
+`;
 
 function App() {
   return (
     <div className="App">
-      <nav className="NavBar">
-        <GiFarmTractor />
-        <h1>The Bestest Farm Management System&#8482;</h1>
-      </nav>
-
-      <main>
-        {/* CONTROL PANEL */}
-        <div className="ControlPanel">
-          <h2><GiFarmer /> Control Panel</h2>
-        </div>
-
-        {/* DISPLAY PANEL */}
-        <div className="DisplayPanel">
-          <h2><GiWheat /> Display Panel</h2>
-
-        </div>
-      </main>
+      <Background>
+        <img src={BackgroundImg} alt="" />
+      </Background>
+      
+      <MainPage />
     </div>
   );
 }
