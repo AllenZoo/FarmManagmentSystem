@@ -24,9 +24,5 @@
     "node_modules/@types",
     "src/@types",
   ],
-  "include": [
-    "src",
-    "tests"
-  ],
-  "extends": "./tsconfig.paths.json"
+  "extends": "./tsconfig.paths.json",
 }
