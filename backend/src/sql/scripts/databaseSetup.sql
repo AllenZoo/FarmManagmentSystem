@@ -327,7 +327,7 @@ INSERT INTO Livestock_3 (animalType, age, harvestable) VALUES ('pig', 4, 1);
 
 INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4001, 'chicken', 1, 10, '12/04/2022', '04/04/2022');
 INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4002, 'chicken', 3, 5,'12/04/2022', '01/04/2022');
-INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4003, 'cow', 4, 70,'10/04/2022', '12/04/2022')
+INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4003, 'cow', 4, 70,'10/04/2022', '12/04/2022');
 INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4004, 'sheep', 6, 55,'12/04/2022', NULL);
 INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4005, 'pig', 4, 45, '11/04/2022', NULL);
 
