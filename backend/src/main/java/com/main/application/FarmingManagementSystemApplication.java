@@ -1,12 +1,12 @@
-package com.example.demo;
+package com.main.application;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HelloWorldApplication {
+public class FarmingManagementSystemApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(HelloWorldApplication.class, args);
+        SpringApplication.run(FarmingManagementSystemApplication.class, args);
     }
 }

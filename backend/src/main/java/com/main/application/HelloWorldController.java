@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.main.application;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
