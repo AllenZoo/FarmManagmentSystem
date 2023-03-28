@@ -4,23 +4,21 @@ import database.DatabaseConnectionHandler;
 import delegates.LoginWindowDelegate;
 import delegates.TerminalTransactionsDelegate;
 import model.BranchModel;
-import ui.LoginWindow; // replace
-import ui.TerminalTransactions; // replace
 
 /**
  * This is the main controller class that will orchestrate everything.
  */
 public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 	private DatabaseConnectionHandler dbHandler = null;
-	private LoginWindow loginWindow = null;
+	// private LoginWindow loginWindow = null;
 
 	public Bank() {
 		dbHandler = new DatabaseConnectionHandler();
 	}
 	
 	private void start() {
-		loginWindow = new LoginWindow();
-		loginWindow.showFrame(this);
+		// loginWindow = new LoginWindow();
+		// loginWindow.showFrame(this);
 	}
 	
 	/**
@@ -33,19 +31,19 @@ public class Bank implements LoginWindowDelegate, TerminalTransactionsDelegate {
 
 		if (didConnect) {
 			// Once connected, remove login window and start text transaction flow
-			loginWindow.dispose();
+			// loginWindow.dispose();
 
-			TerminalTransactions transaction = new TerminalTransactions();
-			transaction.setupDatabase(this);
-			transaction.showMainMenu(this);
+			// TerminalTransactions transaction = new TerminalTransactions();
+			// transaction.setupDatabase(this);
+			// transaction.showMainMenu(this);
 		} else {
-			loginWindow.handleLoginFailed();
+			// loginWindow.handleLoginFailed();
 
-			if (loginWindow.hasReachedMaxLoginAttempts()) {
-				loginWindow.dispose();
-				System.out.println("You have exceeded your number of allowed attempts");
-				System.exit(-1);
-			}
+//			if (loginWindow.hasReachedMaxLoginAttempts()) {
+//				loginWindow.dispose();
+//				System.out.println("You have exceeded your number of allowed attempts");
+//				System.exit(-1);
+//			}
 		}
 	}
 	
