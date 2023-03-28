@@ -1,5 +1,12 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import { GiWheat } from 'react-icons/gi';
+
+import {
+  login,
+  TOTALLY_SECRET_USERNAME,
+  TOTALLY_SECRET_PASSWORD
+} from '@src/controllers/loginController';
 
 
 /* -------------------------------------------------------------------------- */
@@ -100,6 +107,14 @@ const StyledLoginForm = styled.form`
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 const LoginPage = () => {
+  const [username, setUsername] = useState(TOTALLY_SECRET_USERNAME);
+  const [password, setPassword] = useState(TOTALLY_SECRET_PASSWORD);
+
+  const handleLogin = async () => {
+    const response = await login(username, password);
+    console.log(response);
+  };
+
   return (
     <StyledLoginPage>
       <h1>Totalitarian Farming System&trade; Login</h1>
@@ -109,15 +124,32 @@ const LoginPage = () => {
       <StyledLoginForm>
         <div>
           <label htmlFor="user">Username</label>
-          <input type="text" id="user" name="user" />
+          <input
+            type="text"
+            id="user"
+            name="user"
+            defaultValue={TOTALLY_SECRET_USERNAME}
+            onChange={(e) => { setUsername(e.target.value); }}
+          />
         </div>
 
         <div>
           <label htmlFor="pass">Password</label>
-          <input type="password" id="pass" name="pass" />
+          <input
+            type="password"
+            id="pass"
+            name="pass"
+            defaultValue={TOTALLY_SECRET_PASSWORD}
+            onChange={(e) => { setPassword(e.target.value); }}
+          />
         </div>
 
-        <button type="submit">Login</button>
+        <button
+          type="button"
+          onClick={handleLogin}
+        >
+          Login
+        </button>
       </StyledLoginForm>
     </StyledLoginPage>
   );

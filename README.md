@@ -8,4 +8,4 @@ The main aspects of the system are separated between staff, livestock, agricultu
 Furthermore, important distributors will also have access to the system in order to purchase products to distribute to other manufacturers, which implies a needed access to the database in order to view available products.
 
 ## Timeline / Task Breakdown
-The timeline/task breakdown can be found [here.](./deliverables/TIMELINE.md)
+The timeline/task breakdown can be found [here.](./_deliverables/TIMELINE.md)
