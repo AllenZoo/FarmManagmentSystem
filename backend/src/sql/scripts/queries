@@ -1,0 +1,69 @@
+/* Insert into queries
+ */
+
+
+/*
+ Inserting into livestock requires finding if new tagID or not. Animal type should be from scroll down list. Age, weight, diet should be specified
+ by the user.
+ Harvestable should be determined based on age.
+ */
+INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (@tagID, @animalType, @age, @weight, NULL, NULL);
+INSERT INTO Livestock_3(animalType, age, harvestable) VALUES (@animalType, @age, @harrvestable);
+INSERT INTO Livestock_1(animalType, weight, diet) VALUES (@animalType, @weight, @diet);
+
+
+/*
+ Moving animals into pens consists of checking if capacity is already max or not. If not, this is simply a number thing.
+ Just add one to the capacity.
+ */
+INSERT INTO Pen (facilityID, name, age, maxCapacity, upkeep, typeOfAnimals) VALUES (@facilityID, @name, @maxcapacity, @upkeep, @typeofAnimals);
+
+
+/*
+ Delete queries
+ */
+
+
+/*
+ Selling animals means we need delete them from DB using the tagID
+ TODO: Need to discuss about deleting from the other livestock relations as well
+ */
+
+DELETE FROM Livestock_4 WHERE tagID = @user;
+
+
+
+
+/*
+ Update queries
+ */
+
+ /*
+  Updating last fed means updating the date in livestock_4
+  */
+
+UPDATE Livestock_4 SET lastFed = @user WHERE tagID = @user;
+
+
+
+
+
+/*
+ Selection queries + Join
+ */
+
+ SELECT tagID, diet FROM Livestock_4 AS L4, Livestock_1 AS L1 WHERE L1.diet = @user AND L1.animalType = L4.animalType AND L1.weight = L4.weight;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
