@@ -1,8 +1,8 @@
-/* Insert into queries
- */
+/*Insert into queries*/
 
 
 /*
+ ADDING AN ANIMAL TO THE DATABASE
  Inserting into livestock requires finding if new tagID or not. Animal type should be from scroll down list. Age, weight, diet should be specified
  by the user.
  Harvestable should be determined based on age.
@@ -13,54 +13,144 @@ INSERT INTO Livestock_1(animalType, weight, diet) VALUES (@animalType, @weight, 
 
 
 /*
+ MOVING GROUPS OF ANIMALS FROM ONE PEN TO ANOTHER
  Moving animals into pens consists of checking if capacity is already max or not. If not, this is simply a number thing.
  Just add one to the capacity.
  */
-INSERT INTO Pen (facilityID, name, age, maxCapacity, upkeep, typeOfAnimals) VALUES (@facilityID, @name, @maxcapacity, @upkeep, @typeofAnimals);
+INSERT INTO Pen (facilityID, name, age, maxCapacity, upkeep, typeOfAnimals) VALUES (?, ?, ?, ?, ?);
 
 
-/*
- Delete queries
- */
 
+/*Delete queries*/
 
 /*
+ SELLING LIVESTOCK
  Selling animals means we need delete them from DB using the tagID
- TODO: Need to discuss about deleting from the other livestock relations as well
  */
-
-DELETE FROM Livestock_4 WHERE tagID = @user;
-
+DELETE FROM Livestock_1 WHERE animalType = (SELECT animalType FROM Livestock_4 WHERE tagID = ?) AND weight;
 
 
 
-/*
- Update queries
- */
+
+
+/*Update queries*/
 
  /*
+  FEEDING/NURTURING
   Updating last fed means updating the date in livestock_4
   */
+UPDATE Livestock_4 SET lastFed = @user WHERE tagID = ?;
 
-UPDATE Livestock_4 SET lastFed = @user WHERE tagID = @user;
+/*
+ SELLING CROPS
+ Selling crops involves updating the quantity integer by the amount the user selects
+ */
+UPDATE Crops SET quantity = ?;
+
+/*
+ HARVESTING FIELD
+ This involves setting the field state to false, and adding the capacity to the crop type
+ */
+UPDATE Crops SET quantity = quantity + (SELECT capacity FROM Fields_4 WHERE plotNum = ?);
+UPDATE Fields_4 SET state = 0;
 
 
 
+
+
+
+/*Selection queries*/
+
+/*
+ FINDING ALL ANIMALS READY TO BE SOLD - WEIGHT SPECIFIED BY THE USER
+ This involves going through Livestock_4 with information about what age they should be sold at. If the animals are greater than the min age to be harvested, then included. If
+ Meet user weight criteria, then included
+ */
+ SELECT tagID FROM Livestock_4 AS L4 WHERE L4.age > (SELECT MIN(age) FROM Livestock_3 WHERE harvestable = TRUE) AND weight = ?;
+
+
+/*Projection*/
+/*Do we really need this?? TODO*/
+
+
+
+
+/*Join*/
+
+/*
+ SHOWING THE HEALTH STATUS OF ANIMALS
+ Age is specified by the user
+ */
+
+SELECT tagID, animalType, healthStatus FROM Livestock_4 AS L4, VeterinaryRecords as VR WHERE VR.tagID = L4.tagID and L4.age = ?;
+
+
+
+
+/*Aggregation with Group by*/
+
+/*
+ FINDING AMOUNT OF EACH ANIMAL TO BE SOLD
+ User specifies the age
+ */
+SELECT L4.animalType, COUNT(DISTINCT tagID)
+FROM Livestock_4 AS L4, Livestock_3 AS L3
+WHERE L3.animalType = L4.animalType AND L4.age < ?
+GROUP BY L4.animalType;
+
+
+
+
+/*Aggregation with Having*/
 
 
 /*
- Selection queries + Join
+ FINDING the diets for different animals that lead to the highest weight
+ Here we group by animal type and their diet, and we compare the avg weight to the avg weight for the animalType
  */
 
- SELECT tagID, diet FROM Livestock_4 AS L4, Livestock_1 AS L1 WHERE L1.diet = @user AND L1.animalType = L4.animalType AND L1.weight = L4.weight;
+CREATE VIEW temp AS SELECT animalType, AVG(weight) AS avgweight FROM Livestock_1 GROUP BY animalType
+
+SELECT L4.animalType, L1.diet
+FROM Livestock_4 AS L4, Livestock_1 AS L1
+WHERE L4.animalType = L1.animalType AND L4.weight = L1.weight
+GROUP BY L4.animalType, L1.diet
+HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType);
+
+/*
+ Can have a button that specifies two different options for the >= operator.
+ */
 
 
 
 
+/*Nested aggregation with group by*/
+/*TODO*/
 
 
 
+/*Division*/
 
+/*
+ Can use a button to specify which query to run out of the two.
+ */
+
+/*
+ FINDS ALL FARMERS WHO HAVE TENDED ALL FIELDS
+ */
+SELECT F2.farmerID FROM Farmers_2 AS F2
+WHERE NOT EXISTS((SELECT plotNum FROM Fields_4)
+                EXCEPT
+                (SELECT plotNum FROM Tends WHERE farmerID = F2.farmerID))
+
+
+/*
+ FINDS ALL FARMERS WHO HAVE NURTURED/FED ALL ANIMALS
+ */
+SELECT F2.farmerID FROM Farmers_2 AS F2
+WHERE NOT EXISTS((SELECT tagID FROM Livestock_4)
+                 EXCEPT
+                 (SELECT tagID FROM Nurtures WHERE farmerID = F2.farmerID))
 
 
 
