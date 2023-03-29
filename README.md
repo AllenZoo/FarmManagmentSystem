@@ -9,3 +9,8 @@ Furthermore, important distributors will also have access to the system in order
 
 ## Timeline / Task Breakdown
 The timeline/task breakdown can be found [here.](./_deliverables/TIMELINE.md)
+
+## Dependencies
+- Node.js + NPM - [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+- JDK 17 - [https://www.oracle.com/ca-en/java/technologies/downloads/](https://www.oracle.com/ca-en/java/technologies/downloads/)
+- Maven - [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
