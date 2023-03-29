@@ -111,8 +111,13 @@ const LoginPage = () => {
   const [password, setPassword] = useState(TOTALLY_SECRET_PASSWORD);
 
   const handleLogin = async () => {
-    const response = await login(username, password);
-    console.log(response);
+    try {
+      const response = await login(username, password);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      window.alert('Failed to login!');
+    }
   };
 
   return (
