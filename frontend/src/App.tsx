@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 
 import LoginPage from '@pages/LoginPage';
-import MainPage from '@pages/MainPage';
+import MainPage from '@src/pages/MainPage/MainPage';
 import ErrorPage from '@pages/ErrorPage';
 
 import BackgroundImg from '@assets/background.png';
