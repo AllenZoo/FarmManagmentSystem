@@ -8,10 +8,11 @@ import axios from "axios";
 export const login = async (username: string, password: string) => {
   if (username && password) {
     const res = await axios.post("/api/login", { username, password })
-    return res.data;
+    if (res.data) 
+      return res.data;
+    else
+      throw new Error("The seeds in the fields are bad!");
   } else if (!username || !password) {
     throw new Error("Looks like you didn't plant anything in the fields!");
-  } else {
-    throw new Error("The seeds in the fields are bad!");
   };
 };
