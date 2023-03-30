@@ -8,6 +8,7 @@ import model.LivestockModel;
 import model.enums.AnimalType;
 import model.enums.CropType;
 import org.springframework.web.bind.annotation.*;
+import util.JSONParser;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -21,9 +22,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 public class MainController {
 
     private FarmingSystem system;
+    private JSONParser parser;
+
 
     public MainController() {
         system = new FarmingSystem();
+        parser = new JSONParser();
     }
 
     /**
@@ -72,25 +76,21 @@ public class MainController {
     @CrossOrigin(origins = "http://localhost:8080")
     @RequestMapping(value = "/api/insert/livestock", method = POST)
     public boolean insertLiveStock(@RequestBody Map<String, Object> map) {
-        // TODO: reorganize bruh so messy lmao dw I get back to do this -Allen
-        Object tagID = map.get("tagID");
-        Object animalType = map.get("animalType");
-        Object age = map.get("age");
-        Object diet = map.get("diet");
-        Object weight = map.get("weight");
-        Object lastFed = map.get("lastFed");
-        Object harvestable = map.get("harvestable");
-        Object lastViolatedForHarvestedGoods = map.get("lastViolatedForHarvestedGoods");
-
-        Date date = new Date(2003, 1, 1);
+        int tagID = (int) map.get("tagID");
+        AnimalType animalType =  AnimalType.valueOf(map.get("animalType").toString());
+        int age = (int) map.get("age");
+        CropType diet = CropType.valueOf(map.get("diet").toString());
+        double weight = (double) map.get("weight");
+        Date lastFed =  parser.parseDate(map.get("lastFed").toString());
+        boolean harvestable = Boolean.valueOf(map.get("harvestable").toString());
+        Date lastViolatedForHarvestedGoods =
+                parser.parseDate(map.get("lastViolatedForHarvestedGoods").toString());
 
         System.out.println(tagID + " " + animalType + " " + age + " " + diet + " "
                 + weight + " " + lastFed + " " + harvestable + " " + lastViolatedForHarvestedGoods);
 
-        LivestockModel model = new LivestockModel((int) tagID, AnimalType.valueOf(animalType.toString()),
-                (Integer) age, CropType.valueOf(diet.toString()),
-                (double) weight, (Date) date, (boolean) harvestable,
-                (Date) date);
+        LivestockModel model = new LivestockModel(tagID, animalType,
+                age, diet, weight, lastFed, harvestable, lastViolatedForHarvestedGoods);
         //return system.insertLivestock(model);
         return true;
     }
