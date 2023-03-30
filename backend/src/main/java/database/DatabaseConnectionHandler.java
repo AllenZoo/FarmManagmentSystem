@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.BranchModel;
+import model.LivestockModel;
 import util.PrintablePreparedStatement;
 
 /**
@@ -14,9 +15,11 @@ import util.PrintablePreparedStatement;
  */
 public class DatabaseConnectionHandler {
 	// Use this version of the ORACLE_URL if you are running the code off of the server
-//	private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
+	// private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
 	// Use this version of the ORACLE_URL if you are tunneling into the undergrad servers
+
 	private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
+	// private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
 	private static final String EXCEPTION_TAG = "[EXCEPTION]";
 	private static final String WARNING_TAG = "[WARNING]";
 
@@ -42,6 +45,41 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+	public boolean insertLivestock(LivestockModel model) {
+		try {
+			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
+					"lastViolatedForHarvestedGoods) " +
+					"VALUES (?, ?, ?, ?, ?, ?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, model.getTagID());
+			ps.setString(2, model.getAnimalType().toString());
+			ps.setInt(3, model.getAge());
+			ps.setDouble(4, model.getWeight());
+			ps.setDate(5, model.getLastFed());
+			ps.setDate(6, model.getLastViolatedForHarvestedGoods());
+
+			// TODO: might need to check for empty vals and do the following as ref:
+			//	if (model.getPhoneNumber() == 0) {
+			//		ps.setNull(5, java.sql.Types.INTEGER);
+			//	} else {
+			//		ps.setInt(5, model.getPhoneNumber());
+			//	}
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		// Succesfully inserted without errors
+		return true;
+	}
+
+
+	//============================= FROM TUTORIAL ===================================
 	public void deleteBranch(int branchId) {
 		try {
 			String query = "DELETE FROM branch WHERE branch_id = ?";
@@ -185,7 +223,8 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				if(rs.getString(1).toLowerCase().equals("branch")) {
-					ps.execute("DROP TABLE branch");
+					// TODO: check over this. Temp. commented out
+					// ps.execute("DROP TABLE branch");
 					break;
 				}
 			}

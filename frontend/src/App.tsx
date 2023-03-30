@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
 
 import LoginPage from '@pages/LoginPage';
-import MainPage from '@pages/MainPage';
+import MainPage from '@src/pages/MainPage/MainPage';
 import ErrorPage from '@pages/ErrorPage';
 
 import BackgroundImg from '@assets/background.png';
@@ -29,19 +29,13 @@ const StyledBackground = styled.div`
   }
 `;
 
-const StyledContainer = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-`;
-
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 const App = () => {
   return (
-    <StyledContainer data-testid="app">
+    <div data-testid="app">
       <StyledBackground className="Background">
         <img src={BackgroundImg} alt="" />
       </StyledBackground>
@@ -49,11 +43,11 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/main" element={<MainPage />} />
+          <Route path="/dashboard" element={<MainPage />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
-    </StyledContainer>
+    </div>
   );
 }
 
