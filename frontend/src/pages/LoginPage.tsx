@@ -17,10 +17,22 @@ const StyledLoginPage = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   width: 100vw;
   color: #fff;
   text-align: center;
+
+  .wheatIcon {
+    font-size: 30vh;
+    color: #ff0;
+    margin: 1rem 0 0 0;
+    animation: pulse 5s linear infinite;
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  }
 
   h1 {
     font-size: 2.5rem;
@@ -38,10 +50,9 @@ const StyledLoginForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
   width: 100vw;
   gap: 2rem;
-  margin-top: 2rem;
+  margin: 2rem 0;
 
   div {
     display: flex;
@@ -65,7 +76,7 @@ const StyledLoginForm = styled.form`
   input {
     margin: 0.5rem;
     padding: 0.5rem;
-    width: 25vw;
+    min-width: 25vw;
     background-color: transparent;
     border: 2px solid #fff;
     border-radius: 5px;
@@ -74,8 +85,9 @@ const StyledLoginForm = styled.form`
     font-size: 1.5rem;
     transition: 0.4s ease;
 
+    &:hover,
     &:focus {
-      border: 2px solid #ff0;
+      background: rgba(0, 0, 0, 0.1);
       transition: 0.4s ease;
     }
   }
@@ -94,9 +106,8 @@ const StyledLoginForm = styled.form`
     transition: 0.4s ease;
 
     &:hover {
-      outline: 2px solid transparent;
-      background: #fff;
-      color: #000;
+      outline: 2px solid #5f5;
+      background: rgba(0, 255, 0, 0.1);
       transition: 0.4s ease;
     }
   }
@@ -111,15 +122,24 @@ const LoginPage = () => {
   const [password, setPassword] = useState(TOTALLY_SECRET_PASSWORD);
 
   const handleLogin = async () => {
-    const response = await login(username, password);
-    console.log(response);
+    try {
+      const response = await login(username, password);
+
+      // TODO: Handle response; store token somewhere
+      console.log(response);
+
+      document.location.href = '/dashboard';
+    } catch (error) {
+      console.log(error);
+      window.alert(`Login failed: ${(error as Error).message}`);
+    }
   };
 
   return (
     <StyledLoginPage>
       <h1>Totalitarian Farming System&trade; Login</h1>
       <h3>The best way to control and manage your farm!</h3>
-      <GiWheat size="60vh" color="#ff0" />
+      <GiWheat className="wheatIcon" />
 
       <StyledLoginForm>
         <div>

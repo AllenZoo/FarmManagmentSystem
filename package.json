@@ -4,7 +4,8 @@
   "description": "This project is a farm management system that keeps track of many farming utilities and  processes such as facilities, fields, animals, crops, farmers, products, and buyers, with the  intention of helping farm owners manage their farms more efficiently and effectively.",
   "scripts": {
     "client": "cd frontend && npm start",
-    "server": "cd backend"
+    "server": "cd backend && npm start",
+    "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",

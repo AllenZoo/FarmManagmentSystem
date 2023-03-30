@@ -29,19 +29,13 @@ const StyledBackground = styled.div`
   }
 `;
 
-const StyledContainer = styled.div`
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-`;
-
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 const App = () => {
   return (
-    <StyledContainer data-testid="app">
+    <div data-testid="app">
       <StyledBackground className="Background">
         <img src={BackgroundImg} alt="" />
       </StyledBackground>
@@ -49,11 +43,11 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/main" element={<MainPage />} />
+          <Route path="/dashboard" element={<MainPage />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
-    </StyledContainer>
+    </div>
   );
 }
 

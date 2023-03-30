@@ -59,6 +59,7 @@ const StyledButton = styled.button`
 
   &:hover {
     background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
     transition: 0.2s ease;
   }
 `;
