@@ -1,8 +1,18 @@
+DROP TABLE Pen;
+DROP TABLE Housing;
+DROP TABLE Farmers_1;
+DROP TABLE Farmers_2;
+DROP TABLE Crops;
+DROP TABLE Fields_3;
+DROP TABLE Fields_1;
+DROP TABLE Fields_4;
+
 /* -------------------------------------------------------------------------- */
 /*                            Create Entity Tables                            */
 /* -------------------------------------------------------------------------- */
 CREATE TABLE Pen (
   facilityID INTEGER PRIMARY KEY,
+  name VARCHAR(30),
   age INTEGER,
   maxCapacity INTEGER NOT NULL,
   upkeep INTEGER,
