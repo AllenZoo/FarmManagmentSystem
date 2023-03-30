@@ -59,7 +59,7 @@ public class MainController {
     public boolean login(@RequestBody Map<String, Object> map) {
         Object username = map.get("username");
         Object password = map.get("password");
-        System.out.println("Username: " + username + " password: " + password);
+        // System.out.println("Username: " + username + " password: " + password);
         return system.login(username.toString(), password.toString());
     }
 
@@ -91,8 +91,8 @@ public class MainController {
 
         LivestockModel model = new LivestockModel(tagID, animalType,
                 age, diet, weight, lastFed, harvestable, lastViolatedForHarvestedGoods);
-        //return system.insertLivestock(model);
-        return true;
+        return system.insertLivestock(model);
+        // return true;
     }
 
     // For Ref!
