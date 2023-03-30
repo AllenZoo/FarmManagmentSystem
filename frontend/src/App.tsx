@@ -1,11 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import styled from "styled-components";
 
 import LoginPage from '@pages/LoginPage';
 import MainPage from '@src/pages/MainPage/MainPage';
 import ErrorPage from '@pages/ErrorPage';
 
+import FarmerActions from "./pages/MainPage/FarmerActions";
+
 import BackgroundImg from '@assets/background.png';
+import { DASHBOARD_PATHNAME, FARMER_ACTIONS_PATHNAME, LOGIN_PATHNAME } from "./config/routes";
 
 
 /* -------------------------------------------------------------------------- */
@@ -42,8 +45,10 @@ const App = () => {
 
       <Router>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<MainPage />} />
+          <Route path="/" element={<Navigate to={LOGIN_PATHNAME} />} />
+          <Route path={LOGIN_PATHNAME} element={<LoginPage />} />
+          <Route path={DASHBOARD_PATHNAME} element={<MainPage />} />
+          <Route path={FARMER_ACTIONS_PATHNAME} element={<FarmerActions />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>
