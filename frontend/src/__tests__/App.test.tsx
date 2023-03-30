@@ -5,8 +5,8 @@ import App from '@src/App';
 /* -------------------------------------------------------------------------- */
 /*                                 UNIT TESTS                                 */
 /* -------------------------------------------------------------------------- */
-test('renders learn react link', () => {
+test('renders application', () => {
   render(<App />);
-  const linkElement = screen.getByTestId('app');
-  expect(linkElement).toBeInTheDocument();
+  const appElement = screen.getByTestId('app');
+  expect(appElement).toBeInTheDocument();
 });

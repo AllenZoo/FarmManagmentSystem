@@ -5,10 +5,17 @@ import LoginPage from '@pages/LoginPage';
 import MainPage from '@src/pages/MainPage/MainPage';
 import ErrorPage from '@pages/ErrorPage';
 
-import FarmerActions from "./pages/MainPage/FarmerActions";
+import FarmerActions from "@pages/MainPage/FarmerActions";
+import UserInfo from "@pages/MainPage/UserInfo";
+
+import {
+  DASHBOARD_PATHNAME,
+  FARMER_ACTIONS_PATHNAME,
+  LOGIN_PATHNAME,
+  USER_INFO_PATHNAME
+} from "./config/routes";
 
 import BackgroundImg from '@assets/background.png';
-import { DASHBOARD_PATHNAME, FARMER_ACTIONS_PATHNAME, LOGIN_PATHNAME } from "./config/routes";
 
 
 /* -------------------------------------------------------------------------- */
@@ -49,6 +56,7 @@ const App = () => {
           <Route path={LOGIN_PATHNAME} element={<LoginPage />} />
           <Route path={DASHBOARD_PATHNAME} element={<MainPage />} />
           <Route path={FARMER_ACTIONS_PATHNAME} element={<FarmerActions />} />
+          <Route path={USER_INFO_PATHNAME} element={<UserInfo />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

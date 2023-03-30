@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import { GiBarn, GiFarmer, GiPerson, GiBroccoli } from 'react-icons/gi';
 
+import { FARMER_ACTIONS_PATHNAME } from '@src/config/routes';
+
 import NavBar from '@components/NavBar';
+import { Link } from 'react-router-dom';
 
 
 /* -------------------------------------------------------------------------- */
@@ -69,55 +72,29 @@ const StyledButton = styled.button`
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 const MainPage = () => {
-
-  const handleTendFields = () => {
-    console.log('Tend Fields');
-  };
-
-  const handleNurtureAnimals = () => {
-    console.log('Nurture Animals');
-  };
-
-  const handleSellProducts = () => {
-    console.log('Sell Products');
-  };
-
-  const handleManageFacilities = () => {
-    console.log('Manage Facilities');
-  };
-
-
   return (
-    <StyledMainPage>
+    <StyledMainPage data-testid="main-page">
       <NavBar />
 
       <main>
         <StyledSection>
           <h1><GiFarmer size="2rem" /> Farmer Actions</h1>
 
-          <StyledButton
-            onClick={handleTendFields}
-          >
-            Tend Fields
-          </StyledButton>
+          <Link to={`${FARMER_ACTIONS_PATHNAME}#tend-fields`}>
+            <StyledButton>Tend Fields</StyledButton>
+          </Link>
 
-          <StyledButton
-            onClick={handleNurtureAnimals}
-          >
-            Nurture Animals
-          </StyledButton>
+          <Link to={`${FARMER_ACTIONS_PATHNAME}#nurture-animals`}>
+            <StyledButton>Nurture Animals</StyledButton>
+          </Link>
 
-          <StyledButton
-            onClick={handleSellProducts}
-          >
-            Sell Products
-          </StyledButton>
+          <Link to={`${FARMER_ACTIONS_PATHNAME}#sell-products`}>
+            <StyledButton>Sell Products</StyledButton>
+          </Link>
 
-          <StyledButton
-            onClick={handleManageFacilities}
-          >
-            Manage Facilities
-          </StyledButton>
+          <Link to={`${FARMER_ACTIONS_PATHNAME}#manage-facilities`}>
+            <StyledButton>Manage Facilities</StyledButton>
+          </Link>
         </StyledSection>
 
         <StyledSection>

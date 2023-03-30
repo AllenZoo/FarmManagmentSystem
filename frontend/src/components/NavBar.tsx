@@ -13,6 +13,7 @@ const StyledNavBar = styled.div`
   backdrop-filter: blur(5px);
   gap: 0.5rem;
   padding: 0 2rem;
+  color: #fff;
   z-index: 100;
 
   h1 {
