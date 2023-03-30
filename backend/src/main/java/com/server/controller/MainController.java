@@ -42,7 +42,7 @@ public class MainController {
 
 
     @CrossOrigin(origins = "http://localhost:8080")
-    @RequestMapping(value = "/login", method = POST)
+    @RequestMapping(value = "/api/login", method = POST)
     public boolean login(@RequestBody Map<String, Object> map) {
         Object username = map.get("username");
         Object password = map.get("password");
@@ -51,7 +51,7 @@ public class MainController {
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
-    @RequestMapping(value = "/logout", method = GET)
+    @RequestMapping(value = "/api/logout", method = GET)
     public boolean logout() {
         return system.logout();
     }
