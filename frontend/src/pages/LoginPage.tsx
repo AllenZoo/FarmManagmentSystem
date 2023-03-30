@@ -2,11 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { GiWheat } from 'react-icons/gi';
 
-import {
-  login,
-  TOTALLY_SECRET_USERNAME,
-  TOTALLY_SECRET_PASSWORD
-} from '@src/controllers/loginController';
+import { login } from '@src/controllers/loginController';
 
 
 /* -------------------------------------------------------------------------- */
@@ -118,8 +114,8 @@ const StyledLoginForm = styled.form`
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 const LoginPage = () => {
-  const [username, setUsername] = useState(TOTALLY_SECRET_USERNAME);
-  const [password, setPassword] = useState(TOTALLY_SECRET_PASSWORD);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
     try {
@@ -127,7 +123,7 @@ const LoginPage = () => {
 
       // TODO: Handle response; store token somewhere
       console.log(response);
-
+      
       document.location.href = '/dashboard';
     } catch (error) {
       console.log(error);
@@ -148,7 +144,7 @@ const LoginPage = () => {
             type="text"
             id="user"
             name="user"
-            defaultValue={TOTALLY_SECRET_USERNAME}
+            defaultValue=""
             onChange={(e) => { setUsername(e.target.value); }}
           />
         </div>
@@ -159,7 +155,7 @@ const LoginPage = () => {
             type="password"
             id="pass"
             name="pass"
-            defaultValue={TOTALLY_SECRET_PASSWORD}
+            defaultValue=""
             onChange={(e) => { setPassword(e.target.value); }}
           />
         </div>
