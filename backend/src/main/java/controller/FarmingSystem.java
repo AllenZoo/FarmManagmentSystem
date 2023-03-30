@@ -19,7 +19,6 @@ public class FarmingSystem {
         boolean didConnect = dbHandler.login(username, password);
         return didConnect;
     }
-
     public boolean logout() {
         try {
             dbHandler.close();
