@@ -1,6 +1,7 @@
 package controller;
 
 import database.DatabaseConnectionHandler;
+import model.LivestockModel;
 
 public class FarmingSystem {
 
@@ -28,5 +29,13 @@ public class FarmingSystem {
             return false;
         }
 
+    }
+
+
+    /**
+     * Insert a livestock given info
+     */
+    public boolean insertLivestock(LivestockModel model) {
+        return dbHandler.insertLivestock(model);
     }
 }

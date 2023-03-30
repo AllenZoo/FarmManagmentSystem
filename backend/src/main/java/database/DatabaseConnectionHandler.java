@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.BranchModel;
+import model.LivestockModel;
 import util.PrintablePreparedStatement;
 
 /**
@@ -44,6 +45,41 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+	public boolean insertLivestock(LivestockModel model) {
+		try {
+			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
+					"lastViolatedForHarvestedGoods) " +
+					"VALUES (?, ?, ?, ?, ?, ?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, model.getTagID());
+			ps.setString(2, model.getAnimalType().toString());
+			ps.setInt(3, model.getAge());
+			ps.setDouble(4, model.getWeight());
+			ps.setDate(5, model.getLastFed());
+			ps.setDate(6, model.getLastViolatedForHarvestedGoods());
+
+			// TODO: might need to check for empty vals and do the following as ref:
+			//	if (model.getPhoneNumber() == 0) {
+			//		ps.setNull(5, java.sql.Types.INTEGER);
+			//	} else {
+			//		ps.setInt(5, model.getPhoneNumber());
+			//	}
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		// Succesfully inserted without errors
+		return true;
+	}
+
+
+	//============================= FROM TUTORIAL ===================================
 	public void deleteBranch(int branchId) {
 		try {
 			String query = "DELETE FROM branch WHERE branch_id = ?";

@@ -4,6 +4,9 @@ import model.enums.CropStatusType;
 import model.enums.CropType;
 import model.enums.CropVariantType;
 
+/**
+ * The intent for this class is to update/store information about a single crop
+ */
 public class CropModel {
     private final CropType cropType;
     private final CropVariantType variant;

@@ -3,6 +3,11 @@ package model;
 import model.enums.AnimalType;
 import model.enums.CropType;
 
+import java.sql.Date;
+
+/**
+ * The intent for this class is to update/store information about a single livestock
+ */
 public class LivestockModel {
 
     private final int tagID;
@@ -10,18 +15,21 @@ public class LivestockModel {
     private final int age;
     private final CropType diet;
     private final double weight;
-    private final String date;
+    private final Date lastFed;
     private final boolean harvestable;
+    private final Date lastViolatedForHarvestedGoods;
 
     public LivestockModel(int tagID, AnimalType animalType, int age, CropType diet,
-                          double weight, String date, boolean harvestable) {
+                          double weight, Date lastFed, boolean harvestable,
+                          Date lastViolatedForHarvestedGoods) {
         this.tagID = tagID;
         this.animalType = animalType;
         this.age = age;
         this.diet = diet;
         this.weight = weight;
-        this.date = date;
+        this.lastFed = lastFed;
         this.harvestable = harvestable;
+        this.lastViolatedForHarvestedGoods = lastViolatedForHarvestedGoods;
     }
 
     public int getTagID() {
@@ -44,11 +52,16 @@ public class LivestockModel {
         return weight;
     }
 
-    public String getDate() {
-        return date;
+    public Date getLastFed() {
+        return lastFed;
     }
 
     public boolean isHarvestable() {
         return harvestable;
     }
+
+    public Date getLastViolatedForHarvestedGoods() {
+        return lastViolatedForHarvestedGoods;
+    }
+
 }

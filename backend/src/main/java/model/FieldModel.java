@@ -3,6 +3,9 @@ package model;
 import model.enums.CropType;
 import model.enums.FieldState;
 
+/**
+ * The intent for this class is to update/store information about a single field
+ */
 public class FieldModel {
 
     private final int plotNum;

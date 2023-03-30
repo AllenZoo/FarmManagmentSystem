@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * The intent for this class is to update/store information about a single farmer
+ */
 public class FarmerModel {
     private final int farmerID;
     private final String fullName;
