@@ -70,9 +70,15 @@ UPDATE Fields_4 SET state = 0;
 
 
 /*Projection*/
-/*Do we really need this?? TODO*/
 
 
+/*
+PROJECTION TO FIND ALL CROPS/ANIMALTYPES
+ */
+
+SELECT DISTINCT cropType FROM Crops;
+
+SELECT DISTINCT animalType FROM Livestock_4;
 
 
 /*Join*/
@@ -103,10 +109,30 @@ GROUP BY L4.animalType;
 
 /*Aggregation with Having*/
 
+/*
+ User can select to see which animals need the most nurturing/most water spent, most fed.
+ */
+
+SELECT N.tagID
+FROM Nurtures AS N, Livestock_4 AS L4
+WHERE N.tagID = L4.tagID AND animalType = ?
+GROUP BY N.tagID
+HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?
+
+
+
+
+
+
+/*Nested aggregation with group by*/
 
 /*
  FINDING the diets for different animals that lead to the highest weight
  Here we group by animal type and their diet, and we compare the avg weight to the avg weight for the animalType
+ */
+
+/*
+ Can have a button that specifies two different options for the >= operator.
  */
 
 CREATE VIEW temp AS SELECT animalType, AVG(weight) AS avgweight FROM Livestock_1 GROUP BY animalType
@@ -116,16 +142,6 @@ FROM Livestock_4 AS L4, Livestock_1 AS L1
 WHERE L4.animalType = L1.animalType AND L4.weight = L1.weight
 GROUP BY L4.animalType, L1.diet
 HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType);
-
-/*
- Can have a button that specifies two different options for the >= operator.
- */
-
-
-
-
-/*Nested aggregation with group by*/
-/*TODO*/
 
 
 
