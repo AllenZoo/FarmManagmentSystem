@@ -1,46 +1,47 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import NavBar from '@components/NavBar';
 
-import { COMPANY_FUN_FACTS_PATHNAME } from '@src/config/routes';
+import {
+  DASHBOARD_PATHNAME,
+  USER_INFO_PATHNAME,
+} from '@src/config/routes';
 
 
 /* -------------------------------------------------------------------------- */
 /*                                   STYLING                                  */
 /* -------------------------------------------------------------------------- */
-const StyledCompanyFunFacts = styled.div`
-  
-`;
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 /**
- * Renders the 'View Company Info' panel of Company Fun Facts
+ * Renders the 'View Profile' panel of User Info
  */
-const ViewCompanyInfoPanel = () => {
+const ViewProfilePanel = () => {
   return (
     <>
-      View Company Info
+      View Profile
     </>
   );
 };
 
 /**
- * Renders the default panel of Company Fun Facts
+ * Renders the 'View Inventory' panel of User Info
  */
-const DefaultPanel = () => {
+const ViewInventoryPanel = () => {
   return (
     <>
-      Default Panel
+      View Inventory
     </>
   );
 };
 
 
-const CompanyFunFacts = () => {
+const UserInfo = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
   const location = useLocation();
   
@@ -48,10 +49,13 @@ const CompanyFunFacts = () => {
   useEffect(() => {
     const { pathname, hash } = location;
     
-    if (pathname === COMPANY_FUN_FACTS_PATHNAME) {
+    if (pathname === USER_INFO_PATHNAME) {
       switch (hash) {
-        case '#company-info':
-          setPanel(<ViewCompanyInfoPanel />);
+        case '#profile':
+          setPanel(<ViewProfilePanel />);
+          break;
+        case '#inventory':
+          setPanel(<ViewInventoryPanel />);
           break;
         default:
           setPanel(null);
@@ -61,14 +65,12 @@ const CompanyFunFacts = () => {
   }, [location]);
 
   return (
-    <StyledCompanyFunFacts>
+    <div>
       <NavBar />
       
-      <main>
-        { panel ? panel : <DefaultPanel />}
-      </main>
-    </StyledCompanyFunFacts>
+      { location.hash ? panel : <Navigate to={DASHBOARD_PATHNAME} />}
+    </div>
   );
 }
 
-export default CompanyFunFacts;
+export default UserInfo;

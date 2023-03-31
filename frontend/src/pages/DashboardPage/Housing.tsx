@@ -1,58 +1,47 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import NavBar from '@components/NavBar';
 
-import { USER_INFO_PATHNAME } from '@src/config/routes';
+import {
+  DASHBOARD_PATHNAME,
+  HOUSING_PATHNAME,
+} from '@src/config/routes';
 
 
 /* -------------------------------------------------------------------------- */
 /*                                   STYLING                                  */
 /* -------------------------------------------------------------------------- */
-const StyledUserInfo = styled.div`
-  
-`;
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 /**
- * Renders the 'View Profile' panel of User Info
+ * Renders the 'View Housing' panel of Housing
  */
-const ViewProfilePanel = () => {
+const ViewHousingPanel = () => {
   return (
     <>
-      View Profile
+      View Housing
     </>
   );
 };
 
 /**
- * Renders the 'View Inventory' panel of User Info
+ * Renders the 'Manage Housing' panel of Housing
  */
-const ViewInventoryPanel = () => {
+const ManageHousingPanel = () => {
   return (
     <>
-      View Inventory
+      Manage Housing
     </>
   );
 };
 
 
-/**
- * Renders the default panel of User Info
- */
-const DefaultPanel = () => {
-  return (
-    <>
-      Default Panel
-    </>
-  );
-};
-
-
-const UserInfo = () => {
+const Housing = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
   const location = useLocation();
   
@@ -60,13 +49,13 @@ const UserInfo = () => {
   useEffect(() => {
     const { pathname, hash } = location;
     
-    if (pathname === USER_INFO_PATHNAME) {
+    if (pathname === HOUSING_PATHNAME) {
       switch (hash) {
-        case '#profile':
-          setPanel(<ViewProfilePanel />);
+        case '#housing':
+          setPanel(<ViewHousingPanel />);
           break;
-        case '#inventory':
-          setPanel(<ViewInventoryPanel />);
+        case '#manage-housing':
+          setPanel(<ManageHousingPanel />);
           break;
         default:
           setPanel(null);
@@ -76,14 +65,12 @@ const UserInfo = () => {
   }, [location]);
 
   return (
-    <StyledUserInfo>
+    <div>
       <NavBar />
       
-      <main>
-        { panel ? panel : <DefaultPanel />}
-      </main>
-    </StyledUserInfo>
+      { location.hash ? panel : <Navigate to={DASHBOARD_PATHNAME} />}
+    </div>
   );
 }
 
-export default UserInfo;
+export default Housing;

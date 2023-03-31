@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { GiFarmTractor } from 'react-icons/gi';
+import { Link } from 'react-router-dom';
 
 
 /* -------------------------------------------------------------------------- */
@@ -19,6 +20,22 @@ const StyledNavBar = styled.div`
   h1 {
     font-size: 2rem;
     margin: 1rem 0.5rem;
+  }
+`;
+
+const StyledDashboardButton = styled.button`
+  font-size: 3rem;
+  text-align: center;
+  
+  border: transparent;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  transition: 0.4s ease;
+
+  &:hover {
+    scale: 1.1;
+    transition: 0.4s ease;
   }
 `;
 
@@ -59,7 +76,11 @@ function NavBar() {
 
   return (
     <StyledNavBar>
-      <GiFarmTractor size="2.5rem" />
+      <StyledDashboardButton type="button" title="Dashboard">
+        <Link to="/dashboard">
+          <GiFarmTractor />
+        </Link>
+      </StyledDashboardButton>
       <h1>Totalitarian Farming System&trade;</h1>
       <StyledNavButton
         type="button"

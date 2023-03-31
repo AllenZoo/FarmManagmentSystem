@@ -1,14 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import styled from "styled-components";
 
-import LoginPage from '@pages/LoginPage';
-import MainPage from '@src/pages/MainPage';
-import ErrorPage from '@pages/ErrorPage';
+import LoginPage from '@src/pages/LoginPage';
+import MainPage from '@src/pages/DashboardPage';
+import ErrorPage from '@src/pages/ErrorPage';
 
-import FarmerActions from "@pages/MainPage/FarmerActions";
-import UserInfo from "@pages/MainPage/UserInfo";
-import CompanyFunFacts from "@pages/MainPage/CompanyFunFacts";
-import Housing from "@pages/MainPage/Housing";
+import FarmerActions from "@src/pages/DashboardPage/FarmerActions";
+import UserInfo from "@src/pages/DashboardPage/UserInfo";
+import CompanyFunFacts from "@src/pages/DashboardPage/CompanyFunFacts";
+import Housing from "@src/pages/DashboardPage/Housing";
 
 import * as ROUTES from "@config/routes";
 

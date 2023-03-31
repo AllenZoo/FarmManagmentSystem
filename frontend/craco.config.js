@@ -9,6 +9,7 @@ module.exports = {
       "@config": path.resolve(__dirname, "src/config"),
       "@controllers": path.resolve(__dirname, "src/controllers"),
 			"@pages": path.resolve(__dirname, "src/pages"),
+      "@utils": path.resolve(__dirname, "src/utils"),
 		},
 	},
   jest: {
@@ -20,6 +21,7 @@ module.exports = {
         "@config/(.*)": "<rootDir>/src/config/$1",
         "@controllers/(.*)": "<rootDir>/src/controllers/$1",
         "@pages/(.*)": "<rootDir>/src/pages/$1",
+        "@utils/(.*)": "<rootDir>/src/utils/$1",
       },
     },
   }

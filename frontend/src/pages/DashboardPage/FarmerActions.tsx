@@ -1,17 +1,63 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import NavBar from '@components/NavBar';
 
-import { FARMER_ACTIONS_PATHNAME } from '@src/config/routes';
+import {
+  DASHBOARD_PATHNAME,
+  FARMER_ACTIONS_PATHNAME,
+} from '@src/config/routes';
 
 
 /* -------------------------------------------------------------------------- */
 /*                                   STYLING                                  */
 /* -------------------------------------------------------------------------- */
-const StyledFarmerActions = styled.div`
-  
+const StyledTendFields = styled.div`
+  color: #fff;
+  text-align: center;
+
+  main {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    min-height: 50vh;
+    margin: 1rem 2rem;
+  }
+
+  .ControlPanel {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    height: 80vh;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+    overflow-x: none;
+    transition: 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+      transition: 0.2s ease;
+    }
+  }
+
+  .DisplayPanel {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 80vh;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+    overflow-x: none;
+    transition: 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+      transition: 0.2s ease;
+    }
+  }
 `;
 
 /* -------------------------------------------------------------------------- */
@@ -22,9 +68,20 @@ const StyledFarmerActions = styled.div`
  */
 const TendFieldsPanel = () => {
   return (
-    <>
-      Tend Fields
-    </>
+    <StyledTendFields>
+      <main>
+        {/* CONTROL PANEL */}
+        <div className="ControlPanel">
+          <h2>Control Panel</h2>
+        </div>
+
+        {/* DISPLAY PANEL */}
+        <div className="DisplayPanel">
+          <h2>Display Panel</h2>
+
+        </div>
+      </main>
+    </StyledTendFields>
   );
 };
 
@@ -61,17 +118,6 @@ const ManageFacilitiesPanel = () => {
   );
 };
 
-/**
- * Renders the default panel of Farmer Actions
- */
-const DefaultPanel = () => {
-  return (
-    <>
-      Default Panel
-    </>
-  );
-};
-
 
 const FarmerActions = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
@@ -103,13 +149,11 @@ const FarmerActions = () => {
   }, [location]);
 
   return (
-    <StyledFarmerActions>
+    <div>
       <NavBar />
       
-      <main>
-        { panel ? panel : <DefaultPanel />}
-      </main>
-    </StyledFarmerActions>
+      { location.hash ? panel : <Navigate to={DASHBOARD_PATHNAME} />}
+    </div>
   );
 }
 

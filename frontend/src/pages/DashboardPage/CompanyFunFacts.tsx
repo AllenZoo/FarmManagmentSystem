@@ -1,57 +1,36 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import NavBar from '@components/NavBar';
 
-import { HOUSING_PATHNAME } from '@src/config/routes';
+import {
+  DASHBOARD_PATHNAME,
+  COMPANY_FUN_FACTS_PATHNAME,
+} from '@src/config/routes';
 
 
 /* -------------------------------------------------------------------------- */
 /*                                   STYLING                                  */
 /* -------------------------------------------------------------------------- */
-const StyledHousing = styled.div`
-  
-`;
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 /**
- * Renders the 'View Housing' panel of Housing
+ * Renders the 'View Company Info' panel of Company Fun Facts
  */
-const ViewHousingPanel = () => {
+const ViewCompanyInfoPanel = () => {
   return (
     <>
-      View Housing
-    </>
-  );
-};
-
-/**
- * Renders the 'Manage Housing' panel of Housing
- */
-const ManageHousingPanel = () => {
-  return (
-    <>
-      Manage Housing
-    </>
-  );
-};
-
-/**
- * Renders the default panel of Housing
- */
-const DefaultPanel = () => {
-  return (
-    <>
-      Default Panel
+      View Company Info
     </>
   );
 };
 
 
-const Housing = () => {
+const CompanyFunFacts = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
   const location = useLocation();
   
@@ -59,13 +38,10 @@ const Housing = () => {
   useEffect(() => {
     const { pathname, hash } = location;
     
-    if (pathname === HOUSING_PATHNAME) {
+    if (pathname === COMPANY_FUN_FACTS_PATHNAME) {
       switch (hash) {
-        case '#housing':
-          setPanel(<ViewHousingPanel />);
-          break;
-        case '#manage-housing':
-          setPanel(<ManageHousingPanel />);
+        case '#company-info':
+          setPanel(<ViewCompanyInfoPanel />);
           break;
         default:
           setPanel(null);
@@ -75,14 +51,12 @@ const Housing = () => {
   }, [location]);
 
   return (
-    <StyledHousing>
+    <div>
       <NavBar />
       
-      <main>
-        { panel ? panel : <DefaultPanel />}
-      </main>
-    </StyledHousing>
+      { location.hash ? panel : <Navigate to={DASHBOARD_PATHNAME} />}
+    </div>
   );
 }
 
-export default Housing;
+export default CompanyFunFacts;
