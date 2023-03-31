@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import styled from 'styled-components';
+import { useState, useEffect } from 'react';
 import { GiWheat } from 'react-icons/gi';
+import styled from 'styled-components';
 
 import { login } from '@src/controllers/loginController';
 
@@ -118,12 +118,15 @@ const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
+  /**
+   * Handles the login process
+   */
   const handleLogin = async () => {
     try {
       const response = await login(username, password);
 
-      // TODO: Handle response; store token somewhere
-      console.log(response);
+      if (response)
+        sessionStorage.setItem('user-fms', username);
       
       document.location.href = '/dashboard';
     } catch (error) {
@@ -131,6 +134,12 @@ const LoginPage = () => {
       window.alert(`Login failed: ${(error as Error).message}`);
     }
   };
+
+  // Redirects to dashboard if user is already logged in
+  useEffect(() => {
+    if (sessionStorage.getItem('user-fms'))
+      document.location.href = '/dashboard';
+  }, []);
 
   return (
     <StyledLoginPage>

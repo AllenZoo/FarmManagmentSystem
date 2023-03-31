@@ -1,6 +1,9 @@
-import styled from 'styled-components';
-import { GiFarmTractor } from 'react-icons/gi';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { GiFarmTractor } from 'react-icons/gi';
+import styled from 'styled-components';
+
+import UserContext from '@src/contexts/userContext';
 
 
 /* -------------------------------------------------------------------------- */
@@ -64,11 +67,12 @@ const StyledNavButton = styled.button`
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 function NavBar() {
+  const userContext = useContext(UserContext);
 
   const handleLogout = () => {
     try {
-      // TODO: if implementing full auth, remove token
-      window.location.href = '/';
+      sessionStorage.removeItem('user-fms');
+      userContext.setUser('');
     } catch (error) {
       console.error(error);
     };

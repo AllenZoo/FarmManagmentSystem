@@ -1,9 +1,7 @@
 import axios from "axios";
 
 /**
- * This is a fake login function that will return a fake token if the username and password are correct.
- * 
- * TODO: Replace this with a real login function that will return a real token (maybe).
+ * Controls the login process by sending a POST request to the backend
  */
 export const login = async (username: string, password: string) => {
   if (username && password) {
