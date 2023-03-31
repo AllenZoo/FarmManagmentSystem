@@ -72,6 +72,7 @@ function NavBar() {
   const handleLogout = () => {
     try {
       sessionStorage.removeItem('user-fms');
+      window.alert("Logged out successfully!");
       userContext.setUser('');
     } catch (error) {
       console.error(error);

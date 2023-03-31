@@ -1,8 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { GiWheat } from 'react-icons/gi';
 import styled from 'styled-components';
 
 import { login } from '@src/controllers/loginController';
+
+import BackgroundContext from '@src/contexts/backgroundContext';
+
+import BackgroundImg from '@src/assets/background2.png';
 
 
 /* -------------------------------------------------------------------------- */
@@ -117,6 +121,7 @@ const StyledLoginForm = styled.form`
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const { setBackground } = useContext(BackgroundContext);
 
   /**
    * Handles the login process
@@ -128,15 +133,16 @@ const LoginPage = () => {
       if (response)
         sessionStorage.setItem('user-fms', username);
       
+      window.alert("Logged in successfully!");
       document.location.href = '/dashboard';
     } catch (error) {
-      console.log(error);
       window.alert(`Login failed: ${(error as Error).message}`);
     }
   };
 
   // Redirects to dashboard if user is already logged in
   useEffect(() => {
+    setBackground(BackgroundImg);
     if (sessionStorage.getItem('user-fms'))
       document.location.href = '/dashboard';
   }, []);
