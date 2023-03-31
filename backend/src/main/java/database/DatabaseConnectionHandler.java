@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import model.enums.AnimalType;
+import model.enums.CropType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -67,12 +69,49 @@ public class DatabaseConnectionHandler {
 
   // TODO: implement this
   // TODO: overload this method to allow for filtering
-  public JSONArray getLivestock() {
-    ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+  public ArrayList<LivestockModel> getLivestock() {
+    ArrayList<LivestockModel> livestock = new ArrayList<LivestockModel>();
 
-    JSONArray livestockArray = new JSONArray(livestock);
+	try {
+		String query =
+				"SELECT  l4.tagID AS tagID, " +
+						"l4.animalType AS animalType, " +
+						"l4.age AS age, " +
+						"l1.diet AS diet, " +
+						"l4.weight AS weight, " +
+						"l4.lastFed AS lastFed, " +
+						"l3.harvestable AS harvestable," +
+						"l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods " +
+				"FROM LIVESTOCK_1 l1, LIVESTOCK_3 l3, LIVESTOCK_4 l4 " +
+				"WHERE l4.animalType = l3.animalType " +
+				"AND   l4.animalType = l1.animalType " +
+				"AND   l4.age        = l3.age        " +
+				"AND   l4.weight     = l1.weight     ";
 
-    return livestockArray;
+		PrintablePreparedStatement ps =
+				new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+		ResultSet rs = ps.executeQuery();
+
+		while(rs.next()) {
+			LivestockModel model = new LivestockModel(
+					rs.getInt("tagID"),
+					AnimalType.valueOf(rs.getString("animalType").toUpperCase()),
+					rs.getInt("age"),
+					CropType.valueOf(rs.getString("diet").toUpperCase()),
+					rs.getDouble("weight"),
+					rs.getDate("lastFed"),
+					rs.getBoolean("harvestable"),
+					rs.getDate("lastViolatedForHarvestedGoods"));
+			livestock.add(model);
+		}
+
+		rs.close();
+		ps.close();
+	} catch (SQLException e) {
+		System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+	}
+
+    return livestock;
   }
 
 	public boolean insertLivestock(LivestockModel model) {

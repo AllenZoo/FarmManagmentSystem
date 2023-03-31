@@ -6,6 +6,8 @@ import org.json.JSONObject;
 import database.DatabaseConnectionHandler;
 import model.LivestockModel;
 
+import java.util.ArrayList;
+
 public class FarmingSystem {
 
     private DatabaseConnectionHandler dbHandler = null;
@@ -40,7 +42,9 @@ public class FarmingSystem {
      * TODO: overload this method to allow for filtering
      */
     public JSONArray getLivestock() {
-        return dbHandler.getLivestock();
+        ArrayList<LivestockModel> livestock = dbHandler.getLivestock();
+        JSONArray livestockArray = new JSONArray(livestock);
+        return livestockArray;
     }
 
     /**

@@ -1,6 +1,8 @@
 package com.server.controller;
 
 import controller.FarmingSystem;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import model.LivestockModel;
 import model.enums.AnimalType;
 import model.enums.CropType;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import util.JSONParser;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.Map;
 
@@ -63,8 +67,14 @@ public class MainController {
      * TODO: overload this method to allow for filtering (need to use POST)
      */
     @RequestMapping(value = "/livestock", method = GET)
-    public JSONArray getLivestock() {
-      return system.getLivestock();
+    public void getLivestock(HttpServletRequest req, HttpServletResponse res) throws IOException {
+
+        JSONArray livestock = system.getLivestock();
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(livestock);
+        out.flush();
     }
 
     /**
