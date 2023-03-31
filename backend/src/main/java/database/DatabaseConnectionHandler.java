@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import model.BranchModel;
 import model.LivestockModel;
 import util.PrintablePreparedStatement;
@@ -61,6 +64,16 @@ public class DatabaseConnectionHandler {
 			return false;
 		}
 	}
+
+  // TODO: implement this
+  // TODO: overload this method to allow for filtering
+  public JSONArray getLivestock() {
+    ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+
+    JSONArray livestockArray = new JSONArray(livestock);
+
+    return livestockArray;
+  }
 
 	public boolean insertLivestock(LivestockModel model) {
 		try {

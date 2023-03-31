@@ -1,5 +1,8 @@
 package controller;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import database.DatabaseConnectionHandler;
 import model.LivestockModel;
 
@@ -31,6 +34,14 @@ public class FarmingSystem {
 
     }
 
+    /**
+     * Retrieves all livestock data from database
+     * 
+     * TODO: overload this method to allow for filtering
+     */
+    public JSONArray getLivestock() {
+        return dbHandler.getLivestock();
+    }
 
     /**
      * Insert a livestock given info

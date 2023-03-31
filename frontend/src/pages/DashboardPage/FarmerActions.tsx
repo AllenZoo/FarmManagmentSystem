@@ -4,6 +4,8 @@ import styled from 'styled-components';
 
 import NavBar from '@components/NavBar';
 
+import { retrieveLivestock } from '@controllers/farmerActionsController';
+
 import {
   DASHBOARD_PATHNAME,
   FARMER_ACTIONS_PATHNAME,
@@ -27,7 +29,8 @@ const StyledTendFields = styled.div`
 
   .ControlPanel {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     width: 50%;
     height: 80vh;
     border-radius: 5px;
@@ -60,6 +63,33 @@ const StyledTendFields = styled.div`
   }
 `;
 
+const StyledNurtureAnimals = StyledTendFields;
+
+const StyledSellProducts = StyledTendFields;
+
+const StyledManageFacilities = StyledTendFields;
+
+const StyledButton = styled.button`
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+
+  padding: 0.5rem 1rem;
+  min-width: 20rem;
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+`;
+
+
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
@@ -89,10 +119,44 @@ const TendFieldsPanel = () => {
  * Renders the 'Nurture Animals' panel of Farmer Actions
  */
 const NurtureAnimalsPanel = () => {
+  const [livestock, setLivestock] = useState<String[] | null>(null);
+
+  /**
+   * Retrieves all livestock from the database
+   */
+  const getLivestock = async () => {
+    try {
+      const livestock = await retrieveLivestock();
+      setLivestock(livestock);
+      console.log(livestock);
+    } catch (err) {
+      console.error(err);
+    };
+  };
+
   return (
-    <>
-      Nurture Animals
-    </>
+    <StyledNurtureAnimals>
+      <main>
+        {/* CONTROL PANEL */}
+        <div className="ControlPanel">
+          <h2>Control Panel</h2>
+
+          <div>
+            <StyledButton
+              type="button"
+              onClick={getLivestock}
+            >
+              View All Livestock
+            </StyledButton>
+          </div>
+        </div>
+
+        {/* DISPLAY PANEL */}
+        <div className="DisplayPanel">
+          <h2>Display Panel</h2>
+        </div>
+      </main>
+    </StyledNurtureAnimals>
   );
 };
 
@@ -101,9 +165,20 @@ const NurtureAnimalsPanel = () => {
  */
 const SellProductsPanel = () => {
   return (
-    <>
-      Sell Products
-    </>
+    <StyledSellProducts>
+      <main>
+        {/* CONTROL PANEL */}
+        <div className="ControlPanel">
+          <h2>Control Panel</h2>
+        </div>
+
+        {/* DISPLAY PANEL */}
+        <div className="DisplayPanel">
+          <h2>Display Panel</h2>
+
+        </div>
+      </main>
+    </StyledSellProducts>
   );
 };
 
@@ -112,9 +187,20 @@ const SellProductsPanel = () => {
  */
 const ManageFacilitiesPanel = () => {
   return (
-    <>
-      Manage Facilities
-    </>
+    <StyledManageFacilities>
+      <main>
+        {/* CONTROL PANEL */}
+        <div className="ControlPanel">
+          <h2>Control Panel</h2>
+        </div>
+
+        {/* DISPLAY PANEL */}
+        <div className="DisplayPanel">
+          <h2>Display Panel</h2>
+
+        </div>
+      </main>
+    </StyledManageFacilities>
   );
 };
 
