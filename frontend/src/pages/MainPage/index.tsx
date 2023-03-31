@@ -1,7 +1,8 @@
+import { To } from 'react-router-dom';
 import styled from 'styled-components';
 import { GiBarn, GiFarmer, GiPerson, GiBroccoli } from 'react-icons/gi';
 
-import { FARMER_ACTIONS_PATHNAME } from '@src/config/routes';
+import * as ROUTES from '@src/config/routes';
 
 import NavBar from '@components/NavBar';
 import { Link } from 'react-router-dom';
@@ -71,6 +72,59 @@ const StyledButton = styled.button`
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
+// Farmer Actions Buttons
+const FARMER_ACTIONS_BUTTONS : {link: To, text: String}[] = [
+  {
+    link: `${ROUTES.FARMER_ACTIONS_PATHNAME}#tend-fields`,
+    text: "Tend Fields"
+  },
+  {
+    link: `${ROUTES.FARMER_ACTIONS_PATHNAME}#nurture-animals`,
+    text: "Nurture Animals"
+  },
+  {
+    link: `${ROUTES.FARMER_ACTIONS_PATHNAME}#sell-products`,
+    text: "Sell Products"
+  },
+  {
+    link: `${ROUTES.FARMER_ACTIONS_PATHNAME}#manage-facilities`,
+    text: "Manage Facilities"
+  }
+];
+
+// User Info Buttons
+const USER_INFO_BUTTONS : {link: To, text: String}[] = [
+  {
+    link: `${ROUTES.USER_INFO_PATHNAME}#profile`,
+    text: "View Profile"
+  },
+  {
+    link: `${ROUTES.USER_INFO_PATHNAME}#inventory`,
+    text: "View Inventory"
+  }
+];
+
+// Company Fun Facts Buttons
+const COMPANY_FUN_FACTS_BUTTONS : {link: To, text: String}[] = [
+  {
+    link: `${ROUTES.COMPANY_FUN_FACTS_PATHNAME}#company-info`,
+    text: "View Company Info"
+  }
+];
+
+// Housing Buttons
+const HOUSING_BUTTONS : {link: To, text: String}[] = [
+  {
+    link: `${ROUTES.HOUSING_PATHNAME}#housing`,
+    text: "View Housing"
+  },
+  {
+    link: `${ROUTES.HOUSING_PATHNAME}#manage-housing`,
+    text: "Manage Housing"
+  }
+];
+
+
 const MainPage = () => {
   return (
     <StyledMainPage data-testid="main-page">
@@ -80,53 +134,41 @@ const MainPage = () => {
         <StyledSection>
           <h1><GiFarmer size="2rem" /> Farmer Actions</h1>
 
-          <Link to={`${FARMER_ACTIONS_PATHNAME}#tend-fields`}>
-            <StyledButton>Tend Fields</StyledButton>
-          </Link>
-
-          <Link to={`${FARMER_ACTIONS_PATHNAME}#nurture-animals`}>
-            <StyledButton>Nurture Animals</StyledButton>
-          </Link>
-
-          <Link to={`${FARMER_ACTIONS_PATHNAME}#sell-products`}>
-            <StyledButton>Sell Products</StyledButton>
-          </Link>
-
-          <Link to={`${FARMER_ACTIONS_PATHNAME}#manage-facilities`}>
-            <StyledButton>Manage Facilities</StyledButton>
-          </Link>
+          {FARMER_ACTIONS_BUTTONS.map((button, index) => (
+            <Link to={button.link} key={index}>
+              <StyledButton>{button.text}</StyledButton>
+            </Link>
+          ))}
         </StyledSection>
 
         <StyledSection>
           <h1><GiPerson /> User Info</h1>
 
-          <StyledButton>
-            View Profile
-          </StyledButton>
-
-          <StyledButton>
-            View Inventory
-          </StyledButton>
+          {USER_INFO_BUTTONS.map((button, index) => (
+            <Link to={button.link} key={index}>
+              <StyledButton>{button.text}</StyledButton>
+            </Link>
+          ))}
         </StyledSection>
         
         <StyledSection>
           <h1><GiBroccoli /> Company Fun Facts</h1>
-
-          <StyledButton>
-            View Company Info
-          </StyledButton>
+          
+          {COMPANY_FUN_FACTS_BUTTONS.map((button, index) => (
+            <Link to={button.link} key={index}>
+              <StyledButton>{button.text}</StyledButton>
+            </Link>
+          ))}
         </StyledSection>
         
         <StyledSection>
           <h1><GiBarn /> Housing</h1>
-
-          <StyledButton>
-            View Housing
-          </StyledButton>
-
-          <StyledButton>
-            Manage Housing
-          </StyledButton>
+          
+          {HOUSING_BUTTONS.map((button, index) => (
+            <Link to={button.link} key={index}>
+              <StyledButton>{button.text}</StyledButton>
+            </Link>
+          ))}
         </StyledSection>
       </main>
     </StyledMainPage>

@@ -3,6 +3,8 @@ const DASHBOARD_PATHNAME = "/dashboard";
 
 const FARMER_ACTIONS_PATHNAME = "/farmer-actions";
 const USER_INFO_PATHNAME = "/user-info";
+const COMPANY_FUN_FACTS_PATHNAME = "/company-fun-facts";
+const HOUSING_PATHNAME = "/housing";
 
 
 export {
@@ -10,4 +12,6 @@ export {
   DASHBOARD_PATHNAME,
   FARMER_ACTIONS_PATHNAME,
   USER_INFO_PATHNAME,
+  COMPANY_FUN_FACTS_PATHNAME,
+  HOUSING_PATHNAME,
 };

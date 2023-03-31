@@ -2,18 +2,15 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import styled from "styled-components";
 
 import LoginPage from '@pages/LoginPage';
-import MainPage from '@src/pages/MainPage/MainPage';
+import MainPage from '@src/pages/MainPage';
 import ErrorPage from '@pages/ErrorPage';
 
 import FarmerActions from "@pages/MainPage/FarmerActions";
 import UserInfo from "@pages/MainPage/UserInfo";
+import CompanyFunFacts from "@pages/MainPage/CompanyFunFacts";
+import Housing from "@pages/MainPage/Housing";
 
-import {
-  DASHBOARD_PATHNAME,
-  FARMER_ACTIONS_PATHNAME,
-  LOGIN_PATHNAME,
-  USER_INFO_PATHNAME
-} from "./config/routes";
+import * as ROUTES from "@config/routes";
 
 import BackgroundImg from '@assets/background.png';
 
@@ -52,11 +49,13 @@ const App = () => {
 
       <Router>
         <Routes>
-          <Route path="/" element={<Navigate to={LOGIN_PATHNAME} />} />
-          <Route path={LOGIN_PATHNAME} element={<LoginPage />} />
-          <Route path={DASHBOARD_PATHNAME} element={<MainPage />} />
-          <Route path={FARMER_ACTIONS_PATHNAME} element={<FarmerActions />} />
-          <Route path={USER_INFO_PATHNAME} element={<UserInfo />} />
+          <Route path="/" element={<Navigate to={ROUTES.LOGIN_PATHNAME} />} />
+          <Route path={ROUTES.LOGIN_PATHNAME} element={<LoginPage />} />
+          <Route path={ROUTES.DASHBOARD_PATHNAME} element={<MainPage />} />
+          <Route path={ROUTES.FARMER_ACTIONS_PATHNAME} element={<FarmerActions />} />
+          <Route path={ROUTES.USER_INFO_PATHNAME} element={<UserInfo />} />
+          <Route path={ROUTES.COMPANY_FUN_FACTS_PATHNAME} element={<CompanyFunFacts />} />
+          <Route path={ROUTES.HOUSING_PATHNAME} element={<Housing />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </Router>

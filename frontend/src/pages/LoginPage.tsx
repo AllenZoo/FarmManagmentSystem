@@ -19,9 +19,10 @@ const StyledLoginPage = styled.div`
 
   .wheatIcon {
     font-size: 30vh;
-    color: #ff0;
     margin: 1rem 0 0 0;
     animation: pulse 5s linear infinite;
+    stroke: #ff0;
+    fill: #ff0;
 
     @keyframes pulse {
       0% { transform: scale(1); }

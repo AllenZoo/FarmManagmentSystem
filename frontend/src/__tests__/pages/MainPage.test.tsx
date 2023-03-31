@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import MainPage from '@src/pages/MainPage/MainPage';
+import MainPage from '@src/pages/MainPage';
 
 import FarmerActions from '@src/pages/MainPage/FarmerActions';
 import UserInfo from '@src/pages/MainPage/UserInfo';

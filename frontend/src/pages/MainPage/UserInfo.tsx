@@ -18,51 +18,30 @@ const StyledUserInfo = styled.div`
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
 /**
- * Renders the 'Tend Fields' panel of Farmer Actions
+ * Renders the 'View Profile' panel of User Info
  */
-const TendFieldsPanel = () => {
+const ViewProfilePanel = () => {
   return (
     <>
-      Tend Fields
+      View Profile
     </>
   );
 };
 
 /**
- * Renders the 'Nurture Animals' panel of Farmer Actions
+ * Renders the 'View Inventory' panel of User Info
  */
-const NurtureAnimalsPanel = () => {
+const ViewInventoryPanel = () => {
   return (
     <>
-      Nurture Animals
+      View Inventory
     </>
   );
 };
 
-/**
- * Renders the 'Sell Products' panel of Farmer Actions
- */
-const SellProductsPanel = () => {
-  return (
-    <>
-      Sell Products
-    </>
-  );
-};
 
 /**
- * Renders the 'Manage Facilities' panel of Farmer Actions
- */
-const ManageFacilitiesPanel = () => {
-  return (
-    <>
-      Manage Facilities
-    </>
-  );
-};
-
-/**
- * Renders the default panel of Farmer Actions
+ * Renders the default panel of User Info
  */
 const DefaultPanel = () => {
   return (
@@ -83,17 +62,11 @@ const UserInfo = () => {
     
     if (pathname === USER_INFO_PATHNAME) {
       switch (hash) {
-        case '#tend-fields':
-          setPanel(<TendFieldsPanel />);
+        case '#profile':
+          setPanel(<ViewProfilePanel />);
           break;
-        case '#nurture-animals':
-          setPanel(<NurtureAnimalsPanel />);
-          break;
-        case '#sell-products':
-          setPanel(<SellProductsPanel />);
-          break;
-        case '#manage-facilities':
-          setPanel(<ManageFacilitiesPanel />);
+        case '#inventory':
+          setPanel(<ViewInventoryPanel />);
           break;
         default:
           setPanel(null);
