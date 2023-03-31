@@ -1,16 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import App from './App';
+import App from '@src/App';
 
-import './index.css';
+import { BackgroundProvider } from "@contexts/backgroundContext";
+import { UserProvider } from "@contexts/userContext";
 
-import reportWebVitals from './reportWebVitals';
+import '@src/index.css';
+
+import reportWebVitals from '@src/reportWebVitals';
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <UserProvider>
+      <BackgroundProvider>
+        <App />
+      </BackgroundProvider>
+    </UserProvider>
   </React.StrictMode>
 );
 

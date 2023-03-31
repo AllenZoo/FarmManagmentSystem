@@ -4,18 +4,21 @@ import styled from 'styled-components';
 
 import NavBar from '@components/NavBar';
 
-import { retrieveLivestock } from '@controllers/farmerActionsController';
-
 import {
   DASHBOARD_PATHNAME,
   FARMER_ACTIONS_PATHNAME,
 } from '@src/config/routes';
 
+import TendFieldsPanel from './TendFieldsPanel';
+import NurtureAnimalsPanel from './NurtureAnimalsPanel';
+import SellProductsPanel from './SellProductsPanel';
+import ManageFacilitiesPanel from './ManageFacilitiesPanel';
+
 
 /* -------------------------------------------------------------------------- */
 /*                                   STYLING                                  */
 /* -------------------------------------------------------------------------- */
-const StyledTendFields = styled.div`
+export const StyledPanel = styled.div`
   color: #fff;
   text-align: center;
 
@@ -63,13 +66,7 @@ const StyledTendFields = styled.div`
   }
 `;
 
-const StyledNurtureAnimals = StyledTendFields;
-
-const StyledSellProducts = StyledTendFields;
-
-const StyledManageFacilities = StyledTendFields;
-
-const StyledButton = styled.button`
+export const StyledButton = styled.button`
   color: #fff;
   font-size: 1.5rem;
   text-align: center;
@@ -91,120 +88,8 @@ const StyledButton = styled.button`
 
 
 /* -------------------------------------------------------------------------- */
-/*                                  COMPONENT                                 */
+/*                                 COMPONENTS                                 */
 /* -------------------------------------------------------------------------- */
-/**
- * Renders the 'Tend Fields' panel of Farmer Actions
- */
-const TendFieldsPanel = () => {
-  return (
-    <StyledTendFields>
-      <main>
-        {/* CONTROL PANEL */}
-        <div className="ControlPanel">
-          <h2>Control Panel</h2>
-        </div>
-
-        {/* DISPLAY PANEL */}
-        <div className="DisplayPanel">
-          <h2>Display Panel</h2>
-
-        </div>
-      </main>
-    </StyledTendFields>
-  );
-};
-
-/**
- * Renders the 'Nurture Animals' panel of Farmer Actions
- */
-const NurtureAnimalsPanel = () => {
-  const [livestock, setLivestock] = useState<String[] | null>(null);
-
-  /**
-   * Retrieves all livestock from the database
-   */
-  const getLivestock = async () => {
-    try {
-      const livestock = await retrieveLivestock();
-      setLivestock(livestock);
-      console.log(livestock);
-    } catch (err) {
-      console.error(err);
-    };
-  };
-
-  return (
-    <StyledNurtureAnimals>
-      <main>
-        {/* CONTROL PANEL */}
-        <div className="ControlPanel">
-          <h2>Control Panel</h2>
-
-          <div>
-            <StyledButton
-              type="button"
-              onClick={getLivestock}
-            >
-              View All Livestock
-            </StyledButton>
-          </div>
-        </div>
-
-        {/* DISPLAY PANEL */}
-        <div className="DisplayPanel">
-          <h2>Display Panel</h2>
-        </div>
-      </main>
-    </StyledNurtureAnimals>
-  );
-};
-
-/**
- * Renders the 'Sell Products' panel of Farmer Actions
- */
-const SellProductsPanel = () => {
-  return (
-    <StyledSellProducts>
-      <main>
-        {/* CONTROL PANEL */}
-        <div className="ControlPanel">
-          <h2>Control Panel</h2>
-        </div>
-
-        {/* DISPLAY PANEL */}
-        <div className="DisplayPanel">
-          <h2>Display Panel</h2>
-
-        </div>
-      </main>
-    </StyledSellProducts>
-  );
-};
-
-/**
- * Renders the 'Manage Facilities' panel of Farmer Actions
- */
-const ManageFacilitiesPanel = () => {
-  return (
-    <StyledManageFacilities>
-      <main>
-        {/* CONTROL PANEL */}
-        <div className="ControlPanel">
-          <h2>Control Panel</h2>
-        </div>
-
-        {/* DISPLAY PANEL */}
-        <div className="DisplayPanel">
-          <h2>Display Panel</h2>
-
-        </div>
-      </main>
-    </StyledManageFacilities>
-  );
-};
-
-
 const FarmerActions = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
   const location = useLocation();

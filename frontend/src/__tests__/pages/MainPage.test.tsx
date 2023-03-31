@@ -2,10 +2,10 @@ import { render, screen } from '@testing-library/react';
 
 import MainPage from '@src/pages/DashboardPage';
 
-import FarmerActions from '@src/pages/DashboardPage/FarmerActions';
-import UserInfo from '@src/pages/DashboardPage/UserInfo';
-import CompanyFunFacts from '@src/pages/DashboardPage/CompanyFunFacts';
-import Housing from '@src/pages/DashboardPage/Housing';
+import FarmerActions from '@src/pages/DashboardPage/FarmActionsPage';
+import UserInfo from '@src/pages/DashboardPage/UserInfoPage';
+import CompanyFunFacts from '@src/pages/DashboardPage/CompanyFunFactsPage';
+import Housing from '@src/pages/DashboardPage/HousingPage';
 
 /* -------------------------------------------------------------------------- */
 /*                                 UNIT TESTS                                 */
