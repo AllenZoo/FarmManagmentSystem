@@ -45,6 +45,23 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+	public boolean login(String username, String password) {
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+
+			connection = DriverManager.getConnection(ORACLE_URL, username, password);
+			connection.setAutoCommit(false);
+
+			System.out.println("\nConnected to Oracle!");
+			return true;
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			return false;
+		}
+	}
+
 	public boolean insertLivestock(LivestockModel model) {
 		try {
 			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
@@ -52,7 +69,7 @@ public class DatabaseConnectionHandler {
 					"VALUES (?, ?, ?, ?, ?, ?)";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, model.getTagID());
-			ps.setString(2, model.getAnimalType().toString());
+			ps.setString(2, model.getAnimalType().toString().toLowerCase());
 			ps.setInt(3, model.getAge());
 			ps.setDouble(4, model.getWeight());
 			ps.setDate(5, model.getLastFed());
@@ -171,22 +188,7 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
-	public boolean login(String username, String password) {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
 
-			connection = DriverManager.getConnection(ORACLE_URL, username, password);
-			connection.setAutoCommit(false);
-
-			System.out.println("\nConnected to Oracle!");
-			return true;
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-			return false;
-		}
-	}
 
 	private void rollbackConnection() {
 		try  {
