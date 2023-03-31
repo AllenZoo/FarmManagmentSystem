@@ -12,6 +12,8 @@ import Housing from "@src/pages/DashboardPage/Housing";
 
 import * as ROUTES from "@config/routes";
 
+import { BackgroundProvider } from "./contexts/backgroundContext";
+
 import BackgroundImg from '@assets/background.png';
 
 
@@ -43,22 +45,24 @@ const StyledBackground = styled.div`
 const App = () => {
   return (
     <div data-testid="app">
-      <StyledBackground className="Background">
-        <img src={BackgroundImg} alt="" />
-      </StyledBackground>
+      <BackgroundProvider>
+        <StyledBackground className="Background">
+          <img src={BackgroundImg} alt="" />
+        </StyledBackground>
 
-      <Router>
-        <Routes>
-          <Route path="/" element={<Navigate to={ROUTES.LOGIN_PATHNAME} />} />
-          <Route path={ROUTES.LOGIN_PATHNAME} element={<LoginPage />} />
-          <Route path={ROUTES.DASHBOARD_PATHNAME} element={<MainPage />} />
-          <Route path={ROUTES.FARMER_ACTIONS_PATHNAME} element={<FarmerActions />} />
-          <Route path={ROUTES.USER_INFO_PATHNAME} element={<UserInfo />} />
-          <Route path={ROUTES.COMPANY_FUN_FACTS_PATHNAME} element={<CompanyFunFacts />} />
-          <Route path={ROUTES.HOUSING_PATHNAME} element={<Housing />} />
-          <Route path="*" element={<ErrorPage />} />
-        </Routes>
-      </Router>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Navigate to={ROUTES.LOGIN_PATHNAME} />} />
+            <Route path={ROUTES.LOGIN_PATHNAME} element={<LoginPage />} />
+            <Route path={ROUTES.DASHBOARD_PATHNAME} element={<MainPage />} />
+            <Route path={ROUTES.FARMER_ACTIONS_PATHNAME} element={<FarmerActions />} />
+            <Route path={ROUTES.USER_INFO_PATHNAME} element={<UserInfo />} />
+            <Route path={ROUTES.COMPANY_FUN_FACTS_PATHNAME} element={<CompanyFunFacts />} />
+            <Route path={ROUTES.HOUSING_PATHNAME} element={<Housing />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </Router>
+      </BackgroundProvider>
     </div>
   );
 }
