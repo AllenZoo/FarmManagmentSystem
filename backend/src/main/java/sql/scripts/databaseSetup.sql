@@ -1,26 +1,26 @@
--- DROP TABLE Manages_Housing;
--- DROP TABLE MANAGES_PEN;
--- DROP TABLE Lives;
--- DROP TABLE Contains;
--- DROP TABLE Nurtures;
--- DROP TABLE Creates;
--- DROP TABLE Tends;
--- DROP TABLE Buys;
--- DROP TABLE IsGrowing;
--- DROP TABLE Buyers_DealsWith;
--- DROP TABLE Farmers_2;
--- DROP TABLE Fields_4;
--- DROP TABLE Fields_1;
--- DROP TABLE VeterinaryRecords_Has;
--- DROP TABLE Livestock_4;
--- DROP TABLE Pen;
--- DROP TABLE Housing;
--- DROP TABLE Farmers_1;
--- DROP TABLE Crops;
--- DROP TABLE Fields_3;
--- DROP TABLE Livestock_1;
--- DROP TABLE Livestock_3;
--- DROP TABLE LIVESTOCKPRODUCE;
+DROP TABLE Manages_Housing;
+DROP TABLE MANAGES_PEN;
+DROP TABLE Lives;
+DROP TABLE Contains;
+DROP TABLE Nurtures;
+DROP TABLE Creates;
+DROP TABLE Tends;
+DROP TABLE Buys;
+DROP TABLE IsGrowing;
+DROP TABLE Buyers_DealsWith;
+DROP TABLE Farmers_2;
+DROP TABLE Fields_4;
+DROP TABLE Fields_1;
+DROP TABLE VeterinaryRecords_Has;
+DROP TABLE Livestock_4;
+DROP TABLE Pen;
+DROP TABLE Housing;
+DROP TABLE Farmers_1;
+DROP TABLE Crops;
+DROP TABLE Fields_3;
+DROP TABLE Livestock_1;
+DROP TABLE Livestock_3;
+DROP TABLE LIVESTOCKPRODUCE;
 
 
 
@@ -164,6 +164,7 @@ CREATE TABLE VeterinaryRecords_Has (
   healthStatus VARCHAR(30),
   PRIMARY KEY (tagID, recordID),
   FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
+  ON DELETE CASCADE
 );
 
 /* -------------------------------------------------------------------------- */
