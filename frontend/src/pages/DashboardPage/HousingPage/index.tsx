@@ -7,7 +7,7 @@ import NavBar from '@components/NavBar';
 import {
   DASHBOARD_PATHNAME,
   HOUSING_PATHNAME,
-} from '@src/config/routes';
+} from '@config/routes';
 
 
 /* -------------------------------------------------------------------------- */

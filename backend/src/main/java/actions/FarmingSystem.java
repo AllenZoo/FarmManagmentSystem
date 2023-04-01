@@ -1,4 +1,4 @@
-package controller;
+package actions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,7 +44,7 @@ public class FarmingSystem {
      * TODO: overload this method to allow for filtering
      */
     public JSONArray getLivestock() {
-        ArrayList<LivestockModel> livestock = dbHandler.getLivestock();
+        ArrayList<JSONObject> livestock = dbHandler.getLivestock();
         JSONArray livestockArray = new JSONArray(livestock);
         return livestockArray;
     }

@@ -78,4 +78,19 @@ public class LivestockModel {
         json.put("lastViolatedForHarvestedGoods", lastViolatedForHarvestedGoods);
         return json;
     }
+
+    public static LivestockModel fromJSON(JSONObject json) {
+        System.out.println(json);
+        
+        return new LivestockModel(
+                json.getInt("tagID"),
+                AnimalType.valueOf(json.getString("animalType").toUpperCase()),
+                json.getInt("age"),
+                CropType.valueOf(json.getString("diet").toUpperCase()),
+                json.getDouble("weight"),
+                Date.valueOf(json.getString("lastFed")),
+                json.getBoolean("harvestable"),
+                Date.valueOf(json.getString("lastViolatedForHarvestedGoods"))
+              );
+    }
 }

@@ -6,10 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.json.JSONObject;
+
 import model.enums.AnimalType;
 import model.enums.CropType;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import model.BranchModel;
 import model.LivestockModel;
@@ -67,52 +67,58 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
-    // TODO: overload this method to allow for filtering
-    public ArrayList<LivestockModel> getLivestock() {
-    ArrayList<LivestockModel> livestock = new ArrayList<LivestockModel>();
 
-	try {
-		String query =
-				"SELECT  l4.tagID AS tagID, " +
-						"l4.animalType AS animalType, " +
-						"l4.age AS age, " +
-						"l1.diet AS diet, " +
-						"l4.weight AS weight, " +
-						"l4.lastFed AS lastFed, " +
-						"l3.harvestable AS harvestable," +
-						"l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods " +
-				"FROM LIVESTOCK_1 l1, LIVESTOCK_3 l3, LIVESTOCK_4 l4 " +
-				"WHERE l4.animalType = l3.animalType " +
-				"AND   l4.animalType = l1.animalType " +
-				"AND   l4.age        = l3.age        " +
-				"AND   l4.weight     = l1.weight     ";
+	//===================Livestock methods==============================
 
-		PrintablePreparedStatement ps =
-				new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-		ResultSet rs = ps.executeQuery();
+  // TODO: implement this
+  // TODO: overload this method to allow for filtering
+  public ArrayList<JSONObject> getLivestock() {
+    ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 
-		while(rs.next()) {
-			LivestockModel model = new LivestockModel(
-					rs.getInt("tagID"),
-					AnimalType.valueOf(rs.getString("animalType").toUpperCase()),
-					rs.getInt("age"),
-					CropType.valueOf(rs.getString("diet").toUpperCase()),
-					rs.getDouble("weight"),
-					rs.getDate("lastFed"),
-					rs.getBoolean("harvestable"),
-					rs.getDate("lastViolatedForHarvestedGoods"));
-			livestock.add(model);
-		}
+    try {
+      String query =
+          "SELECT  l4.tagID AS tagID, " +
+              "l4.animalType AS animalType, " +
+              "l4.age AS age, " +
+              "l1.diet AS diet, " +
+              "l4.weight AS weight, " +
+              "l4.lastFed AS lastFed, " +
+              "l3.harvestable AS harvestable," +
+              "l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods " +
+          "FROM LIVESTOCK_1 l1, LIVESTOCK_3 l3, LIVESTOCK_4 l4 " +
+          "WHERE l4.animalType = l3.animalType " +
+          "AND   l4.animalType = l1.animalType " +
+          "AND   l4.age        = l3.age        " +
+          "AND   l4.weight     = l1.weight     ";
 
-		rs.close();
-		ps.close();
-	} catch (SQLException e) {
-		System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-	}
+      PrintablePreparedStatement ps =
+          new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+      ResultSet rs = ps.executeQuery();
 
+      while(rs.next()) {
+        LivestockModel model = new LivestockModel(
+            rs.getInt("tagID"),
+            AnimalType.valueOf(rs.getString("animalType").toUpperCase()),
+            rs.getInt("age"),
+            CropType.valueOf(rs.getString("diet").toUpperCase()),
+            rs.getDouble("weight"),
+            rs.getDate("lastFed"),
+            rs.getBoolean("harvestable"),
+            rs.getDate("lastViolatedForHarvestedGoods"));
+        livestock.add(model.toJSON());
+      }
+
+      rs.close();
+      ps.close();
+    } catch (SQLException e) {
+      System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+    }
+
+    // System.out.println(livestock);
     return livestock;
   }
 
+  // INSERT QUERY
 	public boolean insertLivestock(LivestockModel model) {
 		try {
 			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
@@ -145,6 +151,133 @@ public class DatabaseConnectionHandler {
 		// Succesfully inserted without errors
 		return true;
 	}
+
+	// DELETE QUERY
+	public boolean deleteLivestock(LivestockModel model) {
+		try {
+			String query = "DELETE FROM Livestock_4 WHERE tagID = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, model.getTagID());
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Animal with TagID " + model.getTagID() + " does not exist!");
+			}
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		return true;
+	}
+
+	// UPDATE QUERY
+	public boolean updateLivestock(LivestockModel model) {
+		try {
+			String query = "UPDATE Livestock_4 SET lastFed = ? WHERE tagID = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setDate(1, model.getLastFed());
+			ps.setInt(2, model.getTagID());
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " animal with tagID " + model.getTagID() + " does not exist!");
+			}
+			connection.commit();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		return true;
+	}
+
+	// SELECTION Query
+	// Finds the animals that are ready to sell with user specified weight
+	// TODO: Figure out what needs to be passed into this function for weight
+	public ArrayList<JSONObject> findAnimalToSell(LivestockModel model) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT tagID FROM Livestock_4 L4 WHERE L4.age > (SELECT MIN(age) " +
+					"FROM Livestock_3 WHERE harvestable = TRUE) AND weight = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setDouble(1, model.getWeight());
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				int tag_to_add = rs.getInt("tagID");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("tagID", tag_to_add);
+				livestock.add(jsonObject);
+			}
+
+			ps.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return null;
+		}
+		return livestock;
+	}
+
+	// PROJECTION QUERY
+	// TODO: Figure out if we want to try and turn string into SQL variable or just have a switch
+	public ArrayList<JSONObject> findColumns(String column_name) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT DISTINCT ? FROM Livestock_4";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+
+
+			ps.execute();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
+	}
+
+	// JOIN QUERY
+	// Finds the health status of the animal with tagID specified by user
+	public ArrayList<JSONObject> findLivestockHealthStatus(int id) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT tagID, animalType, healthStatus FROM Livestock_4 L4, " +
+					"VeterinaryRecords_Has VR WHERE VR.tagID = L4.tagID and L4.tagID = ?";
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, id);
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				int tag_to_add = rs.getInt("tagID");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("tagID", tag_to_add);
+				livestock.add(jsonObject);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return livestock;
+	}
+
+	// Aggregation with group by
+
+	public ArrayList<JSONObject> findCountedTypesSold() {
+		return null;
+	}
+
+
+
 
 
 	//============================= FROM TUTORIAL ===================================
@@ -238,6 +371,8 @@ public class DatabaseConnectionHandler {
 			rollbackConnection();
 		}
 	}
+
+
 
 	private void rollbackConnection() {
 		try  {

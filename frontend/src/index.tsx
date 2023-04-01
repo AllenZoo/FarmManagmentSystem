@@ -5,6 +5,7 @@ import App from '@src/App';
 
 import { BackgroundProvider } from "@contexts/backgroundContext";
 import { UserProvider } from "@contexts/userContext";
+import { ModalProvider } from '@contexts/modalContext';
 
 import '@src/index.css';
 
@@ -14,9 +15,11 @@ import reportWebVitals from '@src/reportWebVitals';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <UserProvider>
-      <BackgroundProvider>
-        <App />
-      </BackgroundProvider>
+      <ModalProvider>
+        <BackgroundProvider>
+          <App />
+        </BackgroundProvider>
+      </ModalProvider>
     </UserProvider>
   </React.StrictMode>
 );
