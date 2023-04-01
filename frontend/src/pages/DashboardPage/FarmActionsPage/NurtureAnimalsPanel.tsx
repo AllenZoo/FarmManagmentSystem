@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { GiBasket, GiBloodySword, GiGrain } from 'react-icons/gi';
 import { FaFilter } from 'react-icons/fa';
 import styled from 'styled-components';
@@ -7,9 +7,9 @@ import { StyledButton } from '.';
 
 import ModalContext from '@contexts/modalContext';
 
-import { deleteLivestock, insertLivestock, retrieveFilteredLivestock, retrieveLivestock } from '@controllers/farmerActionsController';
+import { deleteLivestock, insertLivestock, retrieveFilteredLivestock, retrieveLivestock, updateLivestock } from '@controllers/farmerActionsController';
 
-import { AnimalType, CropType } from '@utils/enums';
+import { ActionTypes, AnimalType, CropType } from '@utils/enums';
 import { convertDateToSQL } from '@utils/DatesSQL';
 
 import ChickenProfile from '@assets/livestock/chicken.png';
@@ -78,8 +78,8 @@ const StyledPanel = styled.div`
 
       .FilterLivestock {
         display: flex;
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-end;
         height: 100%;
         width: 90%;
         gap: 0.5rem;
@@ -87,6 +87,18 @@ const StyledPanel = styled.div`
         border-radius: 5px;
         border: 1px solid #fff;
         background-color: rgba(0, 0, 0, 0.1);
+
+        section {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 1rem;
+
+          label {
+            font-size: 1.2rem;
+            font-weight: bold;
+          }
+        }
       }
     }
   }
@@ -107,6 +119,11 @@ const StyledPanel = styled.div`
     &:hover {
       background: rgba(0, 0, 0, 0.2);
       transition: 0.2s ease;
+    }
+
+    h2 {
+      padding: 0;
+      margin: 0;
     }
 
     .LivestockInfo {
@@ -215,6 +232,19 @@ const StyledActionButton = styled.button`
     transition: 0.2s ease;
   }
 
+  &:disabled {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+
+    &:hover {
+      scale: 1;
+      background: transparent;
+      backdrop-filter: none;
+      transition: 0.2s ease;
+    }
+  }
+
   &[id="filter"] {
     border-color: #8ff;
     width: 3rem;
@@ -255,6 +285,37 @@ const StyledActionButton = styled.button`
   }
 `;
 
+const StyledSelect = styled.select`
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  margin: 0;
+  padding: 0.25rem;
+  text-align: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+
+  option {
+    color: #000;
+    background: #cff;
+  }
+`;
+
 
 /* -------------------------------------------------------------------------- */
 /*                                 COMPONENTS                                 */
@@ -277,13 +338,28 @@ const getAnimalProfile = (animalType: AnimalType) => {
   };
 };
 
+// Empty filter object
+const noFilters : FilteredLivestock = {
+  animalType: null,
+  minAge: null,
+  maxAge: null,
+  diets: null,
+  minWeight: null,
+  maxWeight: null,
+  minLastFed: null,
+  maxLastFed: null,
+  harvestable: null,
+  minLastViolatedForHarvestedGoods: null,
+  maxLastViolatedForHarvestedGoods: null
+};
+
 
 /**
  * Renders the 'Nurture Animals' panel of Farmer Actions
  */
 const NurtureAnimalsPanel = () => {
   const [livestock, setLivestock] = useState<Livestock[] | null>(null);
-  const [filteredData, setFilteredData] = useState<FilteredLivestock | null>(null);
+  const [filteredData, setFilteredData] = useState<FilteredLivestock>(noFilters);
   const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
 
   const modalContext = useContext(ModalContext);
@@ -293,7 +369,7 @@ const NurtureAnimalsPanel = () => {
    */
   const getLivestock = async () => {
     try {
-      if (filteredData) {
+      if (filteredData !== noFilters) {
         const livestock = await retrieveFilteredLivestock(filteredData);
         setLivestock(livestock);
         return;
@@ -304,6 +380,15 @@ const NurtureAnimalsPanel = () => {
     } catch (err) {
       console.error(err);
     };
+  };
+
+  /**
+   * Syncs data
+   */
+  const syncData = () => {
+    setTimeout(async () => {
+      await getLivestock();
+    }, 300);
   };
 
   /**
@@ -331,11 +416,10 @@ const NurtureAnimalsPanel = () => {
 
   /**
    * Feeds the livestock
-   * TODO: Implement
    */
   const feedLivestock = async (livestock: Livestock) => {
     try {
-      
+      updateLivestock(livestock, ActionTypes.FEED);
     } catch (err) {
       console.error(err);
     };
@@ -343,11 +427,10 @@ const NurtureAnimalsPanel = () => {
 
   /**
    * Harvests from the livestock
-   * TODO: Implement
    */
   const harvestLivestock = async (livestock: Livestock) => {
     try {
-      
+      updateLivestock(livestock, ActionTypes.HARVEST);
     } catch (err) {
       console.error(err);
     };
@@ -355,7 +438,6 @@ const NurtureAnimalsPanel = () => {
 
   /**
    * Terminate the livestock
-   * TODO: Implement
    */
   const terminateLivestock = async (livestock: Livestock) => {
     try {
@@ -368,7 +450,7 @@ const NurtureAnimalsPanel = () => {
             onClick={() => {
               deleteLivestock(livestock);
               modalContext.clearModal();
-              getLivestock();
+              syncData();
             }}
           >
             Absolutely Yes!
@@ -391,9 +473,29 @@ const NurtureAnimalsPanel = () => {
    * Update filters for livestock
    */
   const updateFilters = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    
-  };
+    const { name, value } = e.target;
 
+    // console.log(name, value);
+
+    if (value !== "all") {
+      setFilteredData({
+        ...filteredData,
+        [name]: value
+      });
+    } else {
+      setFilteredData({
+        ...filteredData,
+        [name]: null
+      });
+    };
+  };
+  
+  /**
+   * Syncs the livestock data with the database
+   */
+  useEffect(() => {
+    syncData();
+  }, [filteredData]);
 
   return (
     <StyledPanel>
@@ -422,7 +524,50 @@ const NurtureAnimalsPanel = () => {
 
             {filterEnabled && (
               <form className="FilterLivestock">
-                
+                <section>
+                  <label htmlFor="animalType">Animal Type</label>
+                  <StyledSelect
+                    name="animalType"
+                    id="animalType"
+                    onChange={updateFilters}
+                  >
+                    <option value="all">All</option>
+                    <option value="cow">Cow</option>
+                    <option value="chicken">Chicken</option>
+                    <option value="pig">Pig</option>
+                    <option value="sheep">Sheep</option>
+                  </StyledSelect>
+                </section>
+
+                <section>
+                  <label htmlFor="diet">Diet</label>
+                  <StyledSelect
+                    name="diet"
+                    id="diet"
+                    onChange={updateFilters}
+                  >
+                    <option value="all">All</option>
+                    <option value="canola">Canola</option>
+                    <option value="wheat">Wheat</option>
+                    <option value="corn">Corn</option>
+
+                  </StyledSelect>
+                </section>
+
+                <section>
+                  <label htmlFor="harvestable">Harvestable</label>
+                  <StyledSelect
+                    name="harvestable"
+                    id="harvestable"
+                    onChange={updateFilters}
+                  >
+                    <option value="all">All</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </StyledSelect>
+                </section>
+
+
               </form>
             )}
 
@@ -437,7 +582,7 @@ const NurtureAnimalsPanel = () => {
                 type="button"
                 onClick={() => {
                   addLivestock();
-                  getLivestock();
+                  syncData();
                 }}
               >
                 Add Livestock
@@ -448,6 +593,8 @@ const NurtureAnimalsPanel = () => {
 
         {/* DISPLAY PANEL */}
         <div className="DisplayPanel">
+          <h2>Total Livestock Displayed: {livestock?.length}</h2>
+
           {livestock && livestock.map((livestock, index) => (
             <fieldset key={index} className="LivestockInfo">
               <legend>Livestock ID: #{livestock.tagID}</legend>
@@ -493,6 +640,7 @@ const NurtureAnimalsPanel = () => {
                   onClick={() => harvestLivestock(livestock)}
                   id="harvest"
                   title={`Harvest #${livestock.tagID}`}
+                  disabled={!livestock.harvestable}
                 >
                   <GiBasket />
                 </StyledActionButton>
