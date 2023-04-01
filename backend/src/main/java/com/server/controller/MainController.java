@@ -113,6 +113,18 @@ public class MainController {
         out.flush();
     }
 
+    @RequestMapping(value = "/get/vetRecords", method = POST)
+    public void get_vet_records(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+        int tag_to_find = (int) map.get("tagID");
+        JSONArray livestock = system.getVetRecords(tag_to_find);
+
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(livestock);
+        out.flush();
+    }
+
     // For Ref!
     //    @RequestMapping(value = "/login", method = POST)
     //    public boolean login(HttpServletRequest req, HttpServletResponse res, Model model) throws IOException {
