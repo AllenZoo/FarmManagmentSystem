@@ -233,10 +233,14 @@ public class DatabaseConnectionHandler {
 	}
 
 	// PROJECTION QUERY
-	public ArrayList<JSONObject> findColumns(String relation_name, ArrayList<String> strings) {
+	public ArrayList<JSONObject> projectTable(String relation_name, String[] columns) {
 		ArrayList<JSONObject> to_return = new ArrayList<JSONObject>();
 		try {
-			String query = "SELECT DISTINCT " + strings.toString() + " FROM" + relation_name;
+			String columnsString = "";
+			for (int i = 0; i < columns.length; i++) {
+				columnsString += columns[i] + ", ";
+			}
+			String query = "SELECT DISTINCT " + columnsString + " FROM" + relation_name;
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			ResultSet rs = ps.executeQuery();
@@ -244,8 +248,8 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				JSONObject json = new JSONObject();
-				for (int i = 0; i < strings.size();  i++) {
-					json.put(strings.get(i), rs.getObject(i));
+				for (int i = 0; i < columns.length;  i++) {
+					json.put(columns[i], rs.getObject(i));
 				}
 				to_return.add(json);
 			}

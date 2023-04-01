@@ -70,8 +70,8 @@ public class FarmingSystem {
      * General Select from any table request
      */
     public JSONArray getSelect(String[] columns, String tableName) {
-        // TODO: stub
-        return null;
-        // return dbHandler.findColumns()
+        ArrayList<JSONObject> data = dbHandler.projectTable(tableName, columns);
+        JSONArray dataJSONArray = new JSONArray(data);
+        return dataJSONArray;
     }
 }
