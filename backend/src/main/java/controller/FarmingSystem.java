@@ -1,7 +1,6 @@
 package controller;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import database.DatabaseConnectionHandler;
 import model.LivestockModel;

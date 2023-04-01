@@ -8,6 +8,7 @@ import model.enums.AnimalType;
 import model.enums.CropType;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import util.JSONParser;
@@ -82,21 +83,7 @@ public class MainController {
      */
     @RequestMapping(value = "/livestock/insert", method = POST)
     public boolean insertLiveStock(@RequestBody Map<String, Object> map) {
-        int tagID = (int) map.get("tagID");
-        AnimalType animalType =  AnimalType.valueOf(map.get("animalType").toString());
-        int age = (int) map.get("age");
-        CropType diet = CropType.valueOf(map.get("diet").toString());
-        double weight = (double) map.get("weight");
-        Date lastFed =  parser.parseDate(map.get("lastFed").toString());
-        boolean harvestable = Boolean.valueOf(map.get("harvestable").toString());
-        Date lastViolatedForHarvestedGoods =
-                parser.parseDate(map.get("lastViolatedForHarvestedGoods").toString());
-
-        System.out.println(tagID + " " + animalType + " " + age + " " + diet + " "
-                + weight + " " + lastFed + " " + harvestable + " " + lastViolatedForHarvestedGoods);
-
-        LivestockModel model = new LivestockModel(tagID, animalType,
-                age, diet, weight, lastFed, harvestable, lastViolatedForHarvestedGoods);
+        LivestockModel model = LivestockModel.fromJSON(new JSONObject(map));
         return system.insertLivestock(model);
     }
 

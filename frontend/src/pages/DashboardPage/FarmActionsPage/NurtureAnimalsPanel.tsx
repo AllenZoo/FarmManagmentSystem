@@ -1,6 +1,9 @@
 import { useState } from 'react';
-import { retrieveLivestock } from '@controllers/farmerActionsController';
+import { insertLivestock, retrieveLivestock } from '@controllers/farmerActionsController';
 import { StyledPanel, StyledButton } from '.';
+
+import { AnimalType, CropType } from '@utils/enums';
+import { convertDateToSQL } from '@utils/DatesSQL';
 
 /**
  * Renders the 'Nurture Animals' panel of Farmer Actions
@@ -21,6 +24,29 @@ const NurtureAnimalsPanel = () => {
     };
   };
 
+  /**
+   * Adds a new livestock to the database
+   */
+  const addLivestock = async () => {
+    // Dummy data
+    const newLivestock : Livestock = {
+      tagID: '123456789',
+      animalType: AnimalType.COW,
+      age: 1,
+      diet:  CropType.WHEAT,
+      weight: 1000,
+      lastFed: convertDateToSQL(new Date()),
+      harvestable: false,
+      lastViolatedForHarvestedGoods: convertDateToSQL(new Date())
+    };
+
+    try {
+      await insertLivestock(newLivestock);
+    } catch (err) {
+      console.error(err);
+    };
+  };
+
   return (
     <StyledPanel>
       <main>
@@ -34,6 +60,13 @@ const NurtureAnimalsPanel = () => {
               onClick={getLivestock}
             >
               View All Livestock
+            </StyledButton>
+
+            <StyledButton
+              type="button"
+              onClick={addLivestock}
+            >
+              Add Livestock
             </StyledButton>
           </div>
         </div>

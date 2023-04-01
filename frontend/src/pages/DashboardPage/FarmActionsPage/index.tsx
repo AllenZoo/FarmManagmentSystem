@@ -46,6 +46,13 @@ export const StyledPanel = styled.div`
       background: rgba(0, 0, 0, 0.2);
       transition: 0.2s ease;
     }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
   }
 
   .DisplayPanel {

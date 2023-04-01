@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 import model.enums.AnimalType;
 import model.enums.CropType;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import model.BranchModel;
 import model.LivestockModel;
