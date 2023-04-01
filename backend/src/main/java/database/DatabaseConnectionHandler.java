@@ -67,6 +67,9 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+
+	//Livestock methods
+
   // TODO: implement this
   // TODO: overload this method to allow for filtering
   public ArrayList<JSONObject> getLivestock() {
@@ -146,6 +149,68 @@ public class DatabaseConnectionHandler {
 		}
 		// Succesfully inserted without errors
 		return true;
+	}
+
+	public boolean deleteLivestock(LivestockModel model) {
+		try {
+			String query = "DELETE FROM Livestock_4 WHERE tagID = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, model.getTagID());
+			ps.executeQuery();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		return true;
+	}
+
+	public boolean updateLivestock(LivestockModel model) {
+		try {
+			String query = "UPDATE Livestock_4 SET lastFed = ? WHERE tagID = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setDate(1, model.getLastFed());
+			ps.setInt(2, model.getTagID());
+			ps.executeUpdate();
+			connection.commit();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		return true;
+	}
+
+	// Finds the animals that are ready to sell with user specified weight
+	public ArrayList<Integer> sellAnimal(LivestockModel model) {
+		ArrayList<Integer> livestock = new ArrayList<Integer>();
+		try {
+			String query = "SELECT tagID FROM Livestock_4 L4 WHERE L4.age > (SELECT MIN(age) " +
+					"FROM Livestock_3 WHERE harvestable = TRUE) AND weight = ?";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setDouble(1, model.getWeight());
+
+			ResultSet rs = ps.executeQuery();
+
+			ps.close();
+
+			while (rs.next()) {
+				int tag_to_add = rs.getInt("tagID");
+				livestock.add(tag_to_add);
+			}
+
+			ps.close();
+			rs.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return null;
+		}
+		return livestock;
 	}
 
 
