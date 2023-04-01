@@ -85,7 +85,8 @@ public class MainController {
     /**
      * Handles Delete Livestock Requests
      */
-    @RequestMapping(value = "/livestock", method = DELETE)
+    @RequestMapping(value = "/livestock/delete", method = POST)
+    @ResponseBody
     public boolean deleteLivestock(@RequestBody Map<String, Object> map) {
         int tagIDToDelete = (int) map.get("tagID");
         return system.deleteLivestock(tagIDToDelete);
