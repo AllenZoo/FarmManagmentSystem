@@ -103,7 +103,6 @@ public class DatabaseConnectionHandler {
             rs.getBoolean("harvestable"),
             rs.getDate("lastViolatedForHarvestedGoods"));
         livestock.add(model.toJSON());
-        System.out.println(model);
       }
 
       rs.close();
@@ -112,6 +111,7 @@ public class DatabaseConnectionHandler {
       System.out.println(EXCEPTION_TAG + " " + e.getMessage());
     }
 
+    // System.out.println(livestock);
     return livestock;
   }
 

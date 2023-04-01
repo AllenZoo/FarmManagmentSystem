@@ -9,7 +9,7 @@ import { convertDateToSQL } from '@utils/DatesSQL';
  * Renders the 'Nurture Animals' panel of Farmer Actions
  */
 const NurtureAnimalsPanel = () => {
-  const [livestock, setLivestock] = useState<String[] | null>(null);
+  const [livestock, setLivestock] = useState<Livestock[] | null>(null);
 
   /**
    * Retrieves all livestock from the database
@@ -18,7 +18,6 @@ const NurtureAnimalsPanel = () => {
     try {
       const livestock = await retrieveLivestock();
       setLivestock(livestock);
-      console.log(livestock);
     } catch (err) {
       console.error(err);
     };
@@ -54,7 +53,7 @@ const NurtureAnimalsPanel = () => {
         <div className="ControlPanel">
           <h2>Nurture Animals</h2>
 
-          <div>
+          <div className="Controls">
             <StyledButton
               type="button"
               onClick={getLivestock}
@@ -62,17 +61,37 @@ const NurtureAnimalsPanel = () => {
               View All Livestock
             </StyledButton>
 
-            <StyledButton
-              type="button"
-              onClick={addLivestock}
-            >
-              Add Livestock
-            </StyledButton>
+            <form>
+              <select>
+                <option value="cow">Cow</option>
+                <option value="chicken">Chicken</option>
+                <option value="pig">Pig</option>
+              </select>
+
+              <StyledButton
+                type="button"
+                onClick={addLivestock}
+              >
+                Add Livestock
+              </StyledButton>
+            </form>
           </div>
         </div>
 
         {/* DISPLAY PANEL */}
         <div className="DisplayPanel">
+          {livestock && livestock.map((livestock, index) => (
+            <div key={index}>
+              <p>{livestock.tagID}</p>
+              <p>{livestock.animalType}</p>
+              <p>{livestock.age}</p>
+              <p>{livestock.diet}</p>
+              <p>{livestock.weight}</p>
+              <p>{livestock.lastFed}</p>
+              <p>{livestock.harvestable}</p>
+              <p>{livestock.lastViolatedForHarvestedGoods}</p>
+            </div>
+          ))}
         </div>
       </main>
     </StyledPanel>

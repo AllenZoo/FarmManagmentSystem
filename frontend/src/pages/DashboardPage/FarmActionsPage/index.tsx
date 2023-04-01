@@ -36,6 +36,7 @@ export const StyledPanel = styled.div`
     align-items: center;
     width: 50%;
     height: 80vh;
+    padding: 1rem;
     border-radius: 5px;
     border: 1px solid #fff;
     background-color: rgba(0, 0, 0, 0.1);
@@ -46,12 +47,19 @@ export const StyledPanel = styled.div`
       background: rgba(0, 0, 0, 0.2);
       transition: 0.2s ease;
     }
-
-    div {
+    
+    .Controls {
       display: flex;
       flex-direction: column;
       align-items: center;
+      height: 100%;
       gap: 0.5rem;
+      padding: 1rem;
+      border-radius: 5px;
+      border: 1px solid #fff;
+      background-color: rgba(0, 0, 0, 0.1);
+      overflow-x: none;
+      transition: 0.2s ease;
     }
   }
 
@@ -60,6 +68,7 @@ export const StyledPanel = styled.div`
     justify-content: center;
     width: 100%;
     height: 80vh;
+    padding: 1rem;
     border-radius: 5px;
     border: 1px solid #fff;
     background-color: rgba(0, 0, 0, 0.1);
