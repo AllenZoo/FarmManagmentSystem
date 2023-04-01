@@ -6,7 +6,7 @@ import { login } from '@controllers/loginController';
 
 import BackgroundContext from '@contexts/backgroundContext';
 
-import BackgroundImg from '@assets/background2.png';
+import BackgroundImg from '@assets/backgrounds/background2.png';
 
 
 /* -------------------------------------------------------------------------- */

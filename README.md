@@ -14,3 +14,7 @@ The timeline/task breakdown can be found [here.](./_deliverables/TIMELINE.md)
 - Node.js + NPM - [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 - JDK 17 - [https://www.oracle.com/ca-en/java/technologies/downloads/](https://www.oracle.com/ca-en/java/technologies/downloads/)
 - Maven - [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
+
+## Credits / Acknowledgements
+- Backgrounds generated using Stable Diffusion
+- Livestock images from [https://www.flaticon.com/packs/agriculture-54](https://www.flaticon.com/packs/agriculture-54)

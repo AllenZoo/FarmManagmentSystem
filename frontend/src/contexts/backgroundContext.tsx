@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from 'react';
 import styled from "styled-components";
 
-import BackgroundImg from '@assets/background.png';
+import BackgroundImg from '@assets/backgrounds/background.png';
 
 
 /**
