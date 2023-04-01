@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { GiBasket, GiBloodySword, GiGrain } from 'react-icons/gi';
 import styled from 'styled-components';
 
-import { insertLivestock, retrieveLivestock } from '@controllers/farmerActionsController';
 import { StyledButton } from '.';
+
+import ModalContext from '@contexts/modalContext';
+
+import { insertLivestock, retrieveLivestock } from '@controllers/farmerActionsController';
 
 import { AnimalType, CropType } from '@utils/enums';
 import { convertDateToSQL } from '@utils/DatesSQL';
@@ -97,7 +101,7 @@ const StyledPanel = styled.div`
 
       img {
         height: 100%;
-        width: 12rem;
+        width: 20%;
         padding: 0.5rem;
         border-radius: 10px;
         backdrop-filter: blur(5px);
@@ -117,6 +121,8 @@ const StyledPanel = styled.div`
       }
 
       .Info {
+        width: 80%;
+
         b {
           font-size: 1.2rem;
           border-left: 4px solid #fff;
@@ -145,6 +151,68 @@ const StyledPanel = styled.div`
           }
         }
       }
+
+      .Actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 10%;
+      }
+    }
+  }
+`;
+
+const StyledActionButton = styled.button`
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 0;
+  padding: 0.25rem;
+  text-align: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    scale: 1.05;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+
+  &[id="feed"] {
+    border-color: #ff8;
+
+    svg {
+      stroke: #ff8 !important;
+      fill: #ff8 !important;
+    }
+  }
+
+  &[id="harvest"] {
+    border-color: #8f8;
+
+    svg {
+      stroke: #8f8 !important;
+      fill: #8f8 !important;
+    }
+  }
+
+  &[id="terminate"] {
+    border-color: #f88;
+
+    svg {
+      stroke: #f88 !important;
+      fill: #f88 !important;
     }
   }
 `;
@@ -177,6 +245,7 @@ const getAnimalProfile = (animalType: AnimalType) => {
  */
 const NurtureAnimalsPanel = () => {
   const [livestock, setLivestock] = useState<Livestock[] | null>(null);
+  const modalContext = useContext(ModalContext);
 
   /**
    * Retrieves all livestock from the database
@@ -208,6 +277,44 @@ const NurtureAnimalsPanel = () => {
 
     try {
       await insertLivestock(newLivestock);
+    } catch (err) {
+      console.error(err);
+    };
+  };
+
+  /**
+   * Feeds the livestock
+   * TODO: Implement
+   */
+  const feedLivestock = async (livestock: Livestock) => {
+    try {
+      
+    } catch (err) {
+      console.error(err);
+    };
+  };
+
+  /**
+   * Harvests from the livestock
+   * TODO: Implement
+   */
+  const harvestLivestock = async (livestock: Livestock) => {
+    try {
+      
+    } catch (err) {
+      console.error(err);
+    };
+  };
+
+  /**
+   * Terminate the livestock
+   * TODO: Implement
+   */
+  const terminateLivestock = async (livestock: Livestock) => {
+    try {
+      modalContext.setEnabled(true);
+      modalContext.setModal("Hi");
+      modalContext.setConfirmAction(() => console.log("Confirmed"));
     } catch (err) {
       console.error(err);
     };
@@ -275,6 +382,35 @@ const NurtureAnimalsPanel = () => {
                   <p>Harvestable: <b>{livestock.harvestable ? "YES" : "NO"}</b></p>
                   <p>Last Violated For Harvested Goods: <b>{livestock.lastViolatedForHarvestedGoods || "N/A"}</b></p>
                 </section>
+              </div>
+
+              <div className="Actions">
+                <StyledActionButton
+                  type="button"
+                  onClick={() => feedLivestock(livestock)}
+                  id="feed"
+                  title={`Feed #${livestock.tagID} with ${livestock.diet}`}
+                >
+                  <GiGrain />
+                </StyledActionButton>
+
+                <StyledActionButton
+                  type="button"
+                  onClick={() => harvestLivestock(livestock)}
+                  id="harvest"
+                  title={`Harvest #${livestock.tagID}`}
+                >
+                  <GiBasket />
+                </StyledActionButton>
+
+                <StyledActionButton
+                  type="button"
+                  onClick={() => terminateLivestock(livestock)}
+                  id="terminate"
+                  title={`Terminate #${livestock.tagID}`}
+                >
+                  <GiBloodySword />
+                </StyledActionButton>
               </div>
             </fieldset>
           ))}
