@@ -69,7 +69,7 @@ public class FarmingSystem {
     /**
      * General Select from any table request
      */
-    public JSONArray getSelect(String[] columns, String tableName) {
+    public JSONArray getSelect(ArrayList<String> columns, String tableName) {
         ArrayList<JSONObject> data = dbHandler.projectTable(tableName, columns);
         JSONArray dataJSONArray = new JSONArray(data);
         return dataJSONArray;

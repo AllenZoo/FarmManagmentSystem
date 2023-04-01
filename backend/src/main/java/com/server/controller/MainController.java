@@ -13,6 +13,7 @@ import util.JSONParser;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -95,13 +96,13 @@ public class MainController {
     /**
      * General Selection Query
      * Sample Request Format: {
-     *     "table":"LIVESTOCK_4"
+     *     "table":"LIVESTOCK_4",
      *     "columns": ["tagID", "age", "weight"]
      * }
      */
     @RequestMapping(value = "/get/values", method = POST)
     public void doSelection(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
-        String[] columnsToSelect = (String[]) map.get("columns");
+        ArrayList<String> columnsToSelect = (ArrayList<String>) map.get("columns");
         String tableToFrom = map.get("table").toString();
 
         JSONArray livestock = system.getSelect(columnsToSelect, tableToFrom);

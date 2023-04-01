@@ -233,14 +233,19 @@ public class DatabaseConnectionHandler {
 	}
 
 	// PROJECTION QUERY
-	public ArrayList<JSONObject> projectTable(String relation_name, String[] columns) {
+	public ArrayList<JSONObject> projectTable(String relation_name, ArrayList<String> columns) {
 		ArrayList<JSONObject> to_return = new ArrayList<JSONObject>();
 		try {
 			String columnsString = "";
-			for (int i = 0; i < columns.length; i++) {
-				columnsString += columns[i] + ", ";
+			for (int i = 0; i < columns.size(); i++) {
+				if (i != columns.size() - 1) {
+					columnsString += columns.get(i) + ", ";
+				} else {
+					columnsString += columns.get(i);
+				}
+
 			}
-			String query = "SELECT DISTINCT " + columnsString + " FROM" + relation_name;
+			String query = "SELECT DISTINCT " + columnsString + " FROM " + relation_name;
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
 			ResultSet rs = ps.executeQuery();
@@ -248,8 +253,9 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				JSONObject json = new JSONObject();
-				for (int i = 0; i < columns.length;  i++) {
-					json.put(columns[i], rs.getObject(i));
+				for (int i = 0; i < columns.size();  i++) {
+					// System.out.println(rs.getObject(columns.get(i)));
+					json.put(columns.get(i), rs.getObject(columns.get(i)));
 				}
 				to_return.add(json);
 			}
