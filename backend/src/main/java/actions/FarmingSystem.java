@@ -1,6 +1,7 @@
-package controller;
+package actions;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import database.DatabaseConnectionHandler;
 import model.LivestockModel;
@@ -41,7 +42,7 @@ public class FarmingSystem {
      * TODO: overload this method to allow for filtering
      */
     public JSONArray getLivestock() {
-        ArrayList<LivestockModel> livestock = dbHandler.getLivestock();
+        ArrayList<JSONObject> livestock = dbHandler.getLivestock();
         JSONArray livestockArray = new JSONArray(livestock);
         return livestockArray;
     }

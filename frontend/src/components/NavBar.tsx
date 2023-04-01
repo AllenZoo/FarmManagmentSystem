@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { GiFarmTractor } from 'react-icons/gi';
 import styled from 'styled-components';
 
-import UserContext from '@src/contexts/userContext';
+import UserContext from '@contexts/userContext';
 
 
 /* -------------------------------------------------------------------------- */

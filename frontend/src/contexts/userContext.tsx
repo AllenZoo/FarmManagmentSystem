@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useState, useEffect } from 'react';
 
-import * as ROUTES from '@src/config/routes';
+import * as ROUTES from '@config/routes';
 
 /**
  * User context

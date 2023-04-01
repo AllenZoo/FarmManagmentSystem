@@ -2,7 +2,7 @@ import { To } from 'react-router-dom';
 import styled from 'styled-components';
 import { GiBarn, GiFarmer, GiPerson, GiBroccoli } from 'react-icons/gi';
 
-import * as ROUTES from '@src/config/routes';
+import * as ROUTES from '@config/routes';
 
 import NavBar from '@components/NavBar';
 import { Link } from 'react-router-dom';

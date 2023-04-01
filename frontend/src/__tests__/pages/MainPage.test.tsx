@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react';
 
-import MainPage from '@src/pages/DashboardPage';
+import MainPage from '@pages/DashboardPage';
 
-import FarmerActions from '@src/pages/DashboardPage/FarmActionsPage';
-import UserInfo from '@src/pages/DashboardPage/UserInfoPage';
-import CompanyFunFacts from '@src/pages/DashboardPage/CompanyFunFactsPage';
-import Housing from '@src/pages/DashboardPage/HousingPage';
+import FarmerActions from '@pages/DashboardPage/FarmActionsPage';
+import UserInfo from '@pages/DashboardPage/UserInfoPage';
+import CompanyFunFacts from '@pages/DashboardPage/CompanyFunFactsPage';
+import Housing from '@pages/DashboardPage/HousingPage';
 
 /* -------------------------------------------------------------------------- */
 /*                                 UNIT TESTS                                 */

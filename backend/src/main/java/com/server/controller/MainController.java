@@ -1,21 +1,18 @@
 package com.server.controller;
 
-import controller.FarmingSystem;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.LivestockModel;
-import model.enums.AnimalType;
-import model.enums.CropType;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
+import actions.FarmingSystem;
 import util.JSONParser;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
 import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
