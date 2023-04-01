@@ -176,14 +176,23 @@ public class DatabaseConnectionHandler {
 	// UPDATE QUERY
 	public boolean updateLivestock(LivestockModel model) {
 		try {
-			String query = "UPDATE Livestock_4 SET lastFed = ? WHERE tagID = ?";
+			String query = "UPDATE Livestock_4 SET tagID = ?," +
+					"animalType = ?," +
+					"age = ?," +
+					"weight = ?," +
+					"lastFed = ?," +
+					"lastViolatedForHarvestedGoods = ?," +
+					"WHERE tagID = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setDate(1, model.getLastFed());
-			ps.setInt(2, model.getTagID());
-			int rowCount = ps.executeUpdate();
-			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " animal with tagID " + model.getTagID() + " does not exist!");
-			}
+			ps.setInt(1, model.getTagID());
+			ps.setString(2, model.getAnimalType().toString().toLowerCase());
+			ps.setInt(3, model.getAge());
+			ps.setDouble(4, model.getWeight());
+			ps.setDate(5, model.getLastFed());
+			ps.setDate(6, model.getLastViolatedForHarvestedGoods());
+			ps.setInt(7, model.getTagID());
+			ps.executeUpdate();
+
 			connection.commit();
 			ps.close();
 		} catch (SQLException e) {
