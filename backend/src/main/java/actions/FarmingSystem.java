@@ -50,9 +50,13 @@ public class FarmingSystem {
     }
 
     public JSONArray getLivestock(HttpServletRequest req) {
-        ArrayList<LivestockModel> livestock = dbHandler.getLivestock();
+        ArrayList<JSONObject> livestock = dbHandler.getLivestock();
         JSONArray livestockArray = new JSONArray(livestock);
         return livestockArray;
+    }
+
+    public boolean deleteLivestock(int tagID) {
+        return dbHandler.deleteLivestock(tagID);
     }
 
     /**

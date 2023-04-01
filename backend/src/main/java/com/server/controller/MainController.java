@@ -15,8 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
@@ -66,7 +65,7 @@ public class MainController {
      */
     @RequestMapping(value = "/livestock", method = GET)
     public void getLivestock(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        JSONArray livestock = system.getLivestock();
+        JSONArray livestock = system.getLivestock(req);
         PrintWriter out = res.getWriter();
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
@@ -81,6 +80,15 @@ public class MainController {
     public boolean insertLiveStock(@RequestBody Map<String, Object> map) {
         LivestockModel model = LivestockModel.fromJSON(new JSONObject(map));
         return system.insertLivestock(model);
+    }
+
+    /**
+     * Handles Delete Livestock Requests
+     */
+    @RequestMapping(value = "/livestock", method = DELETE)
+    public boolean deleteLivestock(@RequestBody Map<String, Object> map) {
+        int tagIDToDelete = (int) map.get("tagID");
+        return system.deleteLivestock(tagIDToDelete);
     }
 
     // For Ref!

@@ -153,14 +153,14 @@ public class DatabaseConnectionHandler {
 	}
 
 	// DELETE QUERY
-	public boolean deleteLivestock(LivestockModel model) {
+	public boolean deleteLivestock(int tagID) {
 		try {
 			String query = "DELETE FROM Livestock_4 WHERE tagID = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setInt(1, model.getTagID());
+			ps.setInt(1, tagID);
 			int rowCount = ps.executeUpdate();
 			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " Animal with TagID " + model.getTagID() + " does not exist!");
+				System.out.println(WARNING_TAG + " Animal with TagID " + tagID + " does not exist!");
 			}
 			connection.commit();
 
