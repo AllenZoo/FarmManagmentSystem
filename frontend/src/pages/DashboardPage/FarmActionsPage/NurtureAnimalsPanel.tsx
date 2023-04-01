@@ -98,6 +98,17 @@ const StyledPanel = styled.div`
             font-size: 1.2rem;
             font-weight: bold;
           }
+
+          input {
+            max-width: 8rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 2px solid #fff;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 1.2rem;
+            transition: 0.2s ease;
+          }
         }
       }
     }
@@ -472,7 +483,7 @@ const NurtureAnimalsPanel = () => {
   /**
    * Update filters for livestock
    */
-  const updateFilters = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const updateFilters = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = e.target;
 
     // console.log(name, value);
@@ -567,7 +578,29 @@ const NurtureAnimalsPanel = () => {
                   </StyledSelect>
                 </section>
 
-
+                <section>
+                  <label htmlFor="minAge">Min Age</label>
+                  <input
+                    type="number"
+                    name="minAge"
+                    id="minAge"
+                    defaultValue={filteredData.minAge}
+                    min={0}
+                    onChange={updateFilters}
+                  />
+                </section>
+                  
+                <section>
+                  <label htmlFor="maxAge">Max Age</label>
+                  <input
+                    type="number"
+                    name="maxAge"
+                    id="maxAge"
+                    defaultValue={filteredData.maxAge}
+                    min={filteredData.minAge || 0}
+                    onChange={updateFilters}
+                  />
+                </section>
               </form>
             )}
 
