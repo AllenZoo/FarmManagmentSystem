@@ -70,9 +70,11 @@ public class DatabaseConnectionHandler {
 
 	//===================Livestock methods==============================
 
-  // TODO: implement this
-  // TODO: overload this method to allow for filtering
-  public ArrayList<JSONObject> getLivestock() {
+
+
+   // TODO: implement this
+   // TODO: overload this method to allow for filtering
+   public ArrayList<JSONObject> getLivestock() {
     ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 
     try {

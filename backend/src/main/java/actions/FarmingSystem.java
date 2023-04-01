@@ -65,4 +65,13 @@ public class FarmingSystem {
     public boolean insertLivestock(LivestockModel model) {
         return dbHandler.insertLivestock(model);
     }
+
+    /**
+     * General Select from any table request
+     */
+    public JSONArray getSelect(String[] columns, String tableName) {
+        // TODO: stub
+        return null;
+        // return dbHandler.findColumns()
+    }
 }
