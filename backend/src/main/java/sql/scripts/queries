@@ -76,9 +76,13 @@ UPDATE Fields_4 SET state = 0;
 PROJECTION TO FIND ALL CROPS/ANIMALTYPES
  */
 
-SELECT DISTINCT cropType FROM Crops;
+/*
+ Apparently the user needs to be able to select the column
+ */
 
-SELECT DISTINCT animalType FROM Livestock_4;
+SELECT DISTINCT ? FROM Crops;
+
+SELECT DISTINCT ? FROM Livestock_4;
 
 
 /*Join*/
@@ -88,7 +92,7 @@ SELECT DISTINCT animalType FROM Livestock_4;
  Age is specified by the user
  */
 
-SELECT tagID, animalType, healthStatus FROM Livestock_4 AS L4, VeterinaryRecords as VR WHERE VR.tagID = L4.tagID and L4.age = ?;
+SELECT tagID, animalType, healthStatus FROM Livestock_4 AS L4, VeterinaryRecords as VR WHERE VR.tagID = L4.tagID and L4.tagID = ?;
 
 
 

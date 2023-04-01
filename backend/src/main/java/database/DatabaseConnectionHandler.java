@@ -68,7 +68,7 @@ public class DatabaseConnectionHandler {
 	}
 
 
-	//Livestock methods
+	//===================Livestock methods==============================
 
   // TODO: implement this
   // TODO: overload this method to allow for filtering
@@ -118,6 +118,7 @@ public class DatabaseConnectionHandler {
     return livestock;
   }
 
+  // INSERT QUERY
 	public boolean insertLivestock(LivestockModel model) {
 		try {
 			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
@@ -151,12 +152,16 @@ public class DatabaseConnectionHandler {
 		return true;
 	}
 
+	// DELETE QUERY
 	public boolean deleteLivestock(LivestockModel model) {
 		try {
 			String query = "DELETE FROM Livestock_4 WHERE tagID = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, model.getTagID());
-			ps.executeQuery();
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " Animal with TagID " + model.getTagID() + " does not exist!");
+			}
 			connection.commit();
 
 			ps.close();
@@ -168,13 +173,17 @@ public class DatabaseConnectionHandler {
 		return true;
 	}
 
+	// UPDATE QUERY
 	public boolean updateLivestock(LivestockModel model) {
 		try {
 			String query = "UPDATE Livestock_4 SET lastFed = ? WHERE tagID = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setDate(1, model.getLastFed());
 			ps.setInt(2, model.getTagID());
-			ps.executeUpdate();
+			int rowCount = ps.executeUpdate();
+			if (rowCount == 0) {
+				System.out.println(WARNING_TAG + " animal with tagID " + model.getTagID() + " does not exist!");
+			}
 			connection.commit();
 			ps.close();
 		} catch (SQLException e) {
@@ -185,9 +194,11 @@ public class DatabaseConnectionHandler {
 		return true;
 	}
 
+	// SELECTION Query
 	// Finds the animals that are ready to sell with user specified weight
-	public ArrayList<Integer> sellAnimal(LivestockModel model) {
-		ArrayList<Integer> livestock = new ArrayList<Integer>();
+	// TODO: Figure out what needs to be passed into this function for weight
+	public ArrayList<JSONObject> findAnimalToSell(LivestockModel model) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT tagID FROM Livestock_4 L4 WHERE L4.age > (SELECT MIN(age) " +
 					"FROM Livestock_3 WHERE harvestable = TRUE) AND weight = ?";
@@ -196,11 +207,11 @@ public class DatabaseConnectionHandler {
 
 			ResultSet rs = ps.executeQuery();
 
-			ps.close();
-
 			while (rs.next()) {
 				int tag_to_add = rs.getInt("tagID");
-				livestock.add(tag_to_add);
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("tagID", tag_to_add);
+				livestock.add(jsonObject);
 			}
 
 			ps.close();
@@ -212,6 +223,61 @@ public class DatabaseConnectionHandler {
 		}
 		return livestock;
 	}
+
+	// PROJECTION QUERY
+	// TODO: Figure out if we want to try and turn string into SQL variable or just have a switch
+	public ArrayList<JSONObject> findColumns(String column_name) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT DISTINCT ? FROM Livestock_4";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+
+
+			ps.execute();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
+	}
+
+	// JOIN QUERY
+	// Finds the health status of the animal with tagID specified by user
+	public ArrayList<JSONObject> findLivestockHealthStatus(int id) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT tagID, animalType, healthStatus FROM Livestock_4 L4, " +
+					"VeterinaryRecords_Has VR WHERE VR.tagID = L4.tagID and L4.tagID = ?";
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, id);
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				int tag_to_add = rs.getInt("tagID");
+				JSONObject jsonObject = new JSONObject();
+				jsonObject.put("tagID", tag_to_add);
+				livestock.add(jsonObject);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return livestock;
+	}
+
+	// Aggregation with group by
+
+	public ArrayList<JSONObject> findCountedTypesSold() {
+		return null;
+	}
+
+
+
 
 
 	//============================= FROM TUTORIAL ===================================
