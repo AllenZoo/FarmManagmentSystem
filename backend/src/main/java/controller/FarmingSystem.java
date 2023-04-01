@@ -1,5 +1,7 @@
 package controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -42,6 +44,12 @@ public class FarmingSystem {
      * TODO: overload this method to allow for filtering
      */
     public JSONArray getLivestock() {
+        ArrayList<LivestockModel> livestock = dbHandler.getLivestock();
+        JSONArray livestockArray = new JSONArray(livestock);
+        return livestockArray;
+    }
+
+    public JSONArray getLivestock(HttpServletRequest req) {
         ArrayList<LivestockModel> livestock = dbHandler.getLivestock();
         JSONArray livestockArray = new JSONArray(livestock);
         return livestockArray;

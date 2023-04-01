@@ -68,7 +68,6 @@ public class MainController {
      */
     @RequestMapping(value = "/livestock", method = GET)
     public void getLivestock(HttpServletRequest req, HttpServletResponse res) throws IOException {
-
         JSONArray livestock = system.getLivestock();
         PrintWriter out = res.getWriter();
         res.setContentType("application/json");

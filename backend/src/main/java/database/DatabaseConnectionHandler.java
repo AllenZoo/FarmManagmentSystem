@@ -67,9 +67,8 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
-  // TODO: implement this
-  // TODO: overload this method to allow for filtering
-  public ArrayList<LivestockModel> getLivestock() {
+    // TODO: overload this method to allow for filtering
+    public ArrayList<LivestockModel> getLivestock() {
     ArrayList<LivestockModel> livestock = new ArrayList<LivestockModel>();
 
 	try {
@@ -239,8 +238,6 @@ public class DatabaseConnectionHandler {
 			rollbackConnection();
 		}
 	}
-
-
 
 	private void rollbackConnection() {
 		try  {
