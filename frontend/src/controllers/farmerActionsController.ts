@@ -1,7 +1,7 @@
 import axios from "axios";
 
 /**
- * Retrieves the livestock from the backend
+ * Retrieves the livestock
  */
 export const retrieveLivestock = async () => {
   const res = await axios.get("/api/livestock");
@@ -11,7 +11,21 @@ export const retrieveLivestock = async () => {
 };
 
 /**
- * Inserts a new livestock into the backend
+ * Retrieves the filtered livestock
+ */
+export const retrieveFilteredLivestock = async (filteredData: FilteredLivestock) => {
+	const res = await axios.post("/api/livestock", filteredData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+	if (res.data) return res.data;
+	else throw new Error("Failed to retrieve filtered livestock!");
+};
+
+/**
+ * Inserts a new livestock
  */
 export const insertLivestock = async (livestock: Livestock) => {
   const livestockJson = JSON.stringify(livestock);
@@ -23,4 +37,19 @@ export const insertLivestock = async (livestock: Livestock) => {
 
   if (res.data) return res.data;
   else throw new Error("Failed to insert livestock!");
+};
+
+/**
+ * Deletes a livestock
+ */
+export const deleteLivestock = async (livestock: Livestock) => {
+  const livestockJson = JSON.stringify(livestock);
+	const res = await axios.post("/api/livestock/delete", livestockJson, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+	if (res.data) return res.data;
+	else throw new Error("Failed to delete livestock!");
 };

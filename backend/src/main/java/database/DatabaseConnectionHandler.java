@@ -1,9 +1,6 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
@@ -178,14 +175,23 @@ public class DatabaseConnectionHandler {
 	// UPDATE QUERY
 	public boolean updateLivestock(LivestockModel model) {
 		try {
-			String query = "UPDATE Livestock_4 SET lastFed = ? WHERE tagID = ?";
+			String query = "UPDATE Livestock_4 SET tagID = ?," +
+					"animalType = ?," +
+					"age = ?," +
+					"weight = ?," +
+					"lastFed = ?," +
+					"lastViolatedForHarvestedGoods = ?," +
+					"WHERE tagID = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setDate(1, model.getLastFed());
-			ps.setInt(2, model.getTagID());
-			int rowCount = ps.executeUpdate();
-			if (rowCount == 0) {
-				System.out.println(WARNING_TAG + " animal with tagID " + model.getTagID() + " does not exist!");
-			}
+			ps.setInt(1, model.getTagID());
+			ps.setString(2, model.getAnimalType().toString().toLowerCase());
+			ps.setInt(3, model.getAge());
+			ps.setDouble(4, model.getWeight());
+			ps.setDate(5, model.getLastFed());
+			ps.setDate(6, model.getLastViolatedForHarvestedGoods());
+			ps.setInt(7, model.getTagID());
+			ps.executeUpdate();
+
 			connection.commit();
 			ps.close();
 		} catch (SQLException e) {
@@ -227,19 +233,29 @@ public class DatabaseConnectionHandler {
 	}
 
 	// PROJECTION QUERY
-	// TODO: Figure out if we want to try and turn string into SQL variable or just have a switch
-	public ArrayList<JSONObject> findColumns(String column_name) {
-		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+	public ArrayList<JSONObject> findColumns(String relation_name, ArrayList<String> strings) {
+		ArrayList<JSONObject> to_return = new ArrayList<JSONObject>();
 		try {
-			String query = "SELECT DISTINCT ? FROM Livestock_4";
+			String query = "SELECT DISTINCT " + strings.toString() + " FROM" + relation_name;
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
+			ResultSet rs = ps.executeQuery();
 
-			ps.execute();
+
+			while(rs.next()) {
+				JSONObject json = new JSONObject();
+				for (int i = 0; i < strings.size();  i++) {
+					json.put(strings.get(i), rs.getObject(i));
+				}
+				to_return.add(json);
+			}
+
+			rs.close();
+			ps.close();
 		} catch (SQLException e) {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
-		return livestock;
+		return to_return;
 	}
 
 	// JOIN QUERY

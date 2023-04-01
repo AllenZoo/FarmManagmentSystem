@@ -1,4 +1,3 @@
-import { StyledButton } from '@pages/DashboardPage/FarmActionsPage';
 import { createContext, ReactNode, useState } from 'react';
 import styled from "styled-components";
 
@@ -7,19 +6,13 @@ import styled from "styled-components";
  * Modal context
  */
 const ModalContext = createContext<{
-  modalContent: ReactNode,
+  modal: ReactNode,
   setModal: any,
-  enabled: boolean,
-  setEnabled: any,
-  confirmAction: any,
-  setConfirmAction: any,
+  clearModal: any,
 }>({
-  modalContent: <></>,
+  modal: null,
   setModal: () => {},
-  enabled: false,
-  setEnabled: () => {},
-  confirmAction: () => {},
-  setConfirmAction: () => {},
+  clearModal: () => {},
 });
 
 export default ModalContext;
@@ -95,42 +88,25 @@ const StyledModal = styled.div`
  * Context Provider for modal
  */
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const [modalContent, setModal] = useState<ReactNode>(<></>);
-  const [enabled, setEnabled] = useState<boolean>(false);
-  const [confirmAction, setConfirmAction] = useState<any>(() => {});
+  const [modal, setModal] = useState<ReactNode>(null);
+
+  /**
+   * Clears all states to their original values
+   */
+  const clearModal = () => setModal(null);
 
   return (
     <ModalContext.Provider value={{
-      modalContent,
+      modal,
       setModal,
-      enabled,
-      setEnabled,
-      confirmAction,
-      setConfirmAction,
+      clearModal,
     }}>
-      { enabled && (
+      { (modal !== null) && (
         <StyledModal>
-          <button onClick={() => setEnabled(false)} title="Close">X</button>
+          <button onClick={() => clearModal()} title="Close">X</button>
 
           <div className="Info">
-            <h1>Are you sure?</h1>
-            
-            {modalContent}
-
-            <StyledButton onClick={() => {
-              try {
-                confirmAction();
-              } catch (error) {
-                console.log(error);
-              };
-              setEnabled(false);
-            }}>
-              Yes
-            </StyledButton>
-
-            <StyledButton onClick={() => setEnabled(false)}>
-              No
-            </StyledButton>
+            {modal}
           </div>
         </StyledModal>
       )}

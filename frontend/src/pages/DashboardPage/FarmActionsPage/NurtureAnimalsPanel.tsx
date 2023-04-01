@@ -1,12 +1,13 @@
 import { useState, useContext } from 'react';
 import { GiBasket, GiBloodySword, GiGrain } from 'react-icons/gi';
+import { FaFilter } from 'react-icons/fa';
 import styled from 'styled-components';
 
 import { StyledButton } from '.';
 
 import ModalContext from '@contexts/modalContext';
 
-import { insertLivestock, retrieveLivestock } from '@controllers/farmerActionsController';
+import { deleteLivestock, insertLivestock, retrieveFilteredLivestock, retrieveLivestock } from '@controllers/farmerActionsController';
 
 import { AnimalType, CropType } from '@utils/enums';
 import { convertDateToSQL } from '@utils/DatesSQL';
@@ -36,7 +37,7 @@ const StyledPanel = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
+    width: 45%;
     height: 80vh;
     padding: 1rem;
     border-radius: 5px;
@@ -48,6 +49,11 @@ const StyledPanel = styled.div`
     &:hover {
       background: rgba(0, 0, 0, 0.2);
       transition: 0.2s ease;
+    }
+
+    h2 {
+      padding: 0;
+      margin: 0 0 0.5rem 0;
     }
     
     .Controls {
@@ -62,6 +68,26 @@ const StyledPanel = styled.div`
       background-color: rgba(0, 0, 0, 0.1);
       overflow-x: none;
       transition: 0.2s ease;
+
+      .ViewLivestock {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .FilterLivestock {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 100%;
+        width: 90%;
+        gap: 0.5rem;
+        padding: 1rem;
+        border-radius: 5px;
+        border: 1px solid #fff;
+        background-color: rgba(0, 0, 0, 0.1);
+      }
     }
   }
 
@@ -189,6 +215,18 @@ const StyledActionButton = styled.button`
     transition: 0.2s ease;
   }
 
+  &[id="filter"] {
+    border-color: #8ff;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+
+    svg {
+      stroke: #8ff !important;
+      fill: #8ff !important;
+    }
+  }
+
   &[id="feed"] {
     border-color: #ff8;
 
@@ -245,6 +283,9 @@ const getAnimalProfile = (animalType: AnimalType) => {
  */
 const NurtureAnimalsPanel = () => {
   const [livestock, setLivestock] = useState<Livestock[] | null>(null);
+  const [filteredData, setFilteredData] = useState<FilteredLivestock | null>(null);
+  const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
+
   const modalContext = useContext(ModalContext);
 
   /**
@@ -252,6 +293,12 @@ const NurtureAnimalsPanel = () => {
    */
   const getLivestock = async () => {
     try {
+      if (filteredData) {
+        const livestock = await retrieveFilteredLivestock(filteredData);
+        setLivestock(livestock);
+        return;
+      };
+
       const livestock = await retrieveLivestock();
       setLivestock(livestock);
     } catch (err) {
@@ -267,9 +314,9 @@ const NurtureAnimalsPanel = () => {
     const newLivestock : Livestock = {
       tagID: '4000',
       animalType: AnimalType.COW,
-      age: 1,
+      age: 4,
       diet:  CropType.WHEAT,
-      weight: 1000,
+      weight: 70,
       lastFed: convertDateToSQL(new Date()),
       harvestable: false,
       lastViolatedForHarvestedGoods: convertDateToSQL(new Date())
@@ -312,13 +359,41 @@ const NurtureAnimalsPanel = () => {
    */
   const terminateLivestock = async (livestock: Livestock) => {
     try {
-      modalContext.setEnabled(true);
-      modalContext.setModal("Hi");
-      modalContext.setConfirmAction(() => console.log("Confirmed"));
+      modalContext.setModal(
+        <>
+          Are you sure you want to terminate this livestock?
+
+          <StyledButton
+            type="button"
+            onClick={() => {
+              deleteLivestock(livestock);
+              modalContext.clearModal();
+              getLivestock();
+            }}
+          >
+            Absolutely Yes!
+          </StyledButton>
+
+          <StyledButton
+            type="button"
+            onClick={() => {modalContext.clearModal()}}
+          >
+            No
+          </StyledButton>
+        </>
+      );
     } catch (err) {
       console.error(err);
     };
   };
+
+  /**
+   * Update filters for livestock
+   */
+  const updateFilters = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    
+  };
+
 
   return (
     <StyledPanel>
@@ -328,12 +403,28 @@ const NurtureAnimalsPanel = () => {
           <h2>Nurture Animals</h2>
 
           <div className="Controls">
-            <StyledButton
-              type="button"
-              onClick={getLivestock}
-            >
-              View All Livestock
-            </StyledButton>
+            <form className="ViewLivestock">
+              <StyledButton
+                type="button"
+                onClick={getLivestock}
+              >
+                View Livestock
+              </StyledButton>
+
+              <StyledActionButton
+                type="button"
+                onClick={() => {setFilterEnabled(!filterEnabled)}}
+                id="filter"
+              >
+                <FaFilter />
+              </StyledActionButton>
+            </form>
+
+            {filterEnabled && (
+              <form className="FilterLivestock">
+                
+              </form>
+            )}
 
             <form>
               <select>
@@ -344,7 +435,10 @@ const NurtureAnimalsPanel = () => {
 
               <StyledButton
                 type="button"
-                onClick={addLivestock}
+                onClick={() => {
+                  addLivestock();
+                  getLivestock();
+                }}
               >
                 Add Livestock
               </StyledButton>
