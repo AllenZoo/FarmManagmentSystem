@@ -415,8 +415,22 @@ public class DatabaseConnectionHandler {
 	}
 
 
+	// NESTED AGGREGATION WITH GROUP BY
 
-
+	public ArrayList<JSONObject> findOverweightAnimals() {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "CREATE VIEW temp AS SELECT animalType, AVG(weight) AS avgweight FROM Livestock_1 GROUP BY animalType; " +
+					"SELECT L4.animalType, L1.diet " +
+					"FROM Livestock_4 L4, Livestock_1 L1 " +
+					"WHERE L4.animalType = L1.animalType AND L4.weight = L1.weight " +
+					"GROUP BY L4.animalType, L1.diet " +
+					"HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType);";
+		} catch(Exception e) {
+			// TODO
+		}
+		return livestock;
+	}
 
 
 	//============================= FROM TUTORIAL ===================================

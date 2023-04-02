@@ -116,4 +116,10 @@ public class FarmingSystem {
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
     }
+
+    public JSONArray getWateredAndFed(String animal, int water, int food) {
+        ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animal, water, food);
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
 }

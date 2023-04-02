@@ -180,6 +180,20 @@ public class MainController {
         out.flush();
     }
 
+
+    @RequestMapping(value = "/get/wateredAndFed", method = POST)
+    public void getWateredAndFed(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+        String animalName = (String) map.get("animalType");
+        int water_spent = (int) map.get("waterSpent");
+        int food_spent = (int) map.get("foodSpent");
+        JSONArray livestock = system.getWateredAndFed(animalName, water_spent, food_spent);
+
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(livestock);
+        out.flush();
+    }
     // For Ref!
     //    @RequestMapping(value = "/login", method = POST)
     //    public boolean login(HttpServletRequest req, HttpServletResponse res, Model model) throws IOException {
