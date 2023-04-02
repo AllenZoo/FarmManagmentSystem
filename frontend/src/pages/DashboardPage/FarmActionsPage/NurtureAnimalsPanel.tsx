@@ -416,8 +416,9 @@ const NurtureAnimalsPanel = () => {
       }
 
       // Check if all filters are not set
-      if (Object.values(filteredData).every(
-        (value) => (value === null || value === "all" || value === -1))
+      if (
+        Object.values(filteredData).every((value) => (value === null || value === "all" || value === -1)) ||
+        !filterEnabled
       ) {
         const livestock = await retrieveLivestock();
         setLivestock(livestock);
@@ -590,7 +591,12 @@ const NurtureAnimalsPanel = () => {
                     name="harvestable"
                     id="harvestable"
                     defaultValue={"all"}
-                    onChange={(e) => {setHarvestableFilter(e.target.value === 'true' ? true : false)}}
+                    onChange={(e) => {
+                      if (e.target.value === 'all')
+                        setHarvestableFilter("all");
+                      else
+                        setHarvestableFilter(e.target.value === 'true' ? true : false)
+                    }}
                   >
                     <option value="all">All</option>
                     <option value="true">Yes</option>

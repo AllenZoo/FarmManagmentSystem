@@ -46,10 +46,9 @@ public class LivestockFilterModel {
 
         }
 
-
-        if (isHarvestable() == "false") {
+        if (isHarvestable().equals("false")) {
             queryString += " AND (harvestable = " + 0 + " )  ";
-        } else if (isHarvestable() == "true") {
+        } else if (isHarvestable().equals("true")) {
             queryString += " AND (harvestable = " + 1 + " )  ";
         }
 
