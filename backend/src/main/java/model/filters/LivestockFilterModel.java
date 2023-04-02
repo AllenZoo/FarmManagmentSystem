@@ -29,7 +29,16 @@ public class LivestockFilterModel {
         String queryString = " WHERE ";
 
         // There will always be a min age and max age.
-        queryString += " age >= " + minAge + " AND " + " age <= " + maxAge + " ";
+
+        if (minAge <= -1) {
+            queryString += " age >= " + 0 + " ";
+        } else if (maxAge <= -1) {
+            queryString += " age >= " + minAge + " ";
+        } else {
+            queryString += " age >= " + minAge + " AND " + " age <= " + maxAge + " ";
+
+        }
+
 
         if (isHarvestable() == "false") {
             queryString += " AND (harvestable = " + 0 + " )  ";
