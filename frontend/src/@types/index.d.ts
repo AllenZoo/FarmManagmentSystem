@@ -21,7 +21,7 @@ interface FilteredLivestock {
   maxWeight?: double | null;
   minLastFed?: String | null;
   maxLastFed?: String | null;
-  harvestable?: boolean | null;
+  harvestable?: boolean | String | null;
   minLastViolatedForHarvestedGoods?: String | null;
   maxLastViolatedForHarvestedGoods?: String | null;
   // orderBy?: String | null;

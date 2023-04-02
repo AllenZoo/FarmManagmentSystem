@@ -382,11 +382,11 @@ const NurtureAnimalsPanel = () => {
   const [livestock, setLivestock] = useState<Livestock[] | null>(null);
   const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
 
-  const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | null>(null);
-  const [dietFilter, setDietFilter] = useState<CropType | null>(null);
-  const [harvestableFilter, setHarvestableFilter] = useState<boolean | null>(null);
-  const [minAgeFilter, setMinAgeFilter] = useState<number | null>(null);
-  const [maxAgeFilter, setMaxAgeFilter] = useState<number | null>(null);
+  const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>("all");
+  const [dietFilter, setDietFilter] = useState<CropType | string>("all");
+  const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>("all");
+  const [minAgeFilter, setMinAgeFilter] = useState<number>(-1);
+  const [maxAgeFilter, setMaxAgeFilter] = useState<number>(-1);
 
   const modalContext = useContext(ModalContext);
 
@@ -394,11 +394,12 @@ const NurtureAnimalsPanel = () => {
    * Clears all filters
    */
   const clearFilters = () => {
-    setAnimalTypeFilter(null);
-    setDietFilter(null);
-    setHarvestableFilter(null);
-    setMinAgeFilter(null);
-    setMaxAgeFilter(null);
+    setAnimalTypeFilter("all");
+    setDietFilter("all");
+    setHarvestableFilter("all");
+    setMinAgeFilter(-1);
+    setMaxAgeFilter(-1);
+    setFilterEnabled(false);
   };
 
   /**
@@ -414,8 +415,10 @@ const NurtureAnimalsPanel = () => {
         harvestable: harvestableFilter
       }
 
-      // Check if all filters are null
-      if (Object.values(filteredData).every((value) => value === null)) {
+      // Check if all filters are not set
+      if (Object.values(filteredData).every(
+        (value) => (value === null || value === "all" || value === -1))
+      ) {
         const livestock = await retrieveLivestock();
         setLivestock(livestock);
         return;
@@ -554,6 +557,7 @@ const NurtureAnimalsPanel = () => {
                   <StyledSelect
                     name="animalType"
                     id="animalType"
+                    defaultValue={"all"}
                     onChange={(e) => {setAnimalTypeFilter(e.target.value as AnimalType)}}
                   >
                     <option value="all">All</option>
@@ -569,6 +573,7 @@ const NurtureAnimalsPanel = () => {
                   <StyledSelect
                     name="diet"
                     id="diet"
+                    defaultValue={"all"}
                     onChange={(e) => {setDietFilter(e.target.value as CropType)}}
                   >
                     <option value="all">All</option>
@@ -584,6 +589,7 @@ const NurtureAnimalsPanel = () => {
                   <StyledSelect
                     name="harvestable"
                     id="harvestable"
+                    defaultValue={"all"}
                     onChange={(e) => {setHarvestableFilter(e.target.value === 'true' ? true : false)}}
                   >
                     <option value="all">All</option>
@@ -620,12 +626,9 @@ const NurtureAnimalsPanel = () => {
 
                 <section>
                   <StyledButton
-                    type="submit"
+                    type="button"
                     id="clearFilters"
-                    onClick={() => {
-                      clearFilters();
-                      syncData();
-                    }}
+                    onClick={clearFilters}
                   >
                     Clear Filters
                   </StyledButton>
@@ -633,9 +636,7 @@ const NurtureAnimalsPanel = () => {
                   <StyledButton
                     type="button"
                     id="applyFilters"
-                    onClick={() => {
-                      syncData();
-                    }}
+                    onClick={syncData}
                   >
                     Apply Filters
                   </StyledButton>

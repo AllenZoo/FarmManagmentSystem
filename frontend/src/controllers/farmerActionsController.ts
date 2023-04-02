@@ -20,13 +20,13 @@ export const retrieveLivestock = async () => {
  * Retrieves the filtered livestock
  */
 export const retrieveFilteredLivestock = async (filteredData: FilteredLivestock) => {
-  // console.log("filteredData: ", filteredData);
+  console.log(filteredData);
 
-	const res = await axios.post(PATH, filteredData, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+	const res = await axios.post(`${PATH}/filteredValues`, filteredData, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 
 	if (res.data) return res.data;
 	else throw new Error("Failed to retrieve filtered livestock!");
