@@ -6,5 +6,6 @@ public enum CropType {
     CORN,
     POTATOES,
     MUSTARD,
-    COCONUT
+    COCONUT,
+    ALL
 }

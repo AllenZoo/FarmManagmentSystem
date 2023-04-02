@@ -68,6 +68,10 @@ UPDATE Fields_4 SET state = 0;
  */
  SELECT tagID FROM Livestock_4 AS L4 WHERE L4.age > (SELECT MIN(age) FROM Livestock_3 WHERE harvestable = TRUE) AND weight = ?;
 
+/*
+    FINDING ALL ANIMALS GIVE CERTAIN CONSTRAINTS
+
+*/
 
 /*Projection*/
 

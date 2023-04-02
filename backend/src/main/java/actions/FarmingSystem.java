@@ -2,6 +2,9 @@ package actions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.enums.AnimalType;
+import model.enums.CropType;
+import model.filters.LivestockFilterModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -55,6 +58,14 @@ public class FarmingSystem {
         return livestockArray;
     }
 
+    public JSONArray getFilteredLivestock(String harvestable, AnimalType animalType, CropType diet, int minAge, int maxAge) {
+        LivestockFilterModel model = new LivestockFilterModel(harvestable, animalType, diet, minAge, maxAge);
+
+        ArrayList<JSONObject> livestock =         dbHandler.getFilteredLivestock(model);
+        JSONArray livestockArray = new JSONArray(livestock);
+        return livestockArray;
+    }
+
     public boolean deleteLivestock(int tagID) {
         return dbHandler.deleteLivestock(tagID);
     }
@@ -65,6 +76,18 @@ public class FarmingSystem {
     public boolean insertLivestock(LivestockModel model) {
         return dbHandler.insertLivestock(model);
     }
+
+    /**
+     * Update a livestock with given info
+     */
+
+    public boolean updateLivestock(LivestockModel model) {
+        return dbHandler.updateLivestock(model);
+    }
+
+
+
+    // ================= GENERAL PROJECT ===================
 
     /**
      * General Select from any table request
@@ -78,6 +101,12 @@ public class FarmingSystem {
 
     public JSONArray getVetRecords(int id) {
         ArrayList<JSONObject> data = dbHandler.findLivestockHealthStatus(id);
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
+
+    public JSONArray getAnimalCountType(int age) {
+        ArrayList<JSONObject> data = dbHandler.findCountedTypesSold(age);
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
     }
