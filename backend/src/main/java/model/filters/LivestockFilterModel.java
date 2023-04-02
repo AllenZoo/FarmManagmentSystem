@@ -30,11 +30,18 @@ public class LivestockFilterModel {
 
         // There will always be a min age and max age.
 
-        if (minAge <= -1) {
+
+        if (minAge <= -1 && maxAge <= -1) {
+            // no valid age val.
             queryString += " age >= " + 0 + " ";
-        } else if (maxAge <= -1) {
+        } else if (minAge > -1 && maxAge <= -1) {
+            // valid min age val.
             queryString += " age >= " + minAge + " ";
+        } else if (minAge <= -1 && maxAge > -1) {
+            // valid max age val.
+            queryString += " age <= " + maxAge + " ";
         } else {
+            // both valid.
             queryString += " age >= " + minAge + " AND " + " age <= " + maxAge + " ";
 
         }
