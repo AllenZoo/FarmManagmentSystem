@@ -76,12 +76,18 @@ public class FarmingSystem {
     }
 
 
+    /**
+     * Join query with vet records
+     */
     public JSONArray getVetRecords(int id) {
         ArrayList<JSONObject> data = dbHandler.findLivestockHealthStatus(id);
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
     }
 
+    /**
+     * Aggregation with group by -> count animal types
+     */
     public JSONArray getAnimalCountType(int age) {
         ArrayList<JSONObject> data = dbHandler.findCountedTypesSold(age);
         JSONArray dataArray = new JSONArray(data);
