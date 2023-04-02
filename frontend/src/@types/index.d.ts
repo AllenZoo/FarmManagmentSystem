@@ -13,15 +13,17 @@ interface Livestock {
 };
 
 interface FilteredLivestock {
-  animalTypes: AnimalType[] | null;
-  minAge: int | null;
-  maxAge: int | null;
-  diets: CropType[] | null;
-  minWeight: double | null;
-  maxWeight: double | null;
-  minLastFed: String | null;
-  maxLastFed: String | null;
-  harvestable: boolean | null;
-  minLastViolatedForHarvestedGoods: String | null;
-  maxLastViolatedForHarvestedGoods: String | null;
+  animalType?: AnimalType | null;
+  minAge?: int | null;
+  maxAge?: int | null;
+  diets?: CropType | null;
+  minWeight?: double | null;
+  maxWeight?: double | null;
+  minLastFed?: String | null;
+  maxLastFed?: String | null;
+  harvestable?: boolean | null;
+  minLastViolatedForHarvestedGoods?: String | null;
+  maxLastViolatedForHarvestedGoods?: String | null;
+  // orderBy?: String | null;
+  // order?: boolean | null;
 };

@@ -1,11 +1,28 @@
+DROP TABLE Manages_Housing;
+DROP TABLE MANAGES_PEN;
+DROP TABLE Lives;
+DROP TABLE Contains;
+DROP TABLE Nurtures;
+DROP TABLE Creates;
+DROP TABLE Tends;
+DROP TABLE Buys;
+DROP TABLE IsGrowing;
+DROP TABLE Buyers_DealsWith;
+DROP TABLE Farmers_2;
+DROP TABLE Fields_4;
+DROP TABLE Fields_1;
+DROP TABLE VeterinaryRecords_Has;
+DROP TABLE Livestock_4;
 DROP TABLE Pen;
 DROP TABLE Housing;
 DROP TABLE Farmers_1;
-DROP TABLE Farmers_2;
 DROP TABLE Crops;
 DROP TABLE Fields_3;
-DROP TABLE Fields_1;
-DROP TABLE Fields_4;
+DROP TABLE Livestock_1;
+DROP TABLE Livestock_3;
+DROP TABLE LIVESTOCKPRODUCE;
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                            Create Entity Tables                            */
@@ -134,19 +151,20 @@ CREATE TABLE Buyers_DealsWith (
   buyerID INTEGER PRIMARY KEY,
   farmerID INTEGER NOT NULL,
   address VARCHAR(100),
-  name VARCHAR(40),
+  dealer_name VARCHAR(40),
   phoneNumber VARCHAR(30),
-  date DATE,
+  purchase_date DATE,
   FOREIGN KEY (farmerID) REFERENCES Farmers_2 (farmerID)
 );
 
 CREATE TABLE VeterinaryRecords_Has (
   tagID INTEGER NOT NULL,
   recordID INTEGER,
-  date DATE,
+  record_date DATE,
   healthStatus VARCHAR(30),
   PRIMARY KEY (tagID, recordID),
   FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
+  ON DELETE CASCADE
 );
 
 /* -------------------------------------------------------------------------- */
@@ -370,18 +388,18 @@ INSERT INTO LivestockProduce (productType, quantity) VALUES ('beef', 22);INSERT 
 INSERT INTO LivestockProduce (productType, quantity) VALUES ('milk', 20);
 
  
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, name, phoneNumber, date) VALUES (6001, 1002, '4523 Elmwood Avenue, Philadelphia, PA 19103', 'Ethan Williams', '(604) 123-4567', '2023-06-11');
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, name, phoneNumber, date) VALUES (6002, 1005, '7281 8th Street, Miami, FL 33130',  'Sophia Thompson', '(604) 555-1212', '2024-01-03');
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, name, phoneNumber, date) VALUES (6003, 1001, '2128 Linden Avenue, Seattle, WA 98101', 'Luke Carter', '(604) 867-5309', '2022-11-24');
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, name, phoneNumber, date) VALUES (6004, 1005, '9911 Oakwood Drive, San Francisco, CA 94107', 'Olivia Wright', '(604) 987-6543', '2023-09-01');
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, name, phoneNumber, date) VALUES (6005, 1005, '6316 Maple Street, Houston, TX 77030', 'Benjamin Cooper', '(604) 246-8242', '2024-03-12');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6001, 1002, '4523 Elmwood Avenue, Philadelphia, PA 19103', 'Ethan Williams', '(604) 123-4567', '2023-06-11');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6002, 1005, '7281 8th Street, Miami, FL 33130',  'Sophia Thompson', '(604) 555-1212', '2024-01-03');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6003, 1001, '2128 Linden Avenue, Seattle, WA 98101', 'Luke Carter', '(604) 867-5309', '2022-11-24');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6004, 1005, '9911 Oakwood Drive, San Francisco, CA 94107', 'Olivia Wright', '(604) 987-6543', '2023-09-01');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6005, 1005, '6316 Maple Street, Houston, TX 77030', 'Benjamin Cooper', '(604) 246-8242', '2024-03-12');
 
 
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, date, healthStatus) VALUES (4001, 6001, '2022-07-12', 'healthy');
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, date, healthStatus) VALUES (4002, 6002, '2022-09-05', 'sick');
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, date, healthStatus) VALUES (4003, 6003, '2022-06-21', 'healthy');
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, date, healthStatus) VALUES (4004, 6004, '2022-11-17', 'injured');
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, date, healthStatus) VALUES (4005, 6005, '2022-08-08', 'healthy');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4001, 6001, '2022-07-12', 'healthy');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4002, 6002, '2022-09-05', 'sick');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4003, 6003, '2022-06-21', 'healthy');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4004, 6004, '2022-11-17', 'injured');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4005, 6005, '2022-08-08', 'healthy');
 
 /* -------------------------------------------------------------------------- */
 /*                       Insert Into Relationship Tables                      */

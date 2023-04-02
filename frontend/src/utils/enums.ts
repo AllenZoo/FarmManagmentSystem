@@ -38,3 +38,8 @@ export enum HealthStatus {
 	ADEQUATE = "ADEQUATE",
 	HEALTHY = "HEALTHY",
 }
+
+export enum ActionTypes {
+  FEED = "FEED",
+  HARVEST = "HARVEST",
+}
