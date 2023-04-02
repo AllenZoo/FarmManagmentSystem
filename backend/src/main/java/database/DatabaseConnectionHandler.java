@@ -273,7 +273,7 @@ public class DatabaseConnectionHandler {
 	public ArrayList<JSONObject> findLivestockHealthStatus(int id) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
-			String query = "SELECT tagID, animalType, healthStatus FROM Livestock_4 L4, " +
+			String query = "SELECT healthStatus FROM Livestock_4 L4, " +
 					"VeterinaryRecords_Has VR WHERE VR.tagID = L4.tagID and L4.tagID = ?";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
@@ -294,7 +294,6 @@ public class DatabaseConnectionHandler {
 		} catch (SQLException e) {
 			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
-
 		return livestock;
 	}
 

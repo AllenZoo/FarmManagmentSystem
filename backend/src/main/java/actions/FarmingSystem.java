@@ -74,4 +74,11 @@ public class FarmingSystem {
         JSONArray dataJSONArray = new JSONArray(data);
         return dataJSONArray;
     }
+
+
+    public JSONArray getVetRecords(int id) {
+        ArrayList<JSONObject> data = dbHandler.findLivestockHealthStatus(id);
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
 }
