@@ -81,4 +81,10 @@ public class FarmingSystem {
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
     }
+
+    public JSONArray getAnimalCountType(int age) {
+        ArrayList<JSONObject> data = dbHandler.findCountedTypesSold(age);
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
 }

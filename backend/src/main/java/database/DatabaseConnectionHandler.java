@@ -297,10 +297,33 @@ public class DatabaseConnectionHandler {
 		return livestock;
 	}
 
-	// Aggregation with group by
+	// AGGREGATION WITH GROUP BY
+	public ArrayList<JSONObject> findCountedTypesSold(int age) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT L4.animalType, COUNT(DISTINCT tagID) AS num " +
+					"FROM Livestock_4 L4" +
+					" WHERE  L4.age < ? " +
+					"GROUP BY L4.animalType;";
 
-	public ArrayList<JSONObject> findCountedTypesSold() {
-		return null;
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, age);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("Animal Type", rs.getString("animalType"));
+				json.put("Count", rs.getObject("num"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
 	}
 
 

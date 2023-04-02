@@ -113,10 +113,28 @@ public class MainController {
         out.flush();
     }
 
+    /**
+     * Handles getVetRecords request for the livestock
+     */
     @RequestMapping(value = "/get/vetRecords", method = POST)
     public void get_vet_records(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
         int tag_to_find = (int) map.get("tagID");
         JSONArray livestock = system.getVetRecords(tag_to_find);
+
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(livestock);
+        out.flush();
+    }
+
+    /**
+     * Gets the animal count for each animal type
+     */
+    @RequestMapping(value = "/get/animalCount", method = POST)
+    public void getAnimalCountType(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+        int filter_age = (int) map.get("tagID");
+        JSONArray livestock = system.getAnimalCountType(filter_age);
 
         PrintWriter out = res.getWriter();
         res.setContentType("application/json");
