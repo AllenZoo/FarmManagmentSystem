@@ -83,9 +83,9 @@ public class MainController {
     @ResponseBody
     public void getFilteredLivestock(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
         // Check for if null for these values.
-        String harvestable = (map.get("harvestable").toString());
-        AnimalType animalType = AnimalType.valueOf(map.get("animalType").toString());
-        CropType diet = CropType.valueOf(map.get("diet").toString());
+        String harvestable = (map.get("harvestable").toString().toUpperCase());
+        AnimalType animalType = AnimalType.valueOf(map.get("animalType").toString().toUpperCase());
+        CropType diet = CropType.valueOf(map.get("diet").toString().toUpperCase());
 
         int minAge = (int) map.get("minAge");
         int maxAge = (int) map.get("maxAge");
@@ -154,8 +154,8 @@ public class MainController {
      * Handles getVetRecords request for the livestock
      */
     @RequestMapping(value = "/get/vetRecords", method = POST)
-    public void get_vet_records(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
-        int tag_to_find = (int) map.get("tagID");
+    public void getVetRecords(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+        int tag_to_find = Integer.parseInt(map.get("tagID").toString());
         JSONArray livestock = system.getVetRecords(tag_to_find);
 
         PrintWriter out = res.getWriter();

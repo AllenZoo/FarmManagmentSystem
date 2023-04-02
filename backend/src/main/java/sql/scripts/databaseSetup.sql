@@ -395,11 +395,11 @@ INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumb
 INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6005, 1005, '6316 Maple Street, Houston, TX 77030', 'Benjamin Cooper', '(604) 246-8242', '2024-03-12');
 
 
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4001, 6001, '2022-07-12', 'healthy');
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4002, 6002, '2022-09-05', 'sick');
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4003, 6003, '2022-06-21', 'healthy');
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4004, 6004, '2022-11-17', 'injured');
-INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4005, 6005, '2022-08-08', 'healthy');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4001, 6001, DATE '2022-07-12', 'healthy');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4002, 6002, DATE '2022-09-05', 'sick');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4003, 6003, DATE '2022-06-21', 'healthy');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4004, 6004, DATE '2022-11-17', 'injured');
+INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4005, 6005, DATE '2022-08-08', 'healthy');
 
 /* -------------------------------------------------------------------------- */
 /*                       Insert Into Relationship Tables                      */

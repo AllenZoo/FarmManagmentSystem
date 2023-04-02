@@ -321,7 +321,7 @@ public class DatabaseConnectionHandler {
 	public ArrayList<JSONObject> findLivestockHealthStatus(int id) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
-			String query = "SELECT healthStatus FROM Livestock_4 L4, " +
+			String query = "SELECT * FROM Livestock_4 L4, " +
 					"VeterinaryRecords_Has VR WHERE VR.tagID = L4.tagID and L4.tagID = ?";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
@@ -333,6 +333,9 @@ public class DatabaseConnectionHandler {
 				int tag_to_add = rs.getInt("tagID");
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("tagID", tag_to_add);
+				jsonObject.put("recordID", rs.getInt("recordID"));
+				jsonObject.put("record_date", rs.getDate("record_date"));
+				jsonObject.put("healthstatus", rs.getString("healthstatus"));
 				livestock.add(jsonObject);
 			}
 
