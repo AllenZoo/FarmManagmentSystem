@@ -102,7 +102,7 @@ const StyledPanel = styled.div`
           input {
             max-width: 8rem;
             padding: 0.5rem;
-            border-radius: 5px;
+            border-radius: 0.5rem;
             border: 2px solid #fff;
             background-color: rgba(0, 0, 0, 0.1);
             text-align: center;
@@ -488,7 +488,10 @@ const NurtureAnimalsPanel = () => {
 
     // console.log(name, value);
 
-    if (value !== "all") {
+    if (
+      value !== "all" &&
+      !((name === "minAge" || name === "maxAge") && value.startsWith("-")) // Age cannot be negative
+    ) {
       setFilteredData({
         ...filteredData,
         [name]: value
@@ -506,7 +509,7 @@ const NurtureAnimalsPanel = () => {
    */
   useEffect(() => {
     syncData();
-  }, [filteredData]);
+  }, []);
 
   return (
     <StyledPanel>
@@ -519,7 +522,7 @@ const NurtureAnimalsPanel = () => {
             <form className="ViewLivestock">
               <StyledButton
                 type="button"
-                onClick={getLivestock}
+                onClick={syncData}
               >
                 View Livestock
               </StyledButton>
@@ -585,7 +588,8 @@ const NurtureAnimalsPanel = () => {
                     name="minAge"
                     id="minAge"
                     defaultValue={filteredData.minAge}
-                    min={0}
+                    min={-1}
+                    max={100}
                     onChange={updateFilters}
                   />
                 </section>
@@ -597,7 +601,8 @@ const NurtureAnimalsPanel = () => {
                     name="maxAge"
                     id="maxAge"
                     defaultValue={filteredData.maxAge}
-                    min={filteredData.minAge || 0}
+                    min={-1}
+                    max={100}
                     onChange={updateFilters}
                   />
                 </section>
