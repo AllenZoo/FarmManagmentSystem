@@ -380,6 +380,44 @@ public class DatabaseConnectionHandler {
 
 
 
+	// AGGREGATION GROUP BY WITH HAVING
+
+	// TODO: Implement in controller and system
+	public ArrayList<JSONObject> findWateredAndFed(String animal, int water, int food) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT N.tagID " +
+					"FROM Nurtures N, Livestock_4 L4 " +
+					"WHERE N.tagID = L4.tagID AND animalType = ? " +
+					"GROUP BY N.tagID " +
+					"HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?";
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, animal);
+			ps.setInt(2, water);
+			ps.setInt(3, food);
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("Tag ID", rs.getInt("tagID"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
+	}
+
+
+
+
+
 
 	//============================= FROM TUTORIAL ===================================
 	public void deleteBranch(int branchId) {

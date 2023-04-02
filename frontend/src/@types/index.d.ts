@@ -16,7 +16,7 @@ interface FilteredLivestock {
   animalType?: AnimalType | null;
   minAge?: int | null;
   maxAge?: int | null;
-  diets?: CropType | null;
+  diet?: CropType | null;
   minWeight?: double | null;
   maxWeight?: double | null;
   minLastFed?: String | null;
