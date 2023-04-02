@@ -1,7 +1,6 @@
 package actions;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import model.enums.ActionType;
 import model.enums.AnimalType;
 import model.enums.CropType;
@@ -10,7 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import database.DatabaseConnectionHandler;
-import model.LivestockModel;
+import model.models.livestock.Livestock_4_Model;
 
 import java.util.ArrayList;
 
@@ -74,7 +73,7 @@ public class FarmingSystem {
     /**
      * Insert a livestock given info
      */
-    public boolean insertLivestock(LivestockModel model) {
+    public boolean insertLivestock(Livestock_4_Model model) {
         return dbHandler.insertLivestock(model);
     }
 
@@ -82,7 +81,7 @@ public class FarmingSystem {
      * Update a livestock with given info
      */
 
-    public boolean updateLivestock(LivestockModel model, ActionType actionType) {
+    public boolean updateLivestock(Livestock_4_Model model, ActionType actionType) {
         return dbHandler.updateLivestock(model, actionType);
     }
 

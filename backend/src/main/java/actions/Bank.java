@@ -3,7 +3,7 @@ package actions;
 import database.DatabaseConnectionHandler;
 import delegates.LoginWindowDelegate;
 import delegates.TerminalTransactionsDelegate;
-import model.BranchModel;
+import model.models.BranchModel;
 
 /**
  * This is the main controller class that will orchestrate everything.

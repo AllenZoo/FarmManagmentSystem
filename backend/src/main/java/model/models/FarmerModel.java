@@ -1,4 +1,4 @@
-package model;
+package model.models;
 
 /**
  * The intent for this class is to update/store information about a single farmer

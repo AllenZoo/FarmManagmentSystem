@@ -4,14 +4,15 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import model.filters.LivestockFilterModel;
+import model.models.livestock.LivestockModel;
 import org.json.JSONObject;
 
 import model.enums.ActionType;
 import model.enums.AnimalType;
 import model.enums.CropType;
 
-import model.BranchModel;
-import model.LivestockModel;
+import model.models.BranchModel;
+import model.models.livestock.Livestock_4_Model;
 import util.PrintablePreparedStatement;
 
 /**
@@ -120,7 +121,7 @@ public class DatabaseConnectionHandler {
   }
 
   // INSERT QUERY
-	public boolean insertLivestock(LivestockModel model) {
+	public boolean insertLivestock(Livestock_4_Model model) {
 		try {
 			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
 					"lastViolatedForHarvestedGoods) " +
@@ -175,7 +176,7 @@ public class DatabaseConnectionHandler {
 	}
 
 	// UPDATE QUERY
-	public boolean updateLivestock(LivestockModel model, ActionType actionType) {
+	public boolean updateLivestock(Livestock_4_Model model, ActionType actionType) {
     String query;
     PrintablePreparedStatement ps;
 
@@ -283,7 +284,7 @@ public class DatabaseConnectionHandler {
 	// SELECTION Query
 	// Finds the animals that are ready to sell with user specified weight
 	// TODO: Figure out what needs to be passed into this function for weight
-	public ArrayList<JSONObject> findAnimalToSell(LivestockModel model) {
+	public ArrayList<JSONObject> findAnimalToSell(Livestock_4_Model model) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT tagID FROM Livestock_4 L4 WHERE L4.age > (SELECT MIN(age) " +

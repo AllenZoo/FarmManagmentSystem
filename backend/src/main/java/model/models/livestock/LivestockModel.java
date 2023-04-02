@@ -1,4 +1,4 @@
-package model;
+package model.models.livestock;
 
 import model.enums.AnimalType;
 import model.enums.CropType;
@@ -10,7 +10,7 @@ import org.json.JSONObject;
 /**
  * The intent for this class is to update/store information about a single livestock
  */
-public class LivestockModel {
+public class  LivestockModel {
 
     private final int tagID;
     private final AnimalType animalType;
@@ -89,6 +89,6 @@ public class LivestockModel {
                 Date.valueOf(json.getString("lastFed")),
                 json.getBoolean("harvestable"),
                 Date.valueOf(json.getString("lastViolatedForHarvestedGoods"))
-              );
+        );
     }
 }

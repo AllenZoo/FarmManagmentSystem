@@ -2,7 +2,7 @@ package com.server.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import model.LivestockModel;
+import model.models.livestock.Livestock_4_Model;
 import model.enums.ActionType;
 import model.enums.AnimalType;
 import model.enums.CropType;
@@ -100,7 +100,7 @@ public class MainController {
      */
     @RequestMapping(value = "/livestock/insert", method = POST)
     public boolean insertLiveStock(@RequestBody Map<String, Object> map) {
-        LivestockModel model = LivestockModel.fromJSON(new JSONObject(map));
+        Livestock_4_Model model = Livestock_4_Model.fromJSON(new JSONObject(map));
         return system.insertLivestock(model);
     }
 
@@ -120,7 +120,7 @@ public class MainController {
     @RequestMapping(value = "livestock/update", method = POST)
     @ResponseBody
     public boolean updateLivestock(@RequestBody Map<String, Object> map) {
-        LivestockModel model = LivestockModel.fromJSON(new JSONObject(map.get("livestock").toString()));
+        Livestock_4_Model model = Livestock_4_Model.fromJSON(new JSONObject(map.get("livestock").toString()));
         ActionType actionType = ActionType.valueOf(map.get("actionType").toString().toUpperCase());
         return system.updateLivestock(model, actionType);
     }
