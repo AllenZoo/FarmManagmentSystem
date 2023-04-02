@@ -20,7 +20,7 @@ export const retrieveLivestock = async () => {
  * Retrieves the filtered livestock
  */
 export const retrieveFilteredLivestock = async (filteredData: FilteredLivestock) => {
-  console.log(filteredData);
+  // console.log(filteredData);
 
 	const res = await axios.post(`${PATH}/filteredValues`, filteredData, {
 		headers: {

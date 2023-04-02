@@ -80,8 +80,6 @@ public class LivestockModel {
     }
 
     public static LivestockModel fromJSON(JSONObject json) {
-        System.out.println(json);
-        
         return new LivestockModel(
                 json.getInt("tagID"),
                 AnimalType.valueOf(json.getString("animalType").toUpperCase()),

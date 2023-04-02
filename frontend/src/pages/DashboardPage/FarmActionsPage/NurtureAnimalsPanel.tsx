@@ -63,10 +63,8 @@ const StyledPanel = styled.div`
       height: 100%;
       gap: 0.5rem;
       padding: 1rem;
-      border-radius: 5px;
-      border: 1px solid #fff;
-      background-color: rgba(0, 0, 0, 0.1);
       overflow-x: none;
+      overflow-y: scroll;
       transition: 0.2s ease;
 
       .ViewLivestock {
@@ -76,11 +74,11 @@ const StyledPanel = styled.div`
         gap: 0.5rem;
       }
 
-      .FilterLivestock {
+      .FilterLivestock,
+      .AddLivestock {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        height: 100%;
         width: 90%;
         gap: 0.5rem;
         padding: 1rem;
@@ -172,6 +170,7 @@ const StyledPanel = styled.div`
       border: 1px solid #fff;
       background-color: rgba(0, 0, 0, 0.1);
       text-align: left;
+      width: 100%;
 
       legend {
         font-size: 1.2rem;
@@ -388,6 +387,9 @@ const NurtureAnimalsPanel = () => {
   const [minAgeFilter, setMinAgeFilter] = useState<number>(-1);
   const [maxAgeFilter, setMaxAgeFilter] = useState<number>(-1);
 
+  const [tagIDAdd, setTagIDAdd] = useState<number>(4000);
+  const [animalTypeAdd, setAnimalTypeAdd] = useState<AnimalType>(AnimalType.COW);
+
   const modalContext = useContext(ModalContext);
 
   /**
@@ -445,15 +447,15 @@ const NurtureAnimalsPanel = () => {
    * Adds a new livestock to the database
    */
   const addLivestock = async () => {
-    // Dummy data
+    // TODO: Generate more random data
     const newLivestock : Livestock = {
-      tagID: '4000',
-      animalType: AnimalType.COW,
+      tagID: tagIDAdd,
+      animalType: animalTypeAdd,
       age: 4,
-      diet:  CropType.WHEAT,
+      diet: CropType.CANOLA,
       weight: 70,
       lastFed: convertDateToSQL(new Date()),
-      harvestable: false,
+      harvestable: Math.random() < 0.5 ? true : false,
       lastViolatedForHarvestedGoods: convertDateToSQL(new Date())
     };
 
@@ -552,7 +554,7 @@ const NurtureAnimalsPanel = () => {
             </form>
 
             {filterEnabled && (
-              <form className="FilterLivestock" id="FilteringForm">
+              <form className="FilterLivestock">
                 <section>
                   <label htmlFor="animalType">Animal Type</label>
                   <StyledSelect
@@ -650,12 +652,35 @@ const NurtureAnimalsPanel = () => {
               </form>
             )}
 
-            <form>
-              <select>
-                <option value="cow">Cow</option>
-                <option value="chicken">Chicken</option>
-                <option value="pig">Pig</option>
-              </select>
+            <form className="AddLivestock">
+              <section>
+                <label htmlFor="tagID">Tag ID</label>
+                <input
+                  type="number"
+                  name="tagID"
+                  id="tagID"
+                  maxLength={4}
+                  min={4000}
+                  max={4999}
+                  defaultValue={4000}
+                  onChange={(e) => {setTagIDAdd(e.target.value as unknown as number)}}
+                />
+              </section>
+
+              <section>
+                <label htmlFor="animalType">Animal Type</label>
+                <StyledSelect
+                  name="animalType"
+                  id="animalType"
+                  defaultValue={"cow"}
+                  onChange={(e) => {setAnimalTypeAdd(e.target.value as AnimalType)}}
+                >
+                  <option value="cow">Cow</option>
+                  <option value="chicken">Chicken</option>
+                  <option value="pig">Pig</option>
+                  <option value="sheep">Sheep</option>
+                </StyledSelect>
+              </section>
 
               <StyledButton
                 type="button"
