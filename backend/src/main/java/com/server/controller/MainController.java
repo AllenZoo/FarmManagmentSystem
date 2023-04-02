@@ -3,7 +3,7 @@ package com.server.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.LivestockModel;
-
+import model.enums.ActionType;
 import model.enums.AnimalType;
 import model.enums.CropType;
 import org.json.JSONArray;
@@ -11,7 +11,6 @@ import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 import actions.FarmingSystem;
-import util.JSONParser;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,11 +25,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class MainController {
 
     private FarmingSystem system;
-    private JSONParser parser;
 
     public MainController() {
         system = new FarmingSystem();
-        parser = new JSONParser();
     }
 
     /**
@@ -123,11 +120,10 @@ public class MainController {
     @RequestMapping(value = "livestock/update", method = POST)
     @ResponseBody
     public boolean updateLivestock(@RequestBody Map<String, Object> map) {
-        LivestockModel model = LivestockModel.fromJSON(new JSONObject(map));
-        return system.updateLivestock(model);
+        LivestockModel model = LivestockModel.fromJSON(new JSONObject(map.get("livestock").toString()));
+        ActionType actionType = ActionType.valueOf(map.get("actionType").toString().toUpperCase());
+        return system.updateLivestock(model, actionType);
     }
-
-
 
 
     /**

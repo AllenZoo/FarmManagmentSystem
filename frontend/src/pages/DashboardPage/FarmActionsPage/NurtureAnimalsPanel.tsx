@@ -170,7 +170,7 @@ const StyledPanel = styled.div`
       border: 1px solid #fff;
       background-color: rgba(0, 0, 0, 0.1);
       text-align: left;
-      width: 100%;
+      width: calc(100% - 3rem);
 
       legend {
         font-size: 1.2rem;
@@ -472,6 +472,7 @@ const NurtureAnimalsPanel = () => {
   const feedLivestock = async (livestock: Livestock) => {
     try {
       updateLivestock(livestock, ActionTypes.FEED);
+      syncData();
     } catch (err) {
       console.error(err);
     };
@@ -483,6 +484,7 @@ const NurtureAnimalsPanel = () => {
   const harvestLivestock = async (livestock: Livestock) => {
     try {
       updateLivestock(livestock, ActionTypes.HARVEST);
+      syncData();
     } catch (err) {
       console.error(err);
     };

@@ -2,6 +2,7 @@ package actions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.enums.ActionType;
 import model.enums.AnimalType;
 import model.enums.CropType;
 import model.filters.LivestockFilterModel;
@@ -81,8 +82,8 @@ public class FarmingSystem {
      * Update a livestock with given info
      */
 
-    public boolean updateLivestock(LivestockModel model) {
-        return dbHandler.updateLivestock(model);
+    public boolean updateLivestock(LivestockModel model, ActionType actionType) {
+        return dbHandler.updateLivestock(model, actionType);
     }
 
 

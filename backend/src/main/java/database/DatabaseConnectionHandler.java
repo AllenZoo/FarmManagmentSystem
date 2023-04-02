@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import model.filters.LivestockFilterModel;
 import org.json.JSONObject;
 
+import model.enums.ActionType;
 import model.enums.AnimalType;
 import model.enums.CropType;
 
@@ -174,24 +175,52 @@ public class DatabaseConnectionHandler {
 	}
 
 	// UPDATE QUERY
-	public boolean updateLivestock(LivestockModel model) {
+	public boolean updateLivestock(LivestockModel model, ActionType actionType) {
+    String query;
+    PrintablePreparedStatement ps;
+
 		try {
-			String query = "UPDATE Livestock_4 SET tagID = ?," +
-					"animalType = ?," +
-					"age = ?," +
-					"weight = ?," +
-					"lastFed = ?," +
-					"lastViolatedForHarvestedGoods = ?," +
-					"WHERE tagID = ?";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setInt(1, model.getTagID());
-			ps.setString(2, model.getAnimalType().toString().toLowerCase());
-			ps.setInt(3, model.getAge());
-			ps.setDouble(4, model.getWeight());
-			ps.setDate(5, model.getLastFed());
-			ps.setDate(6, model.getLastViolatedForHarvestedGoods());
-			ps.setInt(7, model.getTagID());
-			ps.executeUpdate();
+      switch (actionType) {
+        case FEED:
+          query = "UPDATE Livestock_4 SET lastFed = ? " +
+              "WHERE tagID = ?";
+          ps = new PrintablePreparedStatement(connection.prepareStatement(query), query,
+              false);
+          ps.setDate(1, new Date(System.currentTimeMillis()));
+          ps.setInt(2, model.getTagID());
+          ps.executeUpdate();
+          break;
+        case HARVEST:
+          query = "UPDATE Livestock_4 SET lastViolatedForHarvestedGoods = ? " +
+              "WHERE tagID = ?";
+          ps = new PrintablePreparedStatement(connection.prepareStatement(query), query,
+              false);
+          ps.setDate(1, new Date(System.currentTimeMillis()));
+          ps.setInt(2, model.getTagID());
+          ps.executeUpdate();
+          break;
+        default:
+          System.out.println(WARNING_TAG + " Invalid action type!");
+          rollbackConnection();
+          return false;
+      }
+
+      // String query = "UPDATE Livestock_4 SET tagID = ?," +
+      //     "animalType = ?," +
+      //     "age = ?," +
+      //     "weight = ?," +
+      //     "lastFed = ?," +
+      //     "lastViolatedForHarvestedGoods = ?," +
+      //     "WHERE tagID = ?";
+      // PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+      // ps.setInt(1, model.getTagID());
+      // ps.setString(2, model.getAnimalType().toString().toLowerCase());
+      // ps.setInt(3, model.getAge());
+      // ps.setDouble(4, model.getWeight());
+      // ps.setDate(5, model.getLastFed());
+      // ps.setDate(6, model.getLastViolatedForHarvestedGoods());
+      // ps.setInt(7, model.getTagID());
+      // ps.executeUpdate();
 
 			connection.commit();
 			ps.close();
@@ -200,6 +229,7 @@ public class DatabaseConnectionHandler {
 			rollbackConnection();
 			return false;
 		}
+
 		return true;
 	}
 

@@ -67,7 +67,7 @@ export const deleteLivestock = async (livestock: Livestock) => {
  */
 export const updateLivestock = async (livestock: Livestock, action: ActionTypes) => {
   const livestockJson = JSON.stringify(livestock);
-  const res = await axios.post(`${PATH}/${action.toLowerCase()}`, livestockJson, {
+  const res = await axios.post(`${PATH}/update`, {actionType: action, livestock: livestockJson}, {
     headers: {
       "Content-Type": "application/json",
     },
