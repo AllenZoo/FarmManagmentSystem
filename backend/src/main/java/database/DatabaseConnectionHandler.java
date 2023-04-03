@@ -2,16 +2,20 @@ package database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 import model.filters.LivestockFilterModel;
+import model.models.livestock.LivestockModel;
+import model.models.livestock.Livestock_1_Model;
+import model.models.livestock.Livestock_3_Model;
 import org.json.JSONObject;
 
 import model.enums.ActionType;
 import model.enums.AnimalType;
 import model.enums.CropType;
 
-import model.BranchModel;
-import model.LivestockModel;
+import model.models.BranchModel;
+import model.models.livestock.Livestock_4_Model;
 import util.PrintablePreparedStatement;
 
 /**
@@ -57,6 +61,7 @@ public class DatabaseConnectionHandler {
 
 			connection = DriverManager.getConnection(ORACLE_URL, username, password);
 			connection.setAutoCommit(false);
+			populateLivestock();
 
 			System.out.println("\nConnected to Oracle!");
 			return true;
@@ -120,7 +125,7 @@ public class DatabaseConnectionHandler {
   }
 
   // INSERT QUERY
-	public boolean insertLivestock(LivestockModel model) {
+	public boolean insertLivestock(Livestock_4_Model model) {
 		try {
 			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
 					"lastViolatedForHarvestedGoods) " +
@@ -175,7 +180,7 @@ public class DatabaseConnectionHandler {
 	}
 
 	// UPDATE QUERY
-	public boolean updateLivestock(LivestockModel model, ActionType actionType) {
+	public boolean updateLivestock(Livestock_4_Model model, ActionType actionType) {
     String query;
     PrintablePreparedStatement ps;
 
@@ -283,7 +288,7 @@ public class DatabaseConnectionHandler {
 	// SELECTION Query
 	// Finds the animals that are ready to sell with user specified weight
 	// TODO: Figure out what needs to be passed into this function for weight
-	public ArrayList<JSONObject> findAnimalToSell(LivestockModel model) {
+	public ArrayList<JSONObject> findAnimalToSell(Livestock_4_Model model) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT tagID FROM Livestock_4 L4 WHERE L4.age > (SELECT MIN(age) " +
@@ -462,6 +467,129 @@ public class DatabaseConnectionHandler {
 		return livestock;
 	}
 
+
+	// ================ FUNCTION FOR POPULATING DATABASE ===============================
+	public boolean insertLivestock_3(Livestock_3_Model model) {
+		try {
+			String query = "INSERT INTO Livestock_3(animalType, age, harvestable) " +
+					"VALUES (?, ?, ?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, model.getAnimalType().toString().toLowerCase());
+			ps.setInt(2, model.getAge());
+			ps.setBoolean(3, model.isHarvestable());
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		// Succesfully inserted without errors
+		return true;
+
+	}
+	public boolean insertLivestock_1(Livestock_1_Model model) {
+		try {
+			String query = "INSERT INTO Livestock_1(animalType, weight, diet) " +
+					"VALUES (?, ?, ?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, model.getAnimalType().toString().toLowerCase());
+			ps.setDouble(2, model.getWeight());
+			ps.setString(3, model.getDiet().toString().toLowerCase());
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		// Succesfully inserted without errors
+		return true;
+	}
+	private void populateLivestock_3() {
+		try {
+			// Insert values for all animal types ages 1-15
+			for (int i = 1; i <= 15; i++) {
+				// insert cows
+				Livestock_3_Model temp = new Livestock_3_Model(AnimalType.COW, i, getRandomBool());
+				insertLivestock_3(temp);
+
+				// insert pigs
+				temp = new Livestock_3_Model(AnimalType.PIG, i, getRandomBool());
+				insertLivestock_3(temp);
+
+				// insert chicken
+				temp = new Livestock_3_Model(AnimalType.CHICKEN, i, getRandomBool());
+				insertLivestock_3(temp);
+
+				// insert sheep
+				temp = new Livestock_3_Model(AnimalType.SHEEP, i, getRandomBool());
+				insertLivestock_3(temp);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	private void populateLivestock_1() {
+		try {
+
+			for (int i = 0; i <= 40; i++) {
+				// Insert cows weighted 300-500 kg (increments of 5) (40 cows total)
+				Livestock_1_Model temp = new Livestock_1_Model(AnimalType.COW, getRandomCropType(), (5*i+300));
+				insertLivestock_1(temp);
+
+				// insert pigs weighted 50-250 kg (increments of 5)  (40 pigs total)
+				temp = new Livestock_1_Model(AnimalType.PIG, getRandomCropType(), 5*i+50);
+				insertLivestock_1(temp);
+
+				// insert chicken weighted 1-41 kg (increments of 1) (40 chickens total)
+				temp = new Livestock_1_Model(AnimalType.CHICKEN, getRandomCropType(), i+1);
+				insertLivestock_1(temp);
+
+				// insert sheep weighted 50-250 kg (increments of 5)  (40 sheeps total)
+				temp = new Livestock_1_Model(AnimalType.SHEEP, getRandomCropType(), 5*i+50);
+				insertLivestock_1(temp);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	public void populateLivestock() {
+		populateLivestock_3();
+		populateLivestock_1();
+	}
+	public boolean getRandomBool() {
+		Random random = new Random();
+		return random.nextBoolean();
+	}
+	public CropType getRandomCropType() {
+		Random random = new Random();
+		int crop = random.nextInt(0, 6);
+
+		switch (crop) {
+			case 0:
+				return CropType.MUSTARD;
+			case 1:
+				return CropType.CANOLA;
+			case 2:
+				return CropType.WHEAT;
+			case 3:
+				return CropType.CORN;
+			case 4:
+				return CropType.POTATOES;
+			case 5:
+				return CropType.COCONUT;
+		}
+		return CropType.WHEAT;
+	}
 
 	//============================= FROM TUTORIAL ===================================
 	public void deleteBranch(int branchId) {

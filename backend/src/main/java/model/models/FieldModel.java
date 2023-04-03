@@ -1,4 +1,4 @@
-package model;
+package model.models;
 
 import model.enums.CropType;
 import model.enums.FieldState;
