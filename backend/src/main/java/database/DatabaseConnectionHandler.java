@@ -384,13 +384,38 @@ public class DatabaseConnectionHandler {
 	}
 
 	// AGGREGATION WITH GROUP BY
-	public ArrayList<JSONObject> findCountedTypesSold(int age) {
+	public ArrayList<JSONObject> findCountedTypesSold() {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT L4.animalType, COUNT(DISTINCT tagID) AS num " +
-					"FROM Livestock_4 L4" +
+					"FROM Livestock_4 L4 " +
+					"GROUP BY L4.animalType";
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("animalType", rs.getString("animalType"));
+				json.put("count", rs.getObject("num"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
+	}
+	public ArrayList<JSONObject> findCountedTypesSoldByAge(int age) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT L4.animalType, COUNT(DISTINCT tagID) AS num " +
+					"FROM Livestock_4 L4 " +
 					" WHERE  L4.age < ? " +
-					"GROUP BY L4.animalType;";
+					"GROUP BY L4.animalType";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, age);
@@ -399,8 +424,8 @@ public class DatabaseConnectionHandler {
 
 			while (rs.next()) {
 				JSONObject json = new JSONObject();
-				json.put("Animal Type", rs.getString("animalType"));
-				json.put("Count", rs.getObject("num"));
+				json.put("animalType", rs.getString("animalType"));
+				json.put("count", rs.getObject("num"));
 				livestock.add(json);
 			}
 

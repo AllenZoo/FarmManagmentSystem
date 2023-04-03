@@ -111,11 +111,18 @@ public class FarmingSystem {
     /**
      * Aggregation with group by -> count animal types
      */
-    public JSONArray getAnimalCountType(int age) {
-        ArrayList<JSONObject> data = dbHandler.findCountedTypesSold(age);
+    public JSONArray getAnimalCountType() {
+        ArrayList<JSONObject> data = dbHandler.findCountedTypesSold();
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
     }
+
+    public JSONArray getAnimalCountTypeByAge(int age) {
+        ArrayList<JSONObject> data = dbHandler.findCountedTypesSoldByAge(age);
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
+
 
     /**
      * Aggregation with having
