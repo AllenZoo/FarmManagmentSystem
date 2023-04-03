@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { ActionTypes } from "@utils/enums";
+import { ActionTypes, AnimalType } from "@utils/enums";
 
 
 const PATH = "/api/livestock";
@@ -86,20 +86,20 @@ export const getVetRecords = async (livestock: Livestock) => {
 		},
 	});
 
-	if (res.data) return res.data;
+	if (res.data) return res.data[0];
 	else throw new Error(`Failed to retrieve vet records of livestock with tagID #${livestock.tagID}!`);
 };
 
 /**
  * Retrieves the count of a livestock
  */
-export const getLivestockCount = async (age: number) => {
-  const res = await axios.post(`${PATH}/get/animalCount`, age, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+export const getLivestockCount = async (animalType: AnimalType) => {
+  const res = await axios.post(`${PATH}/get/animalCount`, animalType, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 
   if (res.data) return res.data;
-  else throw new Error(`Failed to retrieve count of livestock ages ${age} and up!`);
+  else throw new Error(`Failed to retrieve count of ${animalType}!`);
 };
