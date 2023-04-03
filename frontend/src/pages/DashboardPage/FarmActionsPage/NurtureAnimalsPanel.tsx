@@ -4,6 +4,7 @@ import {
   GiMedicalPack,
   GiBloodySword,
   GiGrain,
+  GiPowderBag,
 } from "react-icons/gi";
 import { FaFilter } from "react-icons/fa";
 
@@ -12,6 +13,7 @@ import ModalContext from "@contexts/modalContext";
 import {
   deleteLivestock,
   getLivestockCount,
+  getResourcesSpent,
   getVetRecords,
   insertLivestock,
   retrieveFilteredLivestock,
@@ -59,6 +61,8 @@ const NurtureAnimalsPanel = () => {
 
   // Filter states
   const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
+  const [minTagIDFilter, setMinTagIDFilter] = useState<number>(4000);
+  const [maxTagIDFilter, setMaxTagIDFilter] = useState<number>(4999);
   const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>("all");
   const [dietFilter, setDietFilter] = useState<CropType | string>("all");
   const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>("all");
@@ -82,6 +86,8 @@ const NurtureAnimalsPanel = () => {
    * Clears all filters
    */
   const clearFilters = () => {
+    setMinTagIDFilter(4000);
+    setMaxTagIDFilter(4999);
     setAnimalTypeFilter("all");
     setDietFilter("all");
     setHarvestableFilter("all");
@@ -98,6 +104,8 @@ const NurtureAnimalsPanel = () => {
   const getLivestock = async (override?: boolean) => {
     try {
       const filteredData: FilteredLivestock = {
+        minTagID: minTagIDFilter,
+        maxTagID: maxTagIDFilter,
         animalType: animalTypeFilter,
         minAge: minAgeFilter,
         maxAge: maxAgeFilter,
@@ -212,6 +220,44 @@ const NurtureAnimalsPanel = () => {
   };
 
   /**
+   * Loads resources spent on livestock
+   */
+  const lookUpResourcesSpent = async (livestock: Livestock) => {
+    try {
+      await getResourcesSpent(livestock).then((resourcesSpent) => {
+        modalContext.setModal(
+          <>
+            <h1>
+              Resources Spent On {livestock.animalType} (ID #{livestock.tagID})
+            </h1>
+
+            {resourcesSpent ? (
+              <div>
+                <h2>Total Food Consumed: {resourcesSpent.totalFoodConsumed}</h2>
+                <h2>Total Water Consumed: {resourcesSpent.totalWaterConsumed}</h2>
+              </div>
+            ) : (
+              <h2>This animal has been neglected...deprived of food and water :D</h2>
+            )}
+
+            <button
+              className={styles.Button}
+              type="button"
+              onClick={() => {
+                modalContext.clearModal();
+              }}
+            >
+              Close
+            </button>
+          </>
+        );
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  /**
    * Loads vet records for livestock
    */
   const lookUpVetRecords = async (livestock: Livestock) => {
@@ -220,8 +266,7 @@ const NurtureAnimalsPanel = () => {
         modalContext.setModal(
           <>
             <h1>
-              Veterinary Records For {livestock.animalType} (ID #
-              {livestock.tagID})
+              Veterinary Records For {livestock.animalType} (ID #{livestock.tagID})
             </h1>
 
             { vetRecords ? (
@@ -332,6 +377,36 @@ const NurtureAnimalsPanel = () => {
             {filterEnabled && (
               <form className={styles.FilterLivestock}>
                 <h2>Filter Livestock</h2>
+                <section>
+                  <label htmlFor="minTagID">Min Tag ID</label>
+                  <input
+                    type="number"
+                    name="minTagID"
+                    id="minTagID"
+                    defaultValue={minTagIDFilter || 4000}
+                    min={4000}
+                    max={4999}
+                    onChange={(e) => {
+                      setMinTagIDFilter(parseInt(e.target.value));
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="maxTagID">Max Tag ID</label>
+                  <input
+                    type="number"
+                    name="maxTagID"
+                    id="maxTagID"
+                    defaultValue={maxTagIDFilter || 4999}
+                    min={4000}
+                    max={4999}
+                    onChange={(e) => {
+                      setMaxTagIDFilter(parseInt(e.target.value));
+                    }}
+                  />
+                </section>
+
                 <section>
                   <label htmlFor="animalType">Animal Type</label>
                   <select
@@ -690,6 +765,16 @@ const NurtureAnimalsPanel = () => {
                     disabled={!livestock.harvestable}
                   >
                     <GiBasket />
+                  </button>
+
+                  <button
+                    className={styles.ActionButton}
+                    type="button"
+                    onClick={() => lookUpResourcesSpent(livestock)}
+                    id="resourcesSpent"
+                    title={`Read Resources Spent on #${livestock.tagID}`}
+                  >
+                    <GiPowderBag />
                   </button>
 
                   <button

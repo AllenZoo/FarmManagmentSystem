@@ -129,11 +129,14 @@ public class MainController {
         AnimalType animalType = AnimalType.valueOf(map.get("animalType").toString().toUpperCase());
         CropType diet = CropType.valueOf(map.get("diet").toString().toUpperCase());
 
+        int minTagID = (int) map.get("minTagID");
+        int maxTagID = (int) map.get("maxTagID");
+
         int minAge = (int) map.get("minAge");
         int maxAge = (int) map.get("maxAge");
 
 
-        JSONArray livestock = system.getFilteredLivestock(harvestable, animalType, diet, minAge, maxAge);
+        JSONArray livestock = system.getFilteredLivestock(harvestable, animalType, diet, minAge, maxAge, minTagID, maxTagID);
         PrintWriter out = res.getWriter();
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");
