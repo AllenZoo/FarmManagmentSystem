@@ -188,20 +188,22 @@ public class DatabaseConnectionHandler {
       switch (actionType) {
         case FEED:
           query = "UPDATE Livestock_4 SET lastFed = ? " +
-              "WHERE tagID = ?";
+              "WHERE tagID = ? OR (tagID = ? AND lastFed IS NULL)";
           ps = new PrintablePreparedStatement(connection.prepareStatement(query), query,
               false);
           ps.setDate(1, new Date(System.currentTimeMillis()));
           ps.setInt(2, model.getTagID());
+          ps.setInt(3, model.getTagID());
           ps.executeUpdate();
           break;
         case HARVEST:
           query = "UPDATE Livestock_4 SET lastViolatedForHarvestedGoods = ? " +
-              "WHERE tagID = ?";
+              "WHERE tagID = ? OR (tagID = ? AND lastViolatedForHarvestedGoods IS NULL)";
           ps = new PrintablePreparedStatement(connection.prepareStatement(query), query,
               false);
           ps.setDate(1, new Date(System.currentTimeMillis()));
           ps.setInt(2, model.getTagID());
+          ps.setInt(3, model.getTagID());
           ps.executeUpdate();
           break;
         default:

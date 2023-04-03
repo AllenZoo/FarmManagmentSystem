@@ -178,6 +178,7 @@ const NurtureAnimalsPanel = () => {
    */
   const harvestLivestock = async (livestock: Livestock) => {
     try {
+      console.log(livestock);
       updateLivestock(livestock, ActionTypes.HARVEST);
       syncData();
     } catch (err) {
@@ -214,7 +215,6 @@ const NurtureAnimalsPanel = () => {
   const lookUpVetRecords = async (livestock: Livestock) => {
     try {
       await getVetRecords(livestock).then((vetRecords) => {
-        console.log(vetRecords);
         modalContext.setModal(
           <>
             <h1>
@@ -222,11 +222,15 @@ const NurtureAnimalsPanel = () => {
               {livestock.tagID})
             </h1>
 
-            <div>
-              <h2>Record ID: #{vetRecords.recordID}</h2>
-              <h2>Health Status: {vetRecords.healthstatus}</h2>
-              <h2>Record Date: {vetRecords.record_date}</h2>
-            </div>
+            { vetRecords ? (
+              <div>
+                <h2>Record ID: #{vetRecords.recordID}</h2>
+                <h2>Health Status: {vetRecords.healthstatus}</h2>
+                <h2>Record Date: {vetRecords.record_date}</h2>
+              </div>
+            ) : (
+              <h2>No records found</h2>
+            )}
 
             <button
               className={styles.Button}

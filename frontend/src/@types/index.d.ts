@@ -2,14 +2,14 @@
 /*                               TYPE INTERFACES                              */
 /* -------------------------------------------------------------------------- */
 interface Livestock {
-  tagID: int;
-  animalType: AnimalType;
-  age: int;
-  diet: CropType;
-  weight: double;
-  lastFed: String;
-  harvestable: boolean;
-  lastViolatedForHarvestedGoods: String;
+	tagID: int;
+	animalType: AnimalType;
+	age: int;
+	diet: CropType;
+	weight: double;
+	harvestable: boolean;
+	lastFed: String | null;
+	lastViolatedForHarvestedGoods: String | null;
 };
 
 interface FilteredLivestock {
