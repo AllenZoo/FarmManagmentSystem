@@ -43,8 +43,6 @@ public class FarmingSystem {
 
     /**
      * Retrieves all livestock data from database
-     * 
-     * TODO: overload this method to allow for filtering
      */
     public JSONArray getLivestock() {
         ArrayList<JSONObject> livestock = dbHandler.getLivestock();

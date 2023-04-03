@@ -43,7 +43,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
         <div className={styles.Modal}>
           <button onClick={() => clearModal()} title="Close">X</button>
 
-          <div className="Info">
+          <div className={styles.Info}>
             {modal}
           </div>
         </div>

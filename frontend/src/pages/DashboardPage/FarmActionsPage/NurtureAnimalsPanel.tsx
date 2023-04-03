@@ -4,7 +4,14 @@ import { FaFilter } from 'react-icons/fa';
 
 import ModalContext from '@contexts/modalContext';
 
-import { deleteLivestock, insertLivestock, retrieveFilteredLivestock, retrieveLivestock, updateLivestock } from '@controllers/farmerActionsController';
+import {
+  deleteLivestock,
+  getLivestockCount,
+  insertLivestock,
+  retrieveFilteredLivestock,
+  retrieveLivestock,
+  updateLivestock
+} from '@controllers/farmerActionsController';
 
 import { ActionTypes, AnimalType, CropType } from '@utils/enums';
 import { convertDateToSQL } from '@utils/DatesSQL';
@@ -44,6 +51,7 @@ const getAnimalProfile = (animalType: AnimalType) => {
  */
 const NurtureAnimalsPanel = () => {
   const [livestock, setLivestock] = useState<Livestock[] | null>(null);
+  const [livestockCount, setLivestockCount] = useState<{type: AnimalType, count: number}[]>([]);
   const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
 
   const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>("all");
@@ -67,12 +75,14 @@ const NurtureAnimalsPanel = () => {
     setMinAgeFilter(-1);
     setMaxAgeFilter(-1);
     setFilterEnabled(false);
+    getLivestock(true);
   };
 
   /**
    * Retrieves all livestock from the database
+   * @param override If true, will ignore all filters
    */
-  const getLivestock = async () => {
+  const getLivestock = async (override?: boolean) => {
     try {
       const filteredData: FilteredLivestock = {
         animalType: animalTypeFilter,
@@ -85,7 +95,8 @@ const NurtureAnimalsPanel = () => {
       // Check if all filters are not set
       if (
         Object.values(filteredData).every((value) => (value === null || value === "all" || value === -1)) ||
-        !filterEnabled
+        !filterEnabled ||
+        override
       ) {
         const livestock = await retrieveLivestock();
         setLivestock(livestock);
@@ -105,7 +116,8 @@ const NurtureAnimalsPanel = () => {
   const syncData = () => {
     setTimeout(async () => {
       await getLivestock();
-    }, 300);
+      await getAnimalCounts(1);
+    }, 500);
   };
 
   /**
@@ -127,7 +139,7 @@ const NurtureAnimalsPanel = () => {
     try {
       await insertLivestock(newLivestock);
     } catch (err) {
-      console.error(err);
+      window.alert("Failed to add livestock");
     };
   };
 
@@ -150,6 +162,22 @@ const NurtureAnimalsPanel = () => {
     try {
       updateLivestock(livestock, ActionTypes.HARVEST);
       syncData();
+    } catch (err) {
+      console.error(err);
+    };
+  };
+
+  /**
+   * Gets animal count
+   */
+  const getAnimalCounts = async (age: number) => {
+    if (!livestock) return 0;
+
+    try {
+      Object.values(AnimalType).forEach(async (animalType) => {
+        const count = await getLivestockCount(age);
+        setLivestockCount((prevCount) => [...prevCount, {type: animalType, count}]);
+      });
     } catch (err) {
       console.error(err);
     };
@@ -370,6 +398,18 @@ const NurtureAnimalsPanel = () => {
                 Add Livestock
               </button>
             </form>
+
+            <div className={styles.LivestockSummary}>
+              <h2>Livestock Summary</h2>
+              <section>
+                {Object.keys(AnimalType).map((animalType, index) => (
+                  <span key={index}>
+                    <h3># of {animalType}:</h3>
+                    {livestockCount.find((livestockCount) => livestockCount.type === animalType)?.count || 0}
+                  </span>
+                ))}
+              </section>
+            </div>
           </div>
         </div>
 

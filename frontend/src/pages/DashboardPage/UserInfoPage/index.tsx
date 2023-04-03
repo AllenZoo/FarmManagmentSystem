@@ -8,20 +8,8 @@ import {
   USER_INFO_PATHNAME,
 } from '@config/routes';
 
+import ViewProfilePanel from './ViewProfilePanel';
 
-/* -------------------------------------------------------------------------- */
-/*                                  COMPONENT                                 */
-/* -------------------------------------------------------------------------- */
-/**
- * Renders the 'View Profile' panel of User Info
- */
-const ViewProfilePanel = () => {
-  return (
-    <>
-      View Profile
-    </>
-  );
-};
 
 /**
  * Renders the 'View Inventory' panel of User Info
@@ -34,7 +22,9 @@ const ViewInventoryPanel = () => {
   );
 };
 
-
+/* -------------------------------------------------------------------------- */
+/*                                  COMPONENT                                 */
+/* -------------------------------------------------------------------------- */
 const UserInfo = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
   const location = useLocation();
