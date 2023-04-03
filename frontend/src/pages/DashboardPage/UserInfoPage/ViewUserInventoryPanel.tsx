@@ -1,24 +1,31 @@
-import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
+
+import { getDataValues, getTableColumns, getUserTables } from "@controllers/userInfoControllers";
+
 import styles from "./ViewUserInventoryPanel.module.scss";
 
+
+/* -------------------------------------------------------------------------- */
+/*                                  COMPONENT                                 */
+/* -------------------------------------------------------------------------- */
 /**
  * Renders the 'View Inventory' panel of User Info
  */
-export const ViewInventoryPanel = () => {
-  // ============= LOGIC FOR USER INPUT =============
+const ViewInventoryPanel = () => {
   const [tables, setTables] = useState<string[]>([]);
   const [columns, setColumns] = useState<string[]>([]);
 
   const [selectedTable, setSelectedTable] = useState<string>("");
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
 
+  const [data, setData] = useState<any>([]);
+
   const selectOptions = useMemo(() => {
     return createSelectColumnItems();
   }, [columns]);
 
   // Inpsired by: https://stackoverflow.com/questions/36205673/how-do-i-create-a-dynamic-drop-down-list-with-react-bootstrap
-  function createSelectTableItems() {
+  const createSelectTableItems = () => {
     let items = [];
     for (let i = 0; i < tables.length; i++) {
       items.push(
@@ -32,21 +39,15 @@ export const ViewInventoryPanel = () => {
     return items;
   }
 
-  async function OnSelectTable(e: any) {
+  const onSelectTable = async (e: any) => {
     console.log("User selected table: ", e.target.value);
-    await axios
-      .post("http://localhost:3000/api/get/tablecolumns", {
-        table_name: e.target.value,
-      })
-      .then((res) => {
-        console.log(res.data);
-        setColumns(res.data);
-        setSelectedTable(e.target.value);
-        setSelectedColumns([]);
-      });
+    const data = await getTableColumns(e.target.value);
+    setColumns(data);
+    setSelectedTable(e.target.value);
+    setSelectedColumns([]);
   }
 
-  function createSelectColumnItems() {
+  const createSelectColumnItems = () => {
     let items = [];
     for (let i = 0; i < columns.length; i++) {
       items.push(
@@ -59,46 +60,38 @@ export const ViewInventoryPanel = () => {
   }
 
   // TODO: fix to process multiple selects.
-  function OnSelectColumn(e: any) {
+  const onSelectColumn = (e: any) => {
     console.log("User selected column: ", e.target.value);
     setSelectedColumns([...columns, e.target.value]);
   }
 
+  const getTables = async () => {
+    const data = await getUserTables();
+    setTables(data);
+  };
+
+  const getData = async () => {
+    const data = await getDataValues(selectedTable, selectedColumns);
+    setData(data);
+  }
+
   useEffect(() => {
-    axios.get("http://localhost:3000/api/get/usertables").then((res) => {
-      console.log(res.data);
-      setTables(res.data);
-    });
+    getTables();
   }, []);
 
   useEffect(() => {
     createSelectColumnItems();
   }, [columns]);
 
-  // ============= RENDER =============
-  const [data, setData] = useState<any>([]);
-
-  function getData() {
-    axios
-      .post("http://localhost:3000/api/get/values", {
-        table: selectedTable,
-        columns: selectedColumns,
-      })
-      .then((res) => {
-        console.log(res.data);
-        setData(res.data);
-      });
-  }
-
   return (
     <div>
       <h1>View Inventory</h1>
-      <select className={styles.Select} onChange={OnSelectTable}>
+      <select className={styles.Select} onChange={onSelectTable}>
         {createSelectTableItems()}
       </select>
       <select
         className={styles.Select}
-        onChange={OnSelectColumn}
+        onChange={onSelectColumn}
         multiple={true}
       >
         {selectOptions}
@@ -109,3 +102,5 @@ export const ViewInventoryPanel = () => {
     </div>
   );
 };
+
+export default ViewInventoryPanel;
