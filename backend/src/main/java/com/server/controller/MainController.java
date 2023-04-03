@@ -2,6 +2,7 @@ package com.server.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.models.livestock.LivestockModel;
 import model.models.livestock.Livestock_4_Model;
 import model.enums.ActionType;
 import model.enums.AnimalType;
@@ -145,7 +146,7 @@ public class MainController {
      */
     @RequestMapping(value = "/livestock/insert", method = POST)
     public boolean insertLiveStock(@RequestBody Map<String, Object> map) {
-        Livestock_4_Model model = Livestock_4_Model.fromJSON(new JSONObject(map));
+        LivestockModel model = LivestockModel.fromJSON(new JSONObject(map));
         return system.insertLivestock(model);
     }
 

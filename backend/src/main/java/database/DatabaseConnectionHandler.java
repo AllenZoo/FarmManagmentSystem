@@ -185,7 +185,7 @@ public class DatabaseConnectionHandler {
   }
 
   // INSERT QUERY
-	public boolean insertLivestock(Livestock_4_Model model) {
+	public boolean insertLivestock(LivestockModel model) {
 		try {
 			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
 					"lastViolatedForHarvestedGoods) " +
@@ -204,6 +204,11 @@ public class DatabaseConnectionHandler {
 			//	} else {
 			//		ps.setInt(5, model.getPhoneNumber());
 			//	}
+			Livestock_1_Model model1 = new Livestock_1_Model(model.getAnimalType(), model.getDiet(), model.getWeight());
+			Livestock_3_Model model3 = new Livestock_3_Model(model.getAnimalType(), model.getAge(), model.isHarvestable());
+			insertLivestock_3(model3);
+			insertLivestock_1(model1);
+
 
 			ps.executeUpdate();
 			connection.commit();
@@ -690,12 +695,22 @@ public class DatabaseConnectionHandler {
 	// ================ FUNCTION FOR POPULATING DATABASE ===============================
 	public boolean insertLivestock_3(Livestock_3_Model model) {
 		try {
-			String query = "INSERT INTO Livestock_3(animalType, age, harvestable) " +
-					"VALUES (?, ?, ?)";
+			String query = "DECLARE " +
+					"    n int := 0; " +
+					"BEGIN " +
+					"    SELECT count(*) into n " +
+					"    from Livestock_3 where animalType = ? AND " +
+					"                           age = ? " +
+					"    if n = 0 then " +
+					"        insert into Livestock_3(animalType, age, harvestable) VALUES (?, ?, ?); " +
+					"    end if; " +
+					"end;";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, model.getAnimalType().toString().toLowerCase());
 			ps.setInt(2, model.getAge());
-			ps.setBoolean(3, model.isHarvestable());
+			ps.setString(3, model.getAnimalType().toString().toLowerCase());
+			ps.setInt(4, model.getAge());
+			ps.setBoolean(5, model.isHarvestable());
 
 			ps.executeUpdate();
 			connection.commit();
@@ -712,12 +727,22 @@ public class DatabaseConnectionHandler {
 	}
 	public boolean insertLivestock_1(Livestock_1_Model model) {
 		try {
-			String query = "INSERT INTO Livestock_1(animalType, weight, diet) " +
-					"VALUES (?, ?, ?)";
+			String query = "DECLARE " +
+					"    n int := 0; " +
+					"BEGIN " +
+					"    SELECT count(*) into n " +
+					"    from Livestock_1 where animalType = ? AND " +
+					"                           WEIGHT = ?; " +
+					"    if n = 0 then " +
+					"        insert into Livestock_1(animalType, weight, diet) VALUES (?, ?, ?); " +
+					"    end if; " +
+					"end;";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, model.getAnimalType().toString().toLowerCase());
 			ps.setDouble(2, model.getWeight());
-			ps.setString(3, model.getDiet().toString().toLowerCase());
+			ps.setString(3, model.getAnimalType().toString().toLowerCase());
+			ps.setDouble(4, model.getWeight());
+			ps.setString(5, model.getDiet().toString().toLowerCase());
 
 			ps.executeUpdate();
 			connection.commit();
