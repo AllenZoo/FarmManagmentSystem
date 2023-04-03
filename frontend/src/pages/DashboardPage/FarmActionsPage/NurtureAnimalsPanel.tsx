@@ -55,25 +55,26 @@ const getAnimalProfile = (animalType: AnimalType) => {
  */
 const NurtureAnimalsPanel = () => {
   const [livestock, setLivestock] = useState<Livestock[] | null>(null);
-  const [livestockCount, setLivestockCount] = useState<
-    { type: AnimalType; count: number }[]
-  >([]);
-  const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
+  const [livestockCount, setLivestockCount] = useState<{ type: AnimalType; count: number }[]>([]);
 
-  const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>(
-    "all"
-  );
+  // Filter states
+  const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
+  const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>("all");
   const [dietFilter, setDietFilter] = useState<CropType | string>("all");
-  const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>(
-    "all"
-  );
+  const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>("all");
   const [minAgeFilter, setMinAgeFilter] = useState<number>(-1);
   const [maxAgeFilter, setMaxAgeFilter] = useState<number>(-1);
 
+  // Add livestock states
+  const [addEnabled, setAddEnabled] = useState<boolean>(false);
   const [tagIDAdd, setTagIDAdd] = useState<number>(4000);
-  const [animalTypeAdd, setAnimalTypeAdd] = useState<AnimalType>(
-    AnimalType.COW
-  );
+  const [animalTypeAdd, setAnimalTypeAdd] = useState<AnimalType>(AnimalType.COW);
+  const [dietAdd, setDietAdd] = useState<CropType>(CropType.CANOLA);
+  const [ageAdd, setAgeAdd] = useState<number>(1);
+  const [weightAdd, setWeightAdd] = useState<number>(5);
+  const [lastFedAdd, setLastFedAdd] = useState<Date>(new Date());
+  const [lastViolatedForHarvestedGoodsAdd, setLastViolatedForHarvestedGoodsAdd] = useState<Date>(new Date());
+  const [harvestableAdd, setHarvestableAdd] = useState<boolean>(false);
 
   const modalContext = useContext(ModalContext);
 
@@ -142,16 +143,15 @@ const NurtureAnimalsPanel = () => {
    * Adds a new livestock to the database
    */
   const addLivestock = async () => {
-    // TODO: Generate more random data
     const newLivestock: Livestock = {
       tagID: tagIDAdd,
       animalType: animalTypeAdd,
-      age: 4,
-      diet: CropType.CANOLA,
-      weight: 70,
-      lastFed: convertDateToSQL(new Date()),
-      harvestable: Math.random() < 0.5 ? true : false,
-      lastViolatedForHarvestedGoods: convertDateToSQL(new Date()),
+      age: ageAdd,
+      diet: dietAdd,
+      weight: weightAdd,
+      lastFed: convertDateToSQL(lastFedAdd),
+      harvestable: harvestableAdd,
+      lastViolatedForHarvestedGoods: convertDateToSQL(lastViolatedForHarvestedGoodsAdd),
     };
 
     try {
@@ -304,12 +304,14 @@ const NurtureAnimalsPanel = () => {
         {/* CONTROL PANEL */}
         <div className={styles.ControlPanel}>
           <h2>Nurture Animals</h2>
-
           <div className={styles.Controls}>
-            <form className={styles.ViewLivestock}>
+
+            {/* VIEW LIVESTOCK FORM */}
+            <form className={styles.ViewLivestockForm}>
               <button
                 className={styles.Button}
                 type="button"
+                id="viewLivestockButton"
                 onClick={syncData}
               >
                 View Livestock
@@ -329,6 +331,7 @@ const NurtureAnimalsPanel = () => {
 
             {filterEnabled && (
               <form className={styles.FilterLivestock}>
+                <h2>Filter Livestock</h2>
                 <section>
                   <label htmlFor="animalType">Animal Type</label>
                   <select
@@ -439,53 +442,160 @@ const NurtureAnimalsPanel = () => {
               </form>
             )}
 
-            <form className={styles.AddLivestock}>
-              <section>
-                <label htmlFor="tagID">Tag ID</label>
-                <input
-                  type="number"
-                  name="tagID"
-                  id="tagID"
-                  maxLength={4}
-                  min={4000}
-                  max={4999}
-                  defaultValue={4000}
-                  onChange={(e) => {
-                    setTagIDAdd(e.target.value as unknown as number);
-                  }}
-                />
-              </section>
-
-              <section>
-                <label htmlFor="animalType">Animal Type</label>
-                <select
-                  className={styles.Select}
-                  name="animalType"
-                  id="animalType"
-                  defaultValue={"cow"}
-                  onChange={(e) => {
-                    setAnimalTypeAdd(e.target.value as AnimalType);
-                  }}
-                >
-                  <option value="cow">Cow</option>
-                  <option value="chicken">Chicken</option>
-                  <option value="pig">Pig</option>
-                  <option value="sheep">Sheep</option>
-                </select>
-              </section>
-
+            {/* ADD LIVESTOCK FORM */}
+            <form className={styles.AddLivestockForm}>
               <button
                 className={styles.Button}
                 type="button"
                 onClick={() => {
-                  addLivestock();
-                  syncData();
+                  setAddEnabled(!addEnabled);
                 }}
               >
                 Add Livestock
               </button>
             </form>
 
+            {addEnabled && (
+              <form className={styles.AddLivestock}>
+                <h2>Add Livestock</h2>
+                <section>
+                  <label htmlFor="tagID">Tag ID</label>
+                  <input
+                    type="number"
+                    name="tagID"
+                    id="tagID"
+                    maxLength={4}
+                    min={4000}
+                    max={4999}
+                    defaultValue={4000}
+                    onChange={(e) => {
+                      setTagIDAdd(e.target.value as unknown as number);
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="animalType">Animal Type</label>
+                  <select
+                    className={styles.Select}
+                    name="animalType"
+                    id="animalType"
+                    defaultValue={"cow"}
+                    onChange={(e) => {
+                      setAnimalTypeAdd(e.target.value as AnimalType);
+                    }}
+                  >
+                    <option value="cow">Cow</option>
+                    <option value="chicken">Chicken</option>
+                    <option value="pig">Pig</option>
+                    <option value="sheep">Sheep</option>
+                  </select>
+                </section>
+
+                <section>
+                  <label htmlFor="diet">Diet</label>
+                  <select
+                    className={styles.Select}
+                    name="diet"
+                    id="diet"
+                    defaultValue={"cow"}
+                    onChange={(e) => {
+                      setDietAdd(e.target.value as CropType);
+                    }}
+                  >
+                    <option value="canola">Canola</option>
+                    <option value="wheat">Wheat</option>
+                    <option value="corn">Corn</option>
+                    <option value="potatoes">Potatoes</option>
+                    <option value="mustard">Mustard</option>
+                    <option value="coconut">Coconut</option>
+                  </select>
+                </section>
+
+                <section>
+                  <label htmlFor="age">Age</label>
+                  <input
+                    type="number"
+                    name="age"
+                    id="age"
+                    min={0}
+                    defaultValue={1}
+                    onChange={(e) => {
+                      setAgeAdd(e.target.value as unknown as number);
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="weight">Weight</label>
+                  <input
+                    type="number"
+                    name="weight"
+                    id="weight"
+                    min={0}
+                    defaultValue={5}
+                    onChange={(e) => {
+                      setWeightAdd(e.target.value as unknown as number);
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="lastFed">Last Fed</label>
+                  <input
+                    type="string"
+                    name="lastFed"
+                    id="lastFed"
+                    defaultValue={new Date().toLocaleDateString()}
+                    onChange={(e) => {
+                      setLastFedAdd(e.target.value as unknown as Date);
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="lastViolatedForHarvestedGoods">Last Violated For Harvested Goods</label>
+                  <input
+                    type="string"
+                    name="lastViolatedForHarvestedGoods"
+                    id="lastViolatedForHarvestedGoods"
+                    defaultValue={new Date().toLocaleDateString()}
+                    onChange={(e) => {
+                      setLastViolatedForHarvestedGoodsAdd(e.target.value as unknown as Date);
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="harvestable">Harvestable</label>
+                  <select
+                    className={styles.Select}
+                    name="harvestable"
+                    id="harvestable"
+                    defaultValue={"true"}
+                    onChange={(e) => {
+                      setHarvestableAdd(e.target.value === "true" ? true : false);
+                    }}
+                  >
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                  </select>
+                </section>
+
+                <button
+                  className={styles.Button}
+                  type="button"
+                  onClick={() => {
+                    addLivestock();
+                    syncData();
+                  }}
+                >
+                  Add Livestock
+                </button>
+              </form>
+            )}
+            
+            {/* LIVESTOCK SUMMARY */}
             <div className={styles.LivestockSummary}>
               <h2>Livestock Summary</h2>
               <section>
