@@ -8,21 +8,12 @@ import {
   COMPANY_FUN_FACTS_PATHNAME,
 } from '@config/routes';
 
+import ViewCompanyInfoPanel from './ViewCompanyInfoPanel';
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
-/**
- * Renders the 'View Company Info' panel of Company Fun Facts
- */
-const ViewCompanyInfoPanel = () => {
-  return (
-    <>
-      View Company Info
-    </>
-  );
-};
-
 const CompanyFunFacts = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
   const location = useLocation();

@@ -98,6 +98,7 @@ public class FarmingSystem {
         return dataJSONArray;
     }
 
+
     /**
      * Join query with vet records
      */
@@ -118,6 +119,11 @@ public class FarmingSystem {
 
     public JSONArray getWateredAndFed(AnimalType animalType, int water, int food) {
         ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animalType, water, food);
+    /**
+     * Aggregation with having
+     */
+    public JSONArray getWateredAndFed(String animal, int water, int food) {
+        ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animal, water, food);
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
     }
@@ -136,5 +142,23 @@ public class FarmingSystem {
         ArrayList<String> columns = dbHandler.getTableColumns(tableName);
         JSONArray columnsJSONArray = new JSONArray(columns);
         return columnsJSONArray;
+    }
+
+    /**
+     * Nested aggregation
+     */
+    public JSONArray findOverweightAnimals() {
+        ArrayList<JSONObject> data = dbHandler.findOverweightAnimals();
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
+
+    /**
+     * Division query
+     */
+    public JSONArray findAllFarmerDivision(int param) {
+        ArrayList<JSONObject> data = dbHandler.findAllFarmersDivision(param);
+        JSONArray dataArray = new JSONArray(data);
+        return  dataArray;
     }
 }

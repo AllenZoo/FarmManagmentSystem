@@ -116,6 +116,43 @@
           }
         }
       }
+
+      .LivestockSummary {
+        display: flex;
+        flex-direction: column;
+        text-align: start;
+        height: 100%;
+        width: 90%;
+        padding: 1rem;
+        border-radius: 5px;
+        border: 1px solid #fff;
+        background-color: rgba(0, 0, 0, 0.1);
+        transition: 0.2s ease;
+        overflow-y: scroll;
+
+        h2 {
+          border-left: 4px solid #fff;
+          padding: 0 1rem;
+          margin: 0;
+        }
+
+        section {
+          display: flex;
+          flex-direction: column;
+          padding: 0.5rem 2rem;
+          gap: 1rem;
+          
+          span {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            height: 2rem;
+          }
+        }
+      }
     }
   }
 

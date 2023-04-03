@@ -383,7 +383,6 @@ public class DatabaseConnectionHandler {
 	}
 
 	// AGGREGATION WITH GROUP BY
-	// Finds all the young animals that can be sold to others.
 	public ArrayList<JSONObject> findCountedTypesSold(int age) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
@@ -413,11 +412,12 @@ public class DatabaseConnectionHandler {
 	}
 
 
+
+
 	// AGGREGATION GROUP BY WITH HAVING
 
 	// TODO: Implement in controller and system
-	// Finds animals that are well fed and watered
-	public ArrayList<JSONObject> findWateredAndFed(AnimalType animalType, int water, int food) {
+	public ArrayList<JSONObject> findWateredAndFed(String animal, int water, int food) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT N.tagID " +
@@ -427,39 +427,7 @@ public class DatabaseConnectionHandler {
 					"HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, animalType.toString().toLowerCase());
-			ps.setInt(2, water);
-			ps.setInt(3, food);
-
-			ResultSet rs = ps.executeQuery();
-
-			while(rs.next()) {
-				JSONObject json = new JSONObject();
-				json.put("Tag ID", rs.getInt("tagID"));
-				livestock.add(json);
-			}
-
-			rs.close();
-			ps.close();
-
-		} catch (SQLException e) {
-			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-		}
-		return livestock;
-	}
-
-	// Finds animals that are underfed or underhydrated
-	public ArrayList<JSONObject> findLivestockThatNeedNurture(AnimalType animalType, int water, int food) {
-		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
-		try {
-			String query = "SELECT N.tagID " +
-					"FROM Nurtures N, Livestock_4 L4 " +
-					"WHERE N.tagID = L4.tagID AND animalType = ? " +
-					"GROUP BY N.tagID " +
-					"HAVING AVG(N.waterSpent) < ? OR AVG(N.foodSpent) < ?";
-
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, animalType.toString().toLowerCase());
+			ps.setString(1, animal);
 			ps.setInt(2, water);
 			ps.setInt(3, food);
 
@@ -482,6 +450,7 @@ public class DatabaseConnectionHandler {
 
 
 	// NESTED AGGREGATION WITH GROUP BY
+
 	public ArrayList<JSONObject> findOverweightAnimals() {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
@@ -490,13 +459,61 @@ public class DatabaseConnectionHandler {
 					"FROM Livestock_4 L4, Livestock_1 L1 " +
 					"WHERE L4.animalType = L1.animalType AND L4.weight = L1.weight " +
 					"GROUP BY L4.animalType, L1.diet " +
-					"HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType);";
+					"HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType)";
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("animalType", rs.getString("animalType"));
+				json.put("diet", rs.getObject("diet"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
 		} catch(Exception e) {
-			// TODO
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
 		return livestock;
 	}
 
+	// Division
+
+	// Need a param to indicate which query
+	public ArrayList<JSONObject> findAllFarmersDivision(int type) {
+		ArrayList<JSONObject> result = new ArrayList<JSONObject>();
+		try {
+			String query;
+			if (type == 1) {
+				 query = "SELECT F2.farmerID FROM Farmers_2 F2 WHERE NOT " +
+						"EXISTS (((SELECT tagID FROM Livestock_4) " +
+						"MINUS (SELECT tagID FROM Nurtures WHERE farmerID = F2.farmerID)))";
+			} else {
+				query = "SELECT F2.farmerID FROM Farmers_2 F2 " +
+						"WHERE NOT EXISTS(((SELECT plotNum FROM Fields_4)" +
+						"                MINUS" +
+						"                (SELECT plotNum FROM Tends WHERE farmerID = F2.farmerID)))";
+			}
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("farmerID", rs.getInt("farmerID"));
+				result.add(json);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return result;
+	}
 	// ================ GENERAL PROJECTION FUNCTIONS ===================================
 	public ArrayList<String> getUserTables() {
 		ArrayList<String> tables = new ArrayList<String>();

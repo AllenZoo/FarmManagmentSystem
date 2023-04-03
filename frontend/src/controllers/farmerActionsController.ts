@@ -5,7 +5,6 @@ import { ActionTypes } from "@utils/enums";
 
 const PATH = "/api/livestock";
 
-
 /**
  * Retrieves the livestock
  */
@@ -44,7 +43,7 @@ export const insertLivestock = async (livestock: Livestock) => {
   });
 
   if (res.data) return res.data;
-  else throw new Error("Failed to insert livestock!");
+  else throw new Error(`Failed to insert a ${livestock.animalType}!`);
 };
 
 /**
@@ -59,7 +58,7 @@ export const deleteLivestock = async (livestock: Livestock) => {
 	});
 
 	if (res.data) return res.data;
-	else throw new Error("Failed to delete livestock!");
+  else throw new Error(`Failed to delete livestock with tagID #${livestock.tagID}!`);
 };
 
 /**
@@ -74,5 +73,19 @@ export const updateLivestock = async (livestock: Livestock, action: ActionTypes)
   });
 
   if (res.data) return res.data;
-  else throw new Error("Failed to update livestock!");
+  else throw new Error(`Failed to update livestock with tagID #${livestock.tagID}!`);
+};
+
+/**
+ * Retrieves the count of a livestock
+ */
+export const getLivestockCount = async (age: number) => {
+  const res = await axios.post(`${PATH}/get/animalCount`, age, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (res.data) return res.data;
+  else throw new Error(`Failed to retrieve count of livestock ages ${age} and up!`);
 };
