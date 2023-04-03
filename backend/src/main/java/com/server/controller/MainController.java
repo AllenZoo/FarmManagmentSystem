@@ -189,10 +189,24 @@ public class MainController {
     /**
      * Gets the animal count for each animal type
      */
-    @RequestMapping(value = "/get/animalCount", method = POST)
-    public void getAnimalCountType(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+    @RequestMapping(value = "/livestock/get/animalCount", method = GET)
+    public void getAnimalCountType(HttpServletResponse res) throws IOException {
+        JSONArray livestock = system.getAnimalCountType();
+
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(livestock);
+        out.flush();
+    }
+
+    /**
+     * Gets the animal count for each animal type filtered by age
+     */
+    @RequestMapping(value = "/livestock/get/animalCountByAge", method = POST)
+    public void getAnimalCountTypeByAge(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
         int filter_age = (int) map.get("tagID");
-        JSONArray livestock = system.getAnimalCountType(filter_age);
+        JSONArray livestock = system.getAnimalCountTypeByAge(filter_age);
 
         PrintWriter out = res.getWriter();
         res.setContentType("application/json");

@@ -62,8 +62,8 @@ export const retrieveFilteredLivestock = async (filteredData: FilteredLivestock)
 		},
 	});
 
-	if (res.data) return res.data;
-	else throw new Error("Failed to retrieve filtered livestock!");
+  if (res.data) return res.data;
+  else throw new Error("Failed to retrieve filtered livestock!");
 };
 
 /**
@@ -109,7 +109,10 @@ export const updateLivestock = async (livestock: Livestock, action: ActionTypes)
   });
 
   if (res.data) return res.data;
-  else throw new Error(`Failed to update livestock with tagID #${livestock.tagID}!`);
+  else
+    throw new Error(
+      `Failed to delete livestock with tagID #${livestock.tagID}!`
+    );
 };
 
 /**
@@ -122,8 +125,11 @@ export const getVetRecords = async (livestock: Livestock) => {
 		},
 	});
 
-	if (res.data) return res.data[0];
-	else throw new Error(`Failed to retrieve vet records of livestock with tagID #${livestock.tagID}!`);
+  if (res.data) return res.data[0];
+  else
+    throw new Error(
+      `Failed to retrieve vet records of livestock with tagID #${livestock.tagID}!`
+    );
 };
 
 /**
@@ -137,7 +143,7 @@ export const getLivestockCount = async (animalType: AnimalType) => {
 	});
 
   if (res.data) return res.data;
-  else throw new Error(`Failed to retrieve count of ${animalType}!`);
+  else throw new Error(`Failed to retrieve count of animals`);
 };
 
 /* -------------------------------------------------------------------------- */

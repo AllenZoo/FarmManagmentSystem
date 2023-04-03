@@ -1,8 +1,13 @@
-import { useState, useContext, useEffect } from 'react';
-import { GiBasket, GiMedicalPack, GiBloodySword, GiGrain } from 'react-icons/gi';
-import { FaFilter } from 'react-icons/fa';
+import { useState, useContext, useEffect } from "react";
+import {
+  GiBasket,
+  GiMedicalPack,
+  GiBloodySword,
+  GiGrain,
+} from "react-icons/gi";
+import { FaFilter } from "react-icons/fa";
 
-import ModalContext from '@contexts/modalContext';
+import ModalContext from "@contexts/modalContext";
 
 import {
   deleteLivestock,
@@ -11,19 +16,18 @@ import {
   insertLivestock,
   retrieveFilteredLivestock,
   retrieveLivestock,
-  updateLivestock
-} from '@controllers/farmerActionsController';
+  updateLivestock,
+} from "@controllers/farmerActionsController";
 
-import { ActionTypes, AnimalType, CropType } from '@utils/enums';
-import { convertDateToSQL } from '@utils/DatesSQL';
+import { ActionTypes, AnimalType, CropType } from "@utils/enums";
+import { convertDateToSQL } from "@utils/DatesSQL";
 
-import ChickenProfile from '@assets/livestock/chicken.png';
-import CowProfile from '@assets/livestock/cow.png';
-import PigProfile from '@assets/livestock/pig.png';
-import SheepProfile from '@assets/livestock/sheep.png';
+import ChickenProfile from "@assets/livestock/chicken.png";
+import CowProfile from "@assets/livestock/cow.png";
+import PigProfile from "@assets/livestock/pig.png";
+import SheepProfile from "@assets/livestock/sheep.png";
 
-import styles from './NurtureAnimalsPanel.module.scss';
-
+import styles from "./NurtureAnimalsPanel.module.scss";
 
 /* -------------------------------------------------------------------------- */
 /*                                 COMPONENTS                                 */
@@ -43,26 +47,33 @@ const getAnimalProfile = (animalType: AnimalType) => {
       return SheepProfile;
     default:
       return "";
-  };
+  }
 };
-
 
 /**
  * Renders the 'Nurture Animals' panel of Farmer Actions
  */
 const NurtureAnimalsPanel = () => {
   const [livestock, setLivestock] = useState<Livestock[] | null>(null);
-  const [livestockCount, setLivestockCount] = useState<{type: AnimalType, count: number}[]>([]);
+  const [livestockCount, setLivestockCount] = useState<
+    { type: AnimalType; count: number }[]
+  >([]);
   const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
 
-  const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>("all");
+  const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>(
+    "all"
+  );
   const [dietFilter, setDietFilter] = useState<CropType | string>("all");
-  const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>("all");
+  const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>(
+    "all"
+  );
   const [minAgeFilter, setMinAgeFilter] = useState<number>(-1);
   const [maxAgeFilter, setMaxAgeFilter] = useState<number>(-1);
 
   const [tagIDAdd, setTagIDAdd] = useState<number>(4000);
-  const [animalTypeAdd, setAnimalTypeAdd] = useState<AnimalType>(AnimalType.COW);
+  const [animalTypeAdd, setAnimalTypeAdd] = useState<AnimalType>(
+    AnimalType.COW
+  );
 
   const modalContext = useContext(ModalContext);
 
@@ -90,12 +101,14 @@ const NurtureAnimalsPanel = () => {
         minAge: minAgeFilter,
         maxAge: maxAgeFilter,
         diet: dietFilter,
-        harvestable: harvestableFilter
-      }
+        harvestable: harvestableFilter,
+      };
 
       // Check if all filters are not set
       if (
-        Object.values(filteredData).every((value) => (value === null || value === "all" || value === -1)) ||
+        Object.values(filteredData).every(
+          (value) => value === null || value === "all" || value === -1
+        ) ||
         !filterEnabled ||
         override
       ) {
@@ -104,7 +117,7 @@ const NurtureAnimalsPanel = () => {
           setLivestock(livestock);
         });
         return;
-      };
+      }
 
       // Retrieves the filtered livestock
       await retrieveFilteredLivestock(filteredData).then((livestock) => {
@@ -112,7 +125,7 @@ const NurtureAnimalsPanel = () => {
       });
     } catch (err) {
       console.error(err);
-    };
+    }
   };
 
   /**
@@ -121,7 +134,7 @@ const NurtureAnimalsPanel = () => {
   const syncData = () => {
     setTimeout(async () => {
       await getLivestock();
-      await getAnimalCounts();
+      // await getAnimalCounts();
     }, 500);
   };
 
@@ -130,7 +143,7 @@ const NurtureAnimalsPanel = () => {
    */
   const addLivestock = async () => {
     // TODO: Generate more random data
-    const newLivestock : Livestock = {
+    const newLivestock: Livestock = {
       tagID: tagIDAdd,
       animalType: animalTypeAdd,
       age: 4,
@@ -138,14 +151,14 @@ const NurtureAnimalsPanel = () => {
       weight: 70,
       lastFed: convertDateToSQL(new Date()),
       harvestable: Math.random() < 0.5 ? true : false,
-      lastViolatedForHarvestedGoods: convertDateToSQL(new Date())
+      lastViolatedForHarvestedGoods: convertDateToSQL(new Date()),
     };
 
     try {
       await insertLivestock(newLivestock);
     } catch (err) {
       window.alert("Failed to add livestock");
-    };
+    }
   };
 
   /**
@@ -157,7 +170,7 @@ const NurtureAnimalsPanel = () => {
       syncData();
     } catch (err) {
       console.error(err);
-    };
+    }
   };
 
   /**
@@ -170,7 +183,7 @@ const NurtureAnimalsPanel = () => {
       syncData();
     } catch (err) {
       console.error(err);
-    };
+    }
   };
 
   /**
@@ -180,14 +193,22 @@ const NurtureAnimalsPanel = () => {
     if (!livestock) return 0;
 
     try {
+      setLivestockCount([]); // Reset the count
+
       Object.values(AnimalType).forEach(async (animalType) => {
         await getLivestockCount(animalType).then((count) => {
-          setLivestockCount((prevCount) => [...prevCount, {type: animalType, count}]);
+          count.forEach((c: any) => {
+            setLivestockCount((prevCount) => [
+              ...prevCount,
+              { type: c.animalType, count: c.count },
+            ]);
+          });
         });
       });
+      console.log(livestockCount);
     } catch (err) {
       console.error(err);
-    };
+    }
   };
 
   /**
@@ -198,7 +219,10 @@ const NurtureAnimalsPanel = () => {
       await getVetRecords(livestock).then((vetRecords) => {
         modalContext.setModal(
           <>
-            <h1>Veterinary Records For {livestock.animalType} (ID #{livestock.tagID})</h1>
+            <h1>
+              Veterinary Records For {livestock.animalType} (ID #
+              {livestock.tagID})
+            </h1>
 
             { vetRecords ? (
               <div>
@@ -213,7 +237,9 @@ const NurtureAnimalsPanel = () => {
             <button
               className={styles.Button}
               type="button"
-              onClick={() => {modalContext.clearModal()}}
+              onClick={() => {
+                modalContext.clearModal();
+              }}
             >
               Close
             </button>
@@ -222,7 +248,7 @@ const NurtureAnimalsPanel = () => {
       });
     } catch (err) {
       console.error(err);
-    };
+    }
   };
 
   /**
@@ -232,7 +258,10 @@ const NurtureAnimalsPanel = () => {
     try {
       modalContext.setModal(
         <>
-          <h1>Are you sure you want to terminate {livestock.animalType} (ID #{livestock.tagID})?</h1>
+          <h1>
+            Are you sure you want to terminate {livestock.animalType} (ID #
+            {livestock.tagID})?
+          </h1>
 
           <button
             className={styles.Button}
@@ -249,7 +278,9 @@ const NurtureAnimalsPanel = () => {
           <button
             className={styles.Button}
             type="button"
-            onClick={() => {modalContext.clearModal()}}
+            onClick={() => {
+              modalContext.clearModal();
+            }}
           >
             No
           </button>
@@ -257,7 +288,7 @@ const NurtureAnimalsPanel = () => {
       );
     } catch (err) {
       console.error(err);
-    };
+    }
   };
 
   /**
@@ -287,7 +318,9 @@ const NurtureAnimalsPanel = () => {
               <button
                 className={styles.ActionButton}
                 type="button"
-                onClick={() => {setFilterEnabled(!filterEnabled)}}
+                onClick={() => {
+                  setFilterEnabled(!filterEnabled);
+                }}
                 id="filter"
               >
                 <FaFilter />
@@ -303,7 +336,9 @@ const NurtureAnimalsPanel = () => {
                     name="animalType"
                     id="animalType"
                     defaultValue={"all"}
-                    onChange={(e) => {setAnimalTypeFilter(e.target.value as AnimalType)}}
+                    onChange={(e) => {
+                      setAnimalTypeFilter(e.target.value as AnimalType);
+                    }}
                   >
                     <option value="all">All</option>
                     <option value="cow">Cow</option>
@@ -320,13 +355,14 @@ const NurtureAnimalsPanel = () => {
                     name="diet"
                     id="diet"
                     defaultValue={"all"}
-                    onChange={(e) => {setDietFilter(e.target.value as CropType)}}
+                    onChange={(e) => {
+                      setDietFilter(e.target.value as CropType);
+                    }}
                   >
                     <option value="all">All</option>
                     <option value="canola">Canola</option>
                     <option value="wheat">Wheat</option>
                     <option value="corn">Corn</option>
-
                   </select>
                 </section>
 
@@ -338,10 +374,11 @@ const NurtureAnimalsPanel = () => {
                     id="harvestable"
                     defaultValue={"all"}
                     onChange={(e) => {
-                      if (e.target.value === 'all')
-                        setHarvestableFilter("all");
+                      if (e.target.value === "all") setHarvestableFilter("all");
                       else
-                        setHarvestableFilter(e.target.value === 'true' ? true : false)
+                        setHarvestableFilter(
+                          e.target.value === "true" ? true : false
+                        );
                     }}
                   >
                     <option value="all">All</option>
@@ -359,10 +396,12 @@ const NurtureAnimalsPanel = () => {
                     defaultValue={minAgeFilter || -1}
                     min={-1}
                     max={100}
-                    onChange={(e) => {setMinAgeFilter(parseInt(e.target.value))}}
+                    onChange={(e) => {
+                      setMinAgeFilter(parseInt(e.target.value));
+                    }}
                   />
                 </section>
-                  
+
                 <section>
                   <label htmlFor="maxAge">Max Age</label>
                   <input
@@ -372,7 +411,9 @@ const NurtureAnimalsPanel = () => {
                     defaultValue={maxAgeFilter || -1}
                     min={-1}
                     max={100}
-                    onChange={(e) => {setMaxAgeFilter(parseInt(e.target.value))}}
+                    onChange={(e) => {
+                      setMaxAgeFilter(parseInt(e.target.value));
+                    }}
                   />
                 </section>
 
@@ -385,7 +426,7 @@ const NurtureAnimalsPanel = () => {
                   >
                     Clear Filters
                   </button>
-                  
+
                   <button
                     className={styles.Button}
                     type="button"
@@ -409,7 +450,9 @@ const NurtureAnimalsPanel = () => {
                   min={4000}
                   max={4999}
                   defaultValue={4000}
-                  onChange={(e) => {setTagIDAdd(e.target.value as unknown as number)}}
+                  onChange={(e) => {
+                    setTagIDAdd(e.target.value as unknown as number);
+                  }}
                 />
               </section>
 
@@ -420,7 +463,9 @@ const NurtureAnimalsPanel = () => {
                   name="animalType"
                   id="animalType"
                   defaultValue={"cow"}
-                  onChange={(e) => {setAnimalTypeAdd(e.target.value as AnimalType)}}
+                  onChange={(e) => {
+                    setAnimalTypeAdd(e.target.value as AnimalType);
+                  }}
                 >
                   <option value="cow">Cow</option>
                   <option value="chicken">Chicken</option>
@@ -447,9 +492,15 @@ const NurtureAnimalsPanel = () => {
                 {Object.keys(AnimalType).map((animalType, index) => (
                   <span key={index}>
                     <h3># of {animalType}:</h3>
-                    {livestockCount.find((livestockCount) => livestockCount.type === animalType)?.count || 0}
+                    {livestockCount.find(
+                      (livestockCount) =>
+                        livestockCount.type.toUpperCase() === animalType
+                    )?.count || 0}
                   </span>
                 ))}
+                <button className={styles.Button} onClick={getAnimalCounts}>
+                  Refresh
+                </button>
               </section>
             </div>
           </div>
@@ -459,80 +510,100 @@ const NurtureAnimalsPanel = () => {
         <div className={styles.DisplayPanel}>
           <h2>Total Livestock Displayed: {livestock?.length}</h2>
 
-          {livestock && livestock.map((livestock, index) => (
-            <fieldset key={index} className={styles.LivestockInfo}>
-              <legend>Livestock ID: #{livestock.tagID}</legend>
-              <img
-                src={getAnimalProfile(livestock.animalType)}
-                alt=""
-                draggable={false}
-              />
+          {livestock &&
+            livestock.map((livestock, index) => (
+              <fieldset key={index} className={styles.LivestockInfo}>
+                <legend>Livestock ID: #{livestock.tagID}</legend>
+                <img
+                  src={getAnimalProfile(livestock.animalType)}
+                  alt=""
+                  draggable={false}
+                />
 
-              <div className={styles.Info}>
-                <b>GENERAL</b>
-                <section>
-                  <p>Type: <b>{livestock.animalType}</b></p>
-                  <p>Age: <b>{livestock.age} YEARS</b></p>
-                  <p>Weight: <b>{livestock.weight} KG</b></p>
-                </section>
+                <div className={styles.Info}>
+                  <b>GENERAL</b>
+                  <section>
+                    <p>
+                      Type: <b>{livestock.animalType}</b>
+                    </p>
+                    <p>
+                      Age: <b>{livestock.age} YEARS</b>
+                    </p>
+                    <p>
+                      Weight: <b>{livestock.weight} KG</b>
+                    </p>
+                  </section>
 
-                <b>FEEDING</b>
-                <section>
-                  <p>Diet: <b>{livestock.diet}</b></p>
-                  <p>Last Fed: <b>{livestock.lastFed}</b></p>
-                </section>
+                  <b>FEEDING</b>
+                  <section>
+                    <p>
+                      Diet: <b>{livestock.diet}</b>
+                    </p>
+                    <p>
+                      Last Fed: <b>{livestock.lastFed}</b>
+                    </p>
+                  </section>
 
-                <b>HARVEST</b>
-                <section>
-                  <p>Harvestable: <b>{livestock.harvestable ? "YES" : "NO"}</b></p>
-                  <p>Last Violated For Harvested Goods: <b>{livestock.lastViolatedForHarvestedGoods || "N/A"}</b></p>
-                </section>
-              </div>
+                  <b>HARVEST</b>
+                  <section>
+                    <p>
+                      Harvestable: <b>{livestock.harvestable ? "YES" : "NO"}</b>
+                    </p>
+                    <p>
+                      Last Violated For Harvested Goods:{" "}
+                      <b>{livestock.lastViolatedForHarvestedGoods || "N/A"}</b>
+                    </p>
+                  </section>
+                </div>
 
-              <div className={styles.Actions}>
-                <button
-                  className={styles.ActionButton}
-                  type="button"
-                  onClick={() => feedLivestock(livestock)}
-                  id="feed"
-                  title={`Feed #${livestock.tagID} with ${livestock.diet}`}
-                >
-                  <GiGrain />
-                </button>
+                <div className={styles.Actions}>
+                  <button
+                    className={styles.ActionButton}
+                    type="button"
+                    onClick={() => feedLivestock(livestock)}
+                    id="feed"
+                    title={`Feed #${livestock.tagID} with ${livestock.diet}`}
+                  >
+                    <GiGrain />
+                  </button>
 
-                <button
-                  className={styles.ActionButton}
-                  type="button"
-                  onClick={() => harvestLivestock(livestock)}
-                  id="harvest"
-                  title={livestock.harvestable ? `Harvest #${livestock.tagID}` : `Cannot harvest #${livestock.tagID} yet`}
-                  disabled={!livestock.harvestable}
-                >
-                  <GiBasket />
-                </button>
+                  <button
+                    className={styles.ActionButton}
+                    type="button"
+                    onClick={() => harvestLivestock(livestock)}
+                    id="harvest"
+                    title={
+                      livestock.harvestable
+                        ? `Harvest #${livestock.tagID}`
+                        : `Cannot harvest #${livestock.tagID} yet`
+                    }
+                    disabled={!livestock.harvestable}
+                  >
+                    <GiBasket />
+                  </button>
 
-                <button
-                  className={styles.ActionButton}
-                  type="button"
-                  onClick={() => lookUpVetRecords(livestock)}
-                  id="vetRecords"
-                  title={`Read Vet Records of #${livestock.tagID}`}
-                >
-                  <GiMedicalPack />
-                </button>
+                  <button
+                    className={styles.ActionButton}
+                    type="button"
+                    onClick={() => lookUpVetRecords(livestock)}
+                    id="vetRecords"
+                    title={`Read Vet Records of #${livestock.tagID}`}
+                  >
+                    <GiMedicalPack />
+                  </button>
 
-                <button
-                  className={styles.ActionButton}
-                  type="button"
-                  onClick={() => terminateLivestock(livestock)}
-                  id="terminate"
-                  title={`Terminate #${livestock.tagID}`}
-                >
-                  <GiBloodySword />
-                </button>
-              </div>
-            </fieldset>
-          ))}
+                  <button
+                    className={styles.ActionButton}
+                    type="button"
+                    onClick={() => terminateLivestock(livestock)}
+                    id="terminate"
+                    title={`Terminate #${livestock.tagID}`}
+                  >
+                    <GiBloodySword />
+                  </button>
+                </div>
+              </fieldset>
+            ))}
         </div>
       </main>
     </div>
