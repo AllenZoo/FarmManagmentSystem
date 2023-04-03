@@ -1,7 +1,6 @@
 package model.models.livestock;
 
 import model.enums.AnimalType;
-import model.enums.CropType;
 
 import java.sql.Date;
 
@@ -66,13 +65,27 @@ public class Livestock_4_Model {
     }
 
     public static Livestock_4_Model fromJSON(JSONObject json) {
+        Date lastFed;
+        try {
+          lastFed = Date.valueOf(json.getString("lastFed"));
+        } catch (Exception e) {
+          lastFed = null;
+        }
+
+        Date lastViolatedForHarvestedGoods;
+        try {
+          lastViolatedForHarvestedGoods = Date.valueOf(json.getString("lastViolatedForHarvestedGoods"));
+        } catch (Exception e) {
+          lastViolatedForHarvestedGoods = null;
+        }
+
         return new Livestock_4_Model(
                 json.getInt("tagID"),
                 AnimalType.valueOf(json.getString("animalType").toUpperCase()),
                 json.getInt("age"),
                 json.getDouble("weight"),
-                Date.valueOf(json.getString("lastFed")),
-                Date.valueOf(json.getString("lastViolatedForHarvestedGoods"))
+                lastFed,
+                lastViolatedForHarvestedGoods
               );
     }
 }

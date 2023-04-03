@@ -165,6 +165,7 @@ const NurtureAnimalsPanel = () => {
    */
   const harvestLivestock = async (livestock: Livestock) => {
     try {
+      console.log(livestock);
       updateLivestock(livestock, ActionTypes.HARVEST);
       syncData();
     } catch (err) {
