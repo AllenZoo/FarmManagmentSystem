@@ -177,6 +177,9 @@ public class MainController {
     }
 
 
+    /**
+     * Does aggregation with group by - Provides animals who have drank and eaten the most food
+     */
     @RequestMapping(value = "/get/wateredAndFed", method = POST)
     public void getWateredAndFed(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
         String animalName = (String) map.get("animalType");
@@ -190,7 +193,34 @@ public class MainController {
         out.print(livestock);
         out.flush();
     }
-    // For Ref!
+
+    /**
+     * Does nested aggregation
+     */
+    @RequestMapping(value = "/get/overweight", method = GET)
+    public void getOverweightAnimals(HttpServletResponse res) throws IOException {
+        JSONArray data = system.findOverweightAnimals();
+
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(data);
+        out.flush();
+    }
+
+    /**
+     * Does division
+     */
+    @RequestMapping(value = "/get/farmerDiv", method = POST)
+    public void getAllFarmersDivision(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+        JSONArray data = system.findAllFarmerDivision((int) map.get("param"));
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(data);
+        out.flush();
+    }
+      // For Ref!
     //    @RequestMapping(value = "/login", method = POST)
     //    public boolean login(HttpServletRequest req, HttpServletResponse res, Model model) throws IOException {
     //

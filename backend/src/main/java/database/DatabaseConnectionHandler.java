@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import model.filters.LivestockFilterModel;
 import model.models.livestock.LivestockModel;
 import model.models.livestock.Livestock_1_Model;
@@ -390,7 +391,7 @@ public class DatabaseConnectionHandler {
 			String query = "SELECT L4.animalType, COUNT(DISTINCT tagID) AS num " +
 					"FROM Livestock_4 L4" +
 					" WHERE  L4.age < ? " +
-					"GROUP BY L4.animalType;";
+					"GROUP BY L4.animalType";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, age);
@@ -412,12 +413,7 @@ public class DatabaseConnectionHandler {
 		return livestock;
 	}
 
-
-
-
 	// AGGREGATION GROUP BY WITH HAVING
-
-	// TODO: Implement in controller and system
 	public ArrayList<JSONObject> findWateredAndFed(String animal, int water, int food) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
@@ -460,13 +456,61 @@ public class DatabaseConnectionHandler {
 					"FROM Livestock_4 L4, Livestock_1 L1 " +
 					"WHERE L4.animalType = L1.animalType AND L4.weight = L1.weight " +
 					"GROUP BY L4.animalType, L1.diet " +
-					"HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType);";
+					"HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType)";
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("animalType", rs.getString("animalType"));
+				json.put("diet", rs.getObject("diet"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
 		} catch(Exception e) {
-			// TODO
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
 		}
 		return livestock;
 	}
 
+	// Division
+
+	// Need a param to indicate which query
+	public ArrayList<JSONObject> findAllFarmersDivision(int type) {
+		ArrayList<JSONObject> result = new ArrayList<JSONObject>();
+		try {
+			String query;
+			if (type == 1) {
+				 query = "SELECT F2.farmerID FROM Farmers_2 F2 WHERE NOT " +
+						"EXISTS (((SELECT tagID FROM Livestock_4) " +
+						"MINUS (SELECT tagID FROM Nurtures WHERE farmerID = F2.farmerID)))";
+			} else {
+				query = "SELECT F2.farmerID FROM Farmers_2 F2 " +
+						"WHERE NOT EXISTS(((SELECT plotNum FROM Fields_4)" +
+						"                MINUS" +
+						"                (SELECT plotNum FROM Tends WHERE farmerID = F2.farmerID)))";
+			}
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("farmerID", rs.getInt("farmerID"));
+				result.add(json);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return result;
+	}
 
 	// ================ FUNCTION FOR POPULATING DATABASE ===============================
 	public boolean insertLivestock_3(Livestock_3_Model model) {
@@ -590,6 +634,9 @@ public class DatabaseConnectionHandler {
 		}
 		return CropType.WHEAT;
 	}
+
+	// DIVISION QUERY
+
 
 	//============================= FROM TUTORIAL ===================================
 	public void deleteBranch(int branchId) {
