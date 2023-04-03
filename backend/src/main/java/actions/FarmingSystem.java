@@ -93,8 +93,8 @@ public class FarmingSystem {
         return livestockArray;
     }
 
-    public JSONArray getFilteredLivestock(String harvestable, AnimalType animalType, CropType diet, int minAge, int maxAge) {
-        LivestockFilterModel model = new LivestockFilterModel(harvestable, animalType, diet, minAge, maxAge);
+    public JSONArray getFilteredLivestock(String harvestable, AnimalType animalType, CropType diet, int minAge, int maxAge, int minTagID, int maxTagID) {
+        LivestockFilterModel model = new LivestockFilterModel(harvestable, animalType, diet, minAge, maxAge, minTagID, maxTagID);
 
         ArrayList<JSONObject> livestock = dbHandler.getFilteredLivestock(model);
         JSONArray livestockArray = new JSONArray(livestock);

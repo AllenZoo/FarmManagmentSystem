@@ -61,6 +61,8 @@ const NurtureAnimalsPanel = () => {
 
   // Filter states
   const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
+  const [minTagIDFilter, setMinTagIDFilter] = useState<number>(4000);
+  const [maxTagIDFilter, setMaxTagIDFilter] = useState<number>(4999);
   const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>("all");
   const [dietFilter, setDietFilter] = useState<CropType | string>("all");
   const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>("all");
@@ -84,6 +86,8 @@ const NurtureAnimalsPanel = () => {
    * Clears all filters
    */
   const clearFilters = () => {
+    setMinTagIDFilter(4000);
+    setMaxTagIDFilter(4999);
     setAnimalTypeFilter("all");
     setDietFilter("all");
     setHarvestableFilter("all");
@@ -100,6 +104,8 @@ const NurtureAnimalsPanel = () => {
   const getLivestock = async (override?: boolean) => {
     try {
       const filteredData: FilteredLivestock = {
+        minTagID: minTagIDFilter,
+        maxTagID: maxTagIDFilter,
         animalType: animalTypeFilter,
         minAge: minAgeFilter,
         maxAge: maxAgeFilter,
@@ -371,6 +377,36 @@ const NurtureAnimalsPanel = () => {
             {filterEnabled && (
               <form className={styles.FilterLivestock}>
                 <h2>Filter Livestock</h2>
+                <section>
+                  <label htmlFor="minTagID">Min Tag ID</label>
+                  <input
+                    type="number"
+                    name="minTagID"
+                    id="minTagID"
+                    defaultValue={minTagIDFilter || 4000}
+                    min={4000}
+                    max={4999}
+                    onChange={(e) => {
+                      setMinTagIDFilter(parseInt(e.target.value));
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="maxTagID">Max Tag ID</label>
+                  <input
+                    type="number"
+                    name="maxTagID"
+                    id="maxTagID"
+                    defaultValue={maxTagIDFilter || 4999}
+                    min={4000}
+                    max={4999}
+                    onChange={(e) => {
+                      setMaxTagIDFilter(parseInt(e.target.value));
+                    }}
+                  />
+                </section>
+
                 <section>
                   <label htmlFor="animalType">Animal Type</label>
                   <select
