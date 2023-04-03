@@ -1,0 +1,130 @@
+.Select {
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30rem;
+  margin: 0;
+  padding: 0.25rem;
+  text-align: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+
+  option {
+    color: #000;
+    background: #cff;
+  }
+}
+
+.Button {
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+
+  padding: 0.5rem 1rem;
+  min-width: 20rem;
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+}
+
+.ActionButton {
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 0;
+  padding: 0.25rem;
+  text-align: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    scale: 1.05;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+
+    &:hover {
+      scale: 1;
+      background: transparent;
+      backdrop-filter: none;
+      transition: 0.2s ease;
+    }
+  }
+
+  &[id="filter"] {
+    border-color: #8ff;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+
+    svg {
+      stroke: #8ff !important;
+      fill: #8ff !important;
+    }
+  }
+
+  &[id="feed"] {
+    border-color: #ff8;
+
+    svg {
+      stroke: #ff8 !important;
+      fill: #ff8 !important;
+    }
+  }
+
+  &[id="harvest"] {
+    border-color: #8f8;
+
+    svg {
+      stroke: #8f8 !important;
+      fill: #8f8 !important;
+    }
+  }
+
+  &[id="terminate"] {
+    border-color: #f88;
+
+    svg {
+      stroke: #f88 !important;
+      fill: #f88 !important;
+    }
+  }
+}

@@ -127,26 +127,6 @@ public class MainController {
 
 
     /**
-     * General Selection Query
-     * Sample Request Format: {
-     *     "table":"LIVESTOCK_4",
-     *     "columns": ["tagID", "age", "weight"]
-     * }
-     */
-    @RequestMapping(value = "/get/values", method = POST)
-    public void doSelection(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
-        ArrayList<String> columnsToSelect = (ArrayList<String>) map.get("columns");
-        String tableToFrom = map.get("table").toString();
-
-        JSONArray data = system.getSelect(columnsToSelect, tableToFrom);
-        PrintWriter out = res.getWriter();
-        res.setContentType("application/json");
-        res.setCharacterEncoding("UTF-8");
-        out.print(data);
-        out.flush();
-    }
-
-    /**
      * Handles getVetRecords request for the livestock
      */
     @RequestMapping(value = "/get/vetRecords", method = POST)
@@ -179,10 +159,10 @@ public class MainController {
 
     @RequestMapping(value = "/get/wateredAndFed", method = POST)
     public void getWateredAndFed(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
-        String animalName = (String) map.get("animalType");
+        AnimalType animalType = AnimalType.valueOf(map.get("animalType").toString().toUpperCase());
         int water_spent = (int) map.get("waterSpent");
         int food_spent = (int) map.get("foodSpent");
-        JSONArray livestock = system.getWateredAndFed(animalName, water_spent, food_spent);
+        JSONArray livestock = system.getWateredAndFed(animalType, water_spent, food_spent);
 
         PrintWriter out = res.getWriter();
         res.setContentType("application/json");
@@ -190,6 +170,49 @@ public class MainController {
         out.print(livestock);
         out.flush();
     }
+
+
+    @RequestMapping(value = "/get/usertables", method = GET)
+    public void getUserTables(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        JSONArray tables = system.getUserTables();
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(tables);
+        out.flush();
+    }
+
+    @RequestMapping(value = "/get/tablecolumns", method = POST)
+    public void getTableColumns(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+        JSONArray tables = system.getTableColumns(map.get("table_name").toString());
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(tables);
+        out.flush();
+    }
+
+    /**
+     * General PROJECTION Query
+     * Sample Request Format: {
+     *     "table":"LIVESTOCK_4",
+     *     "columns": ["tagID", "age", "weight"]
+     * }
+     */
+    @RequestMapping(value = "/get/values", method = POST)
+    public void doSelection(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+        ArrayList<String> columnsToSelect = (ArrayList<String>) map.get("columns");
+        String tableToFrom = map.get("table").toString();
+
+        JSONArray data = system.getSelect(columnsToSelect, tableToFrom);
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(data);
+        out.flush();
+    }
+
+
     // For Ref!
     //    @RequestMapping(value = "/login", method = POST)
     //    public boolean login(HttpServletRequest req, HttpServletResponse res, Model model) throws IOException {

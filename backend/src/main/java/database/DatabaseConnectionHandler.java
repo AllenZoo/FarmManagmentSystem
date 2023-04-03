@@ -61,7 +61,7 @@ public class DatabaseConnectionHandler {
 
 			connection = DriverManager.getConnection(ORACLE_URL, username, password);
 			connection.setAutoCommit(false);
-			populateLivestock();
+			// populateLivestock();
 
 			System.out.println("\nConnected to Oracle!");
 			return true;
@@ -73,7 +73,6 @@ public class DatabaseConnectionHandler {
 
 
 	//===================Livestock methods==============================
-
 
 
    // TODO: implement this
@@ -384,6 +383,7 @@ public class DatabaseConnectionHandler {
 	}
 
 	// AGGREGATION WITH GROUP BY
+	// Finds all the young animals that can be sold to others.
 	public ArrayList<JSONObject> findCountedTypesSold(int age) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
@@ -413,12 +413,11 @@ public class DatabaseConnectionHandler {
 	}
 
 
-
-
 	// AGGREGATION GROUP BY WITH HAVING
 
 	// TODO: Implement in controller and system
-	public ArrayList<JSONObject> findWateredAndFed(String animal, int water, int food) {
+	// Finds animals that are well fed and watered
+	public ArrayList<JSONObject> findWateredAndFed(AnimalType animalType, int water, int food) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT N.tagID " +
@@ -428,7 +427,39 @@ public class DatabaseConnectionHandler {
 					"HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, animal);
+			ps.setString(1, animalType.toString().toLowerCase());
+			ps.setInt(2, water);
+			ps.setInt(3, food);
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("Tag ID", rs.getInt("tagID"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
+	}
+
+	// Finds animals that are underfed or underhydrated
+	public ArrayList<JSONObject> findLivestockThatNeedNurture(AnimalType animalType, int water, int food) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT N.tagID " +
+					"FROM Nurtures N, Livestock_4 L4 " +
+					"WHERE N.tagID = L4.tagID AND animalType = ? " +
+					"GROUP BY N.tagID " +
+					"HAVING AVG(N.waterSpent) < ? OR AVG(N.foodSpent) < ?";
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, animalType.toString().toLowerCase());
 			ps.setInt(2, water);
 			ps.setInt(3, food);
 
@@ -451,7 +482,6 @@ public class DatabaseConnectionHandler {
 
 
 	// NESTED AGGREGATION WITH GROUP BY
-
 	public ArrayList<JSONObject> findOverweightAnimals() {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
@@ -467,6 +497,53 @@ public class DatabaseConnectionHandler {
 		return livestock;
 	}
 
+	// ================ GENERAL PROJECTION FUNCTIONS ===================================
+	public ArrayList<String> getUserTables() {
+		ArrayList<String> tables = new ArrayList<String>();
+
+		try {
+			String query = "select table_name from user_tables";
+
+			PrintablePreparedStatement ps =
+					new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				tables.add(rs.getString("table_name"));
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return tables;
+	}
+	public ArrayList<String> getTableColumns(String tableName) {
+		ArrayList<String> columns = new ArrayList<String>();
+
+		try {
+			String query = "select column_name from ALL_TAB_COLUMNS WHERE table_name= ?";
+
+			PrintablePreparedStatement ps =
+					new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, tableName.toUpperCase());
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				columns.add(rs.getString("column_name"));
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return columns;
+	}
 
 	// ================ FUNCTION FOR POPULATING DATABASE ===============================
 	public boolean insertLivestock_3(Livestock_3_Model model) {

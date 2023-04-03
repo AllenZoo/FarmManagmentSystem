@@ -98,7 +98,6 @@ public class FarmingSystem {
         return dataJSONArray;
     }
 
-
     /**
      * Join query with vet records
      */
@@ -117,9 +116,25 @@ public class FarmingSystem {
         return dataArray;
     }
 
-    public JSONArray getWateredAndFed(String animal, int water, int food) {
-        ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animal, water, food);
+    public JSONArray getWateredAndFed(AnimalType animalType, int water, int food) {
+        ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animalType, water, food);
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
+    }
+
+
+    /**
+     * Projection Functions
+     */
+    public JSONArray getUserTables() {
+        ArrayList<String> tables = dbHandler.getUserTables();
+        JSONArray tablesJSONArray = new JSONArray(tables);
+        return tablesJSONArray;
+    }
+
+    public JSONArray getTableColumns(String tableName) {
+        ArrayList<String> columns = dbHandler.getTableColumns(tableName);
+        JSONArray columnsJSONArray = new JSONArray(columns);
+        return columnsJSONArray;
     }
 }
