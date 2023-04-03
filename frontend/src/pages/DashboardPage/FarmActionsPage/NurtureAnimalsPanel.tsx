@@ -99,13 +99,17 @@ const NurtureAnimalsPanel = () => {
         !filterEnabled ||
         override
       ) {
-        const livestock = await retrieveLivestock();
-        setLivestock(livestock);
+        // Retrieves all livestock
+        await retrieveLivestock().then((livestock) => {
+          setLivestock(livestock);
+        });
         return;
       };
 
-      const livestock = await retrieveFilteredLivestock(filteredData);
-      setLivestock(livestock);
+      // Retrieves the filtered livestock
+      await retrieveFilteredLivestock(filteredData).then((livestock) => {
+        setLivestock(livestock);
+      });
     } catch (err) {
       console.error(err);
     };
@@ -117,7 +121,7 @@ const NurtureAnimalsPanel = () => {
   const syncData = () => {
     setTimeout(async () => {
       await getLivestock();
-      await getAnimalCounts(1);
+      await getAnimalCounts();
     }, 500);
   };
 
@@ -171,13 +175,14 @@ const NurtureAnimalsPanel = () => {
   /**
    * Gets animal count
    */
-  const getAnimalCounts = async (age: number) => {
+  const getAnimalCounts = async () => {
     if (!livestock) return 0;
 
     try {
       Object.values(AnimalType).forEach(async (animalType) => {
-        const count = await getLivestockCount(age);
-        setLivestockCount((prevCount) => [...prevCount, {type: animalType, count}]);
+        await getLivestockCount(animalType).then((count) => {
+          setLivestockCount((prevCount) => [...prevCount, {type: animalType, count}]);
+        });
       });
     } catch (err) {
       console.error(err);
@@ -186,22 +191,31 @@ const NurtureAnimalsPanel = () => {
 
   /**
    * Loads vet records for livestock
-   * 
-   * TODO: Implement this
    */
   const lookUpVetRecords = async (livestock: Livestock) => {
     try {
-      const vetRecords = await getVetRecords(livestock);
-      console.log(vetRecords);
-      modalContext.setModal(
-        <>
-          <h1>Veterinary Records For {livestock.animalType} (ID #{livestock.tagID})</h1>
+      await getVetRecords(livestock).then((vetRecords) => {
+        console.log(vetRecords);
+        modalContext.setModal(
+          <>
+            <h1>Veterinary Records For {livestock.animalType} (ID #{livestock.tagID})</h1>
 
-          <div>
-            N/A
-          </div>
-        </>
-      );
+            <div>
+              <h2>Record ID: #{vetRecords.recordID}</h2>
+              <h2>Health Status: {vetRecords.healthstatus}</h2>
+              <h2>Record Date: {vetRecords.record_date}</h2>
+            </div>
+
+            <button
+              className={styles.Button}
+              type="button"
+              onClick={() => {modalContext.clearModal()}}
+            >
+              Close
+            </button>
+          </>
+        );
+      });
     } catch (err) {
       console.error(err);
     };
