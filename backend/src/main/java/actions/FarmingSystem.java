@@ -100,6 +100,12 @@ public class FarmingSystem {
         return livestockArray;
     }
 
+    public JSONArray getWaterAndFoodOfLivestock(int tagID) {
+        ArrayList<JSONObject> data = dbHandler.getWaterAndFoodSpentOfLivestock(tagID);
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
+
     public boolean deleteLivestock(int tagID) {
         return dbHandler.deleteLivestock(tagID);
     }

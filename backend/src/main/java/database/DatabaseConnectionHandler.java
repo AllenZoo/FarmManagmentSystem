@@ -503,17 +503,50 @@ public class DatabaseConnectionHandler {
 
 
 
-	// AGGREGATION GROUP BY WITH HAVING
+	// Gets the total amount of water and food spent given a livestock id.
+	public ArrayList<JSONObject> getWaterAndFoodSpentOfLivestock(int tagID) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT N.tagID AS tagID, SUM(N.waterSpent) AS totalWaterConsumed," +
+					" SUM(N.foodSpent) AS totalFoodConsumed " +
+					"FROM Nurtures N, Livestock_4 L4 " +
+					"WHERE N.tagID = L4.tagID AND L4.tagID = ? " +
+					"GROUP BY N.tagID ";
 
-	// TODO: Implement in controller and system
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setInt(1, tagID);
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("tagID", rs.getInt("tagID"));
+				json.put("totalWaterConsumed", rs.getInt("totalWaterConsumed"));
+				json.put("totalFoodConsumed", rs.getInt("totalFoodConsumed"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
+	}
+
+	// AGGREGATION GROUP BY WITH HAVING
+	// Find all the animals (of an animal type) that have been fed well with water and food.
+	// (most plump animals?)
 	public ArrayList<JSONObject> findWateredAndFed(AnimalType animalType, int water, int food) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
-			String query = "SELECT N.tagID " +
+			String query = "SELECT N.tagID AS tagID, SUM(N.waterSpent) AS totalWaterConsumed," +
+					" SUM(N.foodSpent) AS totalFoodConsumed " +
 					"FROM Nurtures N, Livestock_4 L4 " +
-					"WHERE N.tagID = L4.tagID AND animalType = ? " +
+					"WHERE N.tagID = L4.tagID AND L4.animalType = ? " +
 					"GROUP BY N.tagID " +
-					"HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?";
+					"HAVING SUM(N.waterSpent) >= ? AND SUM(N.foodSpent) >= ? ";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, animalType.toString().toLowerCase());
@@ -524,7 +557,9 @@ public class DatabaseConnectionHandler {
 
 			while(rs.next()) {
 				JSONObject json = new JSONObject();
-				json.put("Tag ID", rs.getInt("tagID"));
+				json.put("tagID", rs.getInt("tagID"));
+				json.put("totalWaterConsumed", rs.getInt("totalWaterConsumed"));
+				json.put("totalFoodConsumed", rs.getInt("totalFoodConsumed"));
 				livestock.add(json);
 			}
 
@@ -539,7 +574,6 @@ public class DatabaseConnectionHandler {
 
 
 	// NESTED AGGREGATION WITH GROUP BY
-
 	public ArrayList<JSONObject> findOverweightAnimals() {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {

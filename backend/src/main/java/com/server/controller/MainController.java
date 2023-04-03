@@ -186,6 +186,20 @@ public class MainController {
         out.flush();
     }
 
+    // Gets the total food and water spent for a given livestock (tagID)
+    @RequestMapping(value = "/get/foodWaterSpent", method = POST)
+    public void getFoodWaterSpent(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+        int tagID = Integer.parseInt(map.get("tagID").toString());
+        JSONArray data = system.getWaterAndFoodOfLivestock(tagID);
+
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(data);
+        out.flush();
+    }
+
+
     /**
      * Gets the animal count for each animal type
      */
@@ -217,7 +231,17 @@ public class MainController {
 
 
     /**
-     * Does aggregation with group by - Provides animals who have drank and eaten the most food
+     * Does aggregation with group by - Provides animals who have drank and eaten more than user inputted food and water
+     *
+     * RECEIVES:
+     * {
+     *     animalType: AnimalType
+     *     waterSpent: int
+     *     foodSpent: int
+     * }
+     *
+     * Returns: LivestockModel to JSON object.
+     *
      */
     @RequestMapping(value = "/get/wateredAndFed", method = POST)
     public void getWateredAndFed(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
