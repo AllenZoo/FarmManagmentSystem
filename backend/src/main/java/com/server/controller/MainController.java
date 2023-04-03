@@ -127,26 +127,6 @@ public class MainController {
 
 
     /**
-     * General Selection Query
-     * Sample Request Format: {
-     *     "table":"LIVESTOCK_4",
-     *     "columns": ["tagID", "age", "weight"]
-     * }
-     */
-    @RequestMapping(value = "/get/values", method = POST)
-    public void doSelection(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
-        ArrayList<String> columnsToSelect = (ArrayList<String>) map.get("columns");
-        String tableToFrom = map.get("table").toString();
-
-        JSONArray data = system.getSelect(columnsToSelect, tableToFrom);
-        PrintWriter out = res.getWriter();
-        res.setContentType("application/json");
-        res.setCharacterEncoding("UTF-8");
-        out.print(data);
-        out.flush();
-    }
-
-    /**
      * Handles getVetRecords request for the livestock
      */
     @RequestMapping(value = "/get/vetRecords", method = POST)

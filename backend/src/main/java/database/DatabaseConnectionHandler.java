@@ -417,7 +417,7 @@ public class DatabaseConnectionHandler {
 	// AGGREGATION GROUP BY WITH HAVING
 
 	// TODO: Implement in controller and system
-	public ArrayList<JSONObject> findWateredAndFed(String animal, int water, int food) {
+	public ArrayList<JSONObject> findWateredAndFed(AnimalType animalType, int water, int food) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT N.tagID " +
@@ -427,7 +427,7 @@ public class DatabaseConnectionHandler {
 					"HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, animal);
+			ps.setString(1, animalType.toString().toLowerCase());
 			ps.setInt(2, water);
 			ps.setInt(3, food);
 

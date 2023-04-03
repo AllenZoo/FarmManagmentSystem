@@ -117,12 +117,10 @@ public class FarmingSystem {
         return dataArray;
     }
 
-    public JSONArray getWateredAndFed(AnimalType animalType, int water, int food) {
-        ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animalType, water, food);
     /**
      * Aggregation with having
      */
-    public JSONArray getWateredAndFed(String animal, int water, int food) {
+    public JSONArray getWateredAndFed(AnimalType animal, int water, int food) {
         ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animal, water, food);
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
