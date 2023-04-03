@@ -15,13 +15,15 @@ import styles from './index.module.scss';
 interface Button {
   link: To;
   text: string;
+  disabled?: boolean;
 }
 
 // Farmer Actions Buttons
 const FARMER_ACTIONS_BUTTONS : Button[] = [
   {
     link: `${ROUTES.FARMER_ACTIONS_PATHNAME}#tend-fields`,
-    text: "Tend Fields"
+    text: "Tend Fields",
+    disabled: true
   },
   {
     link: `${ROUTES.FARMER_ACTIONS_PATHNAME}#nurture-animals`,
@@ -29,11 +31,13 @@ const FARMER_ACTIONS_BUTTONS : Button[] = [
   },
   {
     link: `${ROUTES.FARMER_ACTIONS_PATHNAME}#sell-products`,
-    text: "Sell Products"
+    text: "Sell Products",
+    disabled: true
   },
   {
     link: `${ROUTES.FARMER_ACTIONS_PATHNAME}#manage-facilities`,
-    text: "Manage Facilities"
+    text: "Manage Facilities",
+    disabled: true
   }
 ];
 
@@ -41,7 +45,8 @@ const FARMER_ACTIONS_BUTTONS : Button[] = [
 const USER_INFO_BUTTONS : Button[] = [
   {
     link: `${ROUTES.USER_INFO_PATHNAME}#profile`,
-    text: "View Profile"
+    text: "View Profile",
+    disabled: true
   },
   {
     link: `${ROUTES.USER_INFO_PATHNAME}#inventory`,
@@ -61,11 +66,13 @@ const COMPANY_FUN_FACTS_BUTTONS : Button[] = [
 const HOUSING_BUTTONS : Button[] = [
   {
     link: `${ROUTES.HOUSING_PATHNAME}#housing`,
-    text: "View Housing"
+    text: "View Housing",
+    disabled: true
   },
   {
     link: `${ROUTES.HOUSING_PATHNAME}#manage-housing`,
-    text: "Manage Housing"
+    text: "Manage Housing",
+    disabled: true
   }
 ];
 
@@ -81,7 +88,9 @@ const MainPage = () => {
 
           {FARMER_ACTIONS_BUTTONS.map((button, index) => (
             <Link to={button.link} key={index}>
-              <button className={styles.Button}>{button.text}</button>
+              <button className={styles.Button} disabled={button.disabled}>
+                {button.text}
+              </button>
             </Link>
           ))}
         </section>
@@ -91,7 +100,9 @@ const MainPage = () => {
 
           {USER_INFO_BUTTONS.map((button, index) => (
             <Link to={button.link} key={index}>
-              <button className={styles.Button}>{button.text}</button>
+              <button className={styles.Button} disabled={button.disabled}>
+                {button.text}
+              </button>
             </Link>
           ))}
         </section>
@@ -101,7 +112,9 @@ const MainPage = () => {
           
           {COMPANY_FUN_FACTS_BUTTONS.map((button, index) => (
             <Link to={button.link} key={index}>
-              <button className={styles.Button}>{button.text}</button>
+              <button className={styles.Button} disabled={button.disabled}>
+                {button.text}
+              </button>
             </Link>
           ))}
         </section>
@@ -111,7 +124,9 @@ const MainPage = () => {
           
           {HOUSING_BUTTONS.map((button, index) => (
             <Link to={button.link} key={index}>
-              <button className={styles.Button}>{button.text}</button>
+              <button className={styles.Button} disabled={button.disabled}>
+                {button.text}
+              </button>
             </Link>
           ))}
         </section>

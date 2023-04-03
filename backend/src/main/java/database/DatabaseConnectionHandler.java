@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import model.filters.CropsFilterModel;
 import model.filters.LivestockFilterModel;
 import model.models.livestock.LivestockModel;
 import model.models.livestock.Livestock_1_Model;
@@ -12,9 +13,11 @@ import org.json.JSONObject;
 
 import model.enums.ActionType;
 import model.enums.AnimalType;
+import model.enums.CropStatus;
 import model.enums.CropType;
-
+import model.enums.CropVariant;
 import model.models.BranchModel;
+import model.models.crop.CropModel;
 import model.models.livestock.Livestock_4_Model;
 import util.PrintablePreparedStatement;
 
@@ -71,13 +74,71 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+  /* -------------------------------------------------------------------------- */
+  /*                                CROPS METHODS                               */
+  /* -------------------------------------------------------------------------- */
+  public ArrayList<JSONObject> getCrops() {
+    ArrayList<JSONObject> crops = new ArrayList<JSONObject>();
 
-	//===================Livestock methods==============================
+    try {
+      String query = "SELECT * FROM CROPS";
+      PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        CropModel model = new CropModel(
+            CropType.valueOf(rs.getString("cropType").toUpperCase()),
+            CropVariant.valueOf(rs.getString("cropVariant").toUpperCase()),
+            CropStatus.valueOf(rs.getString("cropStatus").toUpperCase()),
+            rs.getInt("quantity"));
+        crops.add(model.toJSON());
+      }
+
+      rs.close();
+      ps.close();
+    } catch (SQLException e) {
+      System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+    }
+
+    // System.out.println(crops);
+    return crops;
+  }
+
+  // SELECTION QUERY
+  public ArrayList<JSONObject> getFilteredCrops(CropsFilterModel model) {
+    ArrayList<JSONObject> crops = new ArrayList<JSONObject>();
+
+    try {
+      String subquery = "SELECT * FROM CROPS";
+      String query = "SELECT * FROM (" + subquery + ") " + model.getQueryString();
+
+      PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        CropModel tempModel = new CropModel(
+            CropType.valueOf(rs.getString("cropType").toUpperCase()),
+            CropVariant.valueOf(rs.getString("cropVariant").toUpperCase()),
+            CropStatus.valueOf(rs.getString("cropStatus").toUpperCase()),
+            rs.getInt("quantity"));
+        crops.add(tempModel.toJSON());
+      }
+
+      rs.close();
+      ps.close();
+    } catch (SQLException e) {
+      System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+    }
+
+    // System.out.println(crops);
+    return crops;
+  }
 
 
-   // TODO: implement this
-   // TODO: overload this method to allow for filtering
-   public ArrayList<JSONObject> getLivestock() {
+	/* -------------------------------------------------------------------------- */
+	/*                              LIVESTOCK METHODS                             */
+	/* -------------------------------------------------------------------------- */
+  public ArrayList<JSONObject> getLivestock() {
     ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 
     try {

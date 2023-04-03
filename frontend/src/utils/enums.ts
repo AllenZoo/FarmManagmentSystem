@@ -10,12 +10,12 @@ export enum CropType {
 	COCONUT = "COCONUT",
 }
 
-export enum CropStatusType {
+export enum CropStatus {
 	PLANTED = "PLANTED",
 	HARVESTED = "HARVESTED",
 }
 
-export enum CropVariantType {
+export enum CropVariant {
 	POLLINATED = "POLLINATED",
 	HYBRIDS = "HYBRIDS",
 }

@@ -53,4 +53,9 @@
     backdrop-filter: blur(2px);
     transition: 0.2s ease;
   }
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }

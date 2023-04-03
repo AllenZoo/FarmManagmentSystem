@@ -3,7 +3,10 @@ package actions;
 import jakarta.servlet.http.HttpServletRequest;
 import model.enums.ActionType;
 import model.enums.AnimalType;
+import model.enums.CropStatus;
 import model.enums.CropType;
+import model.enums.CropVariant;
+import model.filters.CropsFilterModel;
 import model.filters.LivestockFilterModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,10 +44,41 @@ public class FarmingSystem {
 
     }
 
+
+    /* -------------------------------------------------------------------------- */
+    /*                               CROPS REQUESTS                               */
+    /* -------------------------------------------------------------------------- */
+    /**
+     * Retrieves all crops data from database
+     */
+    public JSONArray getCrops() {
+      ArrayList<JSONObject> crops = dbHandler.getCrops();
+      JSONArray cropsArray = new JSONArray(crops);
+      return cropsArray;
+    }
+
+    public JSONArray getCrops(HttpServletRequest req) {
+      ArrayList<JSONObject> crops = dbHandler.getCrops();
+      JSONArray cropsArray = new JSONArray(crops);
+      return cropsArray;
+    }
+
+    public JSONArray getFilteredCrops(CropType cropType, CropVariant cropVariant, CropStatus cropStatus, int minQuantity,
+        int maxQuantity) {
+      CropsFilterModel model = new CropsFilterModel(cropType, cropVariant, cropStatus, minQuantity,
+          maxQuantity);
+
+      ArrayList<JSONObject> crops = dbHandler.getFilteredCrops(model);
+      JSONArray cropsArray = new JSONArray(crops);
+      return cropsArray;
+    }
+    
+
+    /* -------------------------------------------------------------------------- */
+    /*                             LIVESTOCK REQUESTS                             */
+    /* -------------------------------------------------------------------------- */
     /**
      * Retrieves all livestock data from database
-     * 
-     * TODO: overload this method to allow for filtering
      */
     public JSONArray getLivestock() {
         ArrayList<JSONObject> livestock = dbHandler.getLivestock();
@@ -61,7 +95,7 @@ public class FarmingSystem {
     public JSONArray getFilteredLivestock(String harvestable, AnimalType animalType, CropType diet, int minAge, int maxAge) {
         LivestockFilterModel model = new LivestockFilterModel(harvestable, animalType, diet, minAge, maxAge);
 
-        ArrayList<JSONObject> livestock =         dbHandler.getFilteredLivestock(model);
+        ArrayList<JSONObject> livestock = dbHandler.getFilteredLivestock(model);
         JSONArray livestockArray = new JSONArray(livestock);
         return livestockArray;
     }

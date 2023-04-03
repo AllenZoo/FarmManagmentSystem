@@ -5,7 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.models.livestock.Livestock_4_Model;
 import model.enums.ActionType;
 import model.enums.AnimalType;
+import model.enums.CropStatus;
 import model.enums.CropType;
+import model.enums.CropVariant;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
@@ -58,10 +61,51 @@ public class MainController {
         return system.logout();
     }
 
+    /* -------------------------------------------------------------------------- */
+    /*                               CROPS REQUESTS                               */
+    /* -------------------------------------------------------------------------- */
+    /**
+     * Handles Retrieving Crop Requests
+     */
+    @RequestMapping(value = "/crops", method = GET)
+    public void getCrops(HttpServletRequest req, HttpServletResponse res) throws IOException {
+      JSONArray crops = system.getCrops(req);
+      PrintWriter out = res.getWriter();
+      res.setContentType("application/json");
+      res.setCharacterEncoding("UTF-8");
+      out.print(crops);
+      out.flush();
+    }
+
+    /**
+     * Handles Filtering Crops By: cropType, cropVariant, cropStatus,
+     * minQuantity, maxQuantity
+     */
+    @RequestMapping(value = "/crops/filteredValues", method = POST)
+    @ResponseBody
+    public void getFilteredCrops(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
+      // Check for if null for these values.
+      CropType cropType = CropType.valueOf(map.get("cropType").toString().toUpperCase());
+      CropVariant cropVariant = CropVariant.valueOf(map.get("cropVariant").toString().toUpperCase());
+      CropStatus cropStatus = CropStatus.valueOf(map.get("cropStatus").toString().toUpperCase());
+
+      int minQuantity = (int) map.get("minQuantity");
+      int maxQuantity = (int) map.get("maxQuantity");
+
+      JSONArray crops = system.getFilteredCrops(cropType, cropVariant, cropStatus, minQuantity, maxQuantity);
+      PrintWriter out = res.getWriter();
+      res.setContentType("application/json");
+      res.setCharacterEncoding("UTF-8");
+      out.print(crops);
+      out.flush();
+    }
+
+
+    /* -------------------------------------------------------------------------- */
+    /*                             LIVESTOCK REQUESTS                             */
+    /* -------------------------------------------------------------------------- */
     /**
      * Handles Retrieving Livestock Requests
-     * 
-     * TODO: overload this method to allow for filtering (need to use POST)
      */
     @RequestMapping(value = "/livestock", method = GET)
     public void getLivestock(HttpServletRequest req, HttpServletResponse res) throws IOException {
@@ -76,7 +120,7 @@ public class MainController {
     /**
      * Handles Filtering Livestock By: harvestable, animalType, min Age, max Age, diet
      */
-    @RequestMapping(value = "livestock/filteredValues", method = POST)
+    @RequestMapping(value = "/livestock/filteredValues", method = POST)
     @ResponseBody
     public void getFilteredLivestock(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
         // Check for if null for these values.
@@ -95,6 +139,7 @@ public class MainController {
         out.print(livestock);
         out.flush();
     }
+
     /**
      * Handles Insert Livestock Requests
      */
@@ -117,7 +162,7 @@ public class MainController {
     /**
      * Handles Update Livestock Requests
       */
-    @RequestMapping(value = "livestock/update", method = POST)
+    @RequestMapping(value = "/livestock/update", method = POST)
     @ResponseBody
     public boolean updateLivestock(@RequestBody Map<String, Object> map) {
         Livestock_4_Model model = Livestock_4_Model.fromJSON(new JSONObject(map.get("livestock").toString()));

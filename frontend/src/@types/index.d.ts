@@ -27,3 +27,20 @@ interface FilteredLivestock {
   // orderBy?: String | null;
   // order?: boolean | null;
 };
+
+interface Crop {
+	cropType: CropType;
+	cropVariant: CropVariant;
+	cropStatus: CropStatus;
+  quantity: int;
+};
+
+interface FilteredCrop {
+  cropType?: CropType | null;
+  cropVariant?: CropVariant | null;
+  cropStatus?: CropStatus | null;
+  minQuantity?: int | null;
+  maxQuantity?: int | null;
+  // orderBy?: String | null;
+  // order?: boolean | null;
+};
