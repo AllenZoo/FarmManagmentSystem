@@ -5,7 +5,8 @@
   "scripts": {
     "client": "cd frontend && npm start",
     "server": "cd backend && npm start",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "install": "concurrently \"cd frontend && yarn install\" \"cd backend && mvn dependency:resolve\""
   },
   "repository": {
     "type": "git",

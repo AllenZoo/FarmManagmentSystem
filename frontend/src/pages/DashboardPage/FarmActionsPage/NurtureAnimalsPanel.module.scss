@@ -1,0 +1,354 @@
+.Panel {
+  color: #fff;
+  text-align: center;
+
+  main {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    min-height: 50vh;
+    margin: 1rem 2rem;
+  }
+
+  .ControlPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45%;
+    height: 80vh;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+    overflow-x: none;
+    transition: 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+      transition: 0.2s ease;
+    }
+
+    h2 {
+      padding: 0;
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .Controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      gap: 0.5rem;
+      padding: 1rem;
+      overflow-x: none;
+      overflow-y: scroll;
+      transition: 0.2s ease;
+
+      .ViewLivestock {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .FilterLivestock,
+      .AddLivestock {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        width: 90%;
+        gap: 0.5rem;
+        padding: 1rem;
+        border-radius: 5px;
+        border: 1px solid #fff;
+        background-color: rgba(0, 0, 0, 0.1);
+
+        button {
+          min-width: 4rem;
+          font-size: 1.2rem;
+        }
+
+        section {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 1rem;
+
+          label {
+            font-size: 1.2rem;
+            font-weight: bold;
+          }
+
+          input {
+            max-width: 8rem;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 2px solid #fff;
+            background-color: rgba(0, 0, 0, 0.1);
+            text-align: center;
+            font-size: 1.2rem;
+            transition: 0.2s ease;
+          }
+        }
+
+        #clearFilters,
+        #applyFilters {
+          margin-top: 1rem;
+          min-width: 4rem;
+          font-size: 1.2rem;
+        }
+
+        #clearFilters {
+          border: 2px solid rgba(255, 0, 0, 0.5);
+          transition: 0.2s ease;
+
+          &:hover {
+            transition: 0.2s ease;
+          }
+        }
+
+        #applyFilters {
+          border: 2px solid rgba(0, 255, 0, 0.5);
+          transition: 0.2s ease;
+
+          &:hover {
+            transition: 0.2s ease;
+          }
+        }
+      }
+    }
+  }
+
+  .DisplayPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    height: 80vh;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: 0.2s ease;
+    overflow-y: scroll;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+      transition: 0.2s ease;
+    }
+
+    h2 {
+      padding: 0;
+      margin: 0;
+    }
+
+    .LivestockInfo {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 5px;
+      border: 1px solid #fff;
+      background-color: rgba(0, 0, 0, 0.1);
+      text-align: left;
+      width: calc(100% - 3rem);
+
+      legend {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      img {
+        height: 100%;
+        width: 20%;
+        padding: 0.5rem;
+        border-radius: 10px;
+        backdrop-filter: blur(5px);
+        background-color: rgba(200, 255, 255, 0.1);
+        transition: 0.2s ease;
+        
+        &:hover {
+          transition: 0.2s ease;
+          animation: pulse 1.5s ease-in-out infinite;
+
+          @keyframes pulse {
+            0% { background: rgba(200, 255, 255, 0.1); }
+            50% { background: rgba(200, 255, 255, 0.2); }
+            100% { background: rgba(200, 255, 255, 0.1); }
+          }
+        }
+      }
+
+      .Info {
+        width: 80%;
+
+        b {
+          font-size: 1.2rem;
+          border-left: 4px solid #fff;
+          padding-left: 0.5rem;
+          width: 100%;
+        }
+
+        section {
+          display: flex;
+          flex-direction: row;
+          gap: 2rem;
+
+          p {
+            margin: 0.25rem;
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 0.5rem;
+            border-radius: 5px;
+          }
+
+          b {
+            font-size: 1rem;
+            border-left: none;
+            padding: 0 0.5rem;
+            border-radius: 5px;
+            background: rgba(100, 255, 100, 0.1);
+          }
+        }
+      }
+
+      .Actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 10%;
+      }
+    }
+  }
+}
+
+.Button {
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+
+  padding: 0.5rem 1rem;
+  min-width: 20rem;
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+}
+
+.ActionButton {
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin: 0;
+  padding: 0.25rem;
+  text-align: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    scale: 1.05;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    cursor: not-allowed;
+
+    &:hover {
+      scale: 1;
+      background: transparent;
+      backdrop-filter: none;
+      transition: 0.2s ease;
+    }
+  }
+
+  &[id="filter"] {
+    border-color: #8ff;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.5rem;
+
+    svg {
+      stroke: #8ff !important;
+      fill: #8ff !important;
+    }
+  }
+
+  &[id="feed"] {
+    border-color: #ff8;
+
+    svg {
+      stroke: #ff8 !important;
+      fill: #ff8 !important;
+    }
+  }
+
+  &[id="harvest"] {
+    border-color: #8f8;
+
+    svg {
+      stroke: #8f8 !important;
+      fill: #8f8 !important;
+    }
+  }
+
+  &[id="terminate"] {
+    border-color: #f88;
+
+    svg {
+      stroke: #f88 !important;
+      fill: #f88 !important;
+    }
+  }
+}
+
+.Select {
+  color: #fff;
+  font-size: 1.2rem;
+  text-align: center;
+
+  border: 2px solid #fff;
+  border-radius: 0.5rem;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  margin: 0;
+  padding: 0.25rem;
+  text-align: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(2px);
+    transition: 0.2s ease;
+  }
+
+  option {
+    color: #000;
+    background: #cff;
+  }
+}

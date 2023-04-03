@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 
 import NavBar from '@components/NavBar';
 
@@ -8,11 +7,6 @@ import {
   DASHBOARD_PATHNAME,
   COMPANY_FUN_FACTS_PATHNAME,
 } from '@config/routes';
-
-
-/* -------------------------------------------------------------------------- */
-/*                                   STYLING                                  */
-/* -------------------------------------------------------------------------- */
 
 
 /* -------------------------------------------------------------------------- */
@@ -28,7 +22,6 @@ const ViewCompanyInfoPanel = () => {
     </>
   );
 };
-
 
 const CompanyFunFacts = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
