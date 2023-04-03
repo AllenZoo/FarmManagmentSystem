@@ -2,15 +2,23 @@ package database;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Random;
 
+import model.filters.CropsFilterModel;
 import model.filters.LivestockFilterModel;
+import model.models.livestock.LivestockModel;
+import model.models.livestock.Livestock_1_Model;
+import model.models.livestock.Livestock_3_Model;
 import org.json.JSONObject;
 
+import model.enums.ActionType;
 import model.enums.AnimalType;
+import model.enums.CropStatus;
 import model.enums.CropType;
-
-import model.BranchModel;
-import model.LivestockModel;
+import model.enums.CropVariant;
+import model.models.BranchModel;
+import model.models.crop.CropModel;
+import model.models.livestock.Livestock_4_Model;
 import util.PrintablePreparedStatement;
 
 /**
@@ -56,6 +64,7 @@ public class DatabaseConnectionHandler {
 
 			connection = DriverManager.getConnection(ORACLE_URL, username, password);
 			connection.setAutoCommit(false);
+			// populateLivestock();
 
 			System.out.println("\nConnected to Oracle!");
 			return true;
@@ -65,14 +74,71 @@ public class DatabaseConnectionHandler {
 		}
 	}
 
+  /* -------------------------------------------------------------------------- */
+  /*                                CROPS METHODS                               */
+  /* -------------------------------------------------------------------------- */
+  public ArrayList<JSONObject> getCrops() {
+    ArrayList<JSONObject> crops = new ArrayList<JSONObject>();
 
-	//===================Livestock methods==============================
+    try {
+      String query = "SELECT * FROM CROPS";
+      PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        CropModel model = new CropModel(
+            CropType.valueOf(rs.getString("cropType").toUpperCase()),
+            CropVariant.valueOf(rs.getString("cropVariant").toUpperCase()),
+            CropStatus.valueOf(rs.getString("cropStatus").toUpperCase()),
+            rs.getInt("quantity"));
+        crops.add(model.toJSON());
+      }
+
+      rs.close();
+      ps.close();
+    } catch (SQLException e) {
+      System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+    }
+
+    // System.out.println(crops);
+    return crops;
+  }
+
+  // SELECTION QUERY
+  public ArrayList<JSONObject> getFilteredCrops(CropsFilterModel model) {
+    ArrayList<JSONObject> crops = new ArrayList<JSONObject>();
+
+    try {
+      String subquery = "SELECT * FROM CROPS";
+      String query = "SELECT * FROM (" + subquery + ") " + model.getQueryString();
+
+      PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+      ResultSet rs = ps.executeQuery();
+
+      while (rs.next()) {
+        CropModel tempModel = new CropModel(
+            CropType.valueOf(rs.getString("cropType").toUpperCase()),
+            CropVariant.valueOf(rs.getString("cropVariant").toUpperCase()),
+            CropStatus.valueOf(rs.getString("cropStatus").toUpperCase()),
+            rs.getInt("quantity"));
+        crops.add(tempModel.toJSON());
+      }
+
+      rs.close();
+      ps.close();
+    } catch (SQLException e) {
+      System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+    }
+
+    // System.out.println(crops);
+    return crops;
+  }
 
 
-
-   // TODO: implement this
-   // TODO: overload this method to allow for filtering
-   public ArrayList<JSONObject> getLivestock() {
+	/* -------------------------------------------------------------------------- */
+	/*                              LIVESTOCK METHODS                             */
+	/* -------------------------------------------------------------------------- */
+  public ArrayList<JSONObject> getLivestock() {
     ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 
     try {
@@ -119,7 +185,7 @@ public class DatabaseConnectionHandler {
   }
 
   // INSERT QUERY
-	public boolean insertLivestock(LivestockModel model) {
+	public boolean insertLivestock(Livestock_4_Model model) {
 		try {
 			String query = "INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, " +
 					"lastViolatedForHarvestedGoods) " +
@@ -155,6 +221,7 @@ public class DatabaseConnectionHandler {
 	// DELETE QUERY
 	public boolean deleteLivestock(int tagID) {
 		try {
+			// Delete livestock
 			String query = "DELETE FROM Livestock_4 WHERE tagID = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, tagID);
@@ -174,24 +241,54 @@ public class DatabaseConnectionHandler {
 	}
 
 	// UPDATE QUERY
-	public boolean updateLivestock(LivestockModel model) {
+	public boolean updateLivestock(Livestock_4_Model model, ActionType actionType) {
+    String query;
+    PrintablePreparedStatement ps;
+
 		try {
-			String query = "UPDATE Livestock_4 SET tagID = ?," +
-					"animalType = ?," +
-					"age = ?," +
-					"weight = ?," +
-					"lastFed = ?," +
-					"lastViolatedForHarvestedGoods = ?," +
-					"WHERE tagID = ?";
-			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setInt(1, model.getTagID());
-			ps.setString(2, model.getAnimalType().toString().toLowerCase());
-			ps.setInt(3, model.getAge());
-			ps.setDouble(4, model.getWeight());
-			ps.setDate(5, model.getLastFed());
-			ps.setDate(6, model.getLastViolatedForHarvestedGoods());
-			ps.setInt(7, model.getTagID());
-			ps.executeUpdate();
+      switch (actionType) {
+        case FEED:
+          query = "UPDATE Livestock_4 SET lastFed = ? " +
+              "WHERE tagID = ? OR (tagID = ? AND lastFed IS NULL)";
+          ps = new PrintablePreparedStatement(connection.prepareStatement(query), query,
+              false);
+          ps.setDate(1, new Date(System.currentTimeMillis()));
+          ps.setInt(2, model.getTagID());
+          ps.setInt(3, model.getTagID());
+          ps.executeUpdate();
+          break;
+        case HARVEST:
+          query = "UPDATE Livestock_4 SET lastViolatedForHarvestedGoods = ? " +
+              "WHERE tagID = ? OR (tagID = ? AND lastViolatedForHarvestedGoods IS NULL)";
+          ps = new PrintablePreparedStatement(connection.prepareStatement(query), query,
+              false);
+          ps.setDate(1, new Date(System.currentTimeMillis()));
+          ps.setInt(2, model.getTagID());
+          ps.setInt(3, model.getTagID());
+          ps.executeUpdate();
+          break;
+        default:
+          System.out.println(WARNING_TAG + " Invalid action type!");
+          rollbackConnection();
+          return false;
+      }
+
+      // String query = "UPDATE Livestock_4 SET tagID = ?," +
+      //     "animalType = ?," +
+      //     "age = ?," +
+      //     "weight = ?," +
+      //     "lastFed = ?," +
+      //     "lastViolatedForHarvestedGoods = ?," +
+      //     "WHERE tagID = ?";
+      // PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+      // ps.setInt(1, model.getTagID());
+      // ps.setString(2, model.getAnimalType().toString().toLowerCase());
+      // ps.setInt(3, model.getAge());
+      // ps.setDouble(4, model.getWeight());
+      // ps.setDate(5, model.getLastFed());
+      // ps.setDate(6, model.getLastViolatedForHarvestedGoods());
+      // ps.setInt(7, model.getTagID());
+      // ps.executeUpdate();
 
 			connection.commit();
 			ps.close();
@@ -200,6 +297,7 @@ public class DatabaseConnectionHandler {
 			rollbackConnection();
 			return false;
 		}
+
 		return true;
 	}
 
@@ -253,7 +351,7 @@ public class DatabaseConnectionHandler {
 	// SELECTION Query
 	// Finds the animals that are ready to sell with user specified weight
 	// TODO: Figure out what needs to be passed into this function for weight
-	public ArrayList<JSONObject> findAnimalToSell(LivestockModel model) {
+	public ArrayList<JSONObject> findAnimalToSell(Livestock_4_Model model) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT tagID FROM Livestock_4 L4 WHERE L4.age > (SELECT MIN(age) " +
@@ -349,13 +447,38 @@ public class DatabaseConnectionHandler {
 	}
 
 	// AGGREGATION WITH GROUP BY
-	public ArrayList<JSONObject> findCountedTypesSold(int age) {
+	public ArrayList<JSONObject> findCountedTypesSold() {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT L4.animalType, COUNT(DISTINCT tagID) AS num " +
-					"FROM Livestock_4 L4" +
+					"FROM Livestock_4 L4 " +
+					"GROUP BY L4.animalType";
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("animalType", rs.getString("animalType"));
+				json.put("count", rs.getObject("num"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
+	}
+	public ArrayList<JSONObject> findCountedTypesSoldByAge(int age) {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "SELECT L4.animalType, COUNT(DISTINCT tagID) AS num " +
+					"FROM Livestock_4 L4 " +
 					" WHERE  L4.age < ? " +
-					"GROUP BY L4.animalType;";
+					"GROUP BY L4.animalType";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, age);
@@ -364,8 +487,8 @@ public class DatabaseConnectionHandler {
 
 			while (rs.next()) {
 				JSONObject json = new JSONObject();
-				json.put("Animal Type", rs.getString("animalType"));
-				json.put("Count", rs.getObject("num"));
+				json.put("animalType", rs.getString("animalType"));
+				json.put("count", rs.getObject("num"));
 				livestock.add(json);
 			}
 
@@ -383,7 +506,7 @@ public class DatabaseConnectionHandler {
 	// AGGREGATION GROUP BY WITH HAVING
 
 	// TODO: Implement in controller and system
-	public ArrayList<JSONObject> findWateredAndFed(String animal, int water, int food) {
+	public ArrayList<JSONObject> findWateredAndFed(AnimalType animalType, int water, int food) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query = "SELECT N.tagID " +
@@ -393,7 +516,7 @@ public class DatabaseConnectionHandler {
 					"HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-			ps.setString(1, animal);
+			ps.setString(1, animalType.toString().toLowerCase());
 			ps.setInt(2, water);
 			ps.setInt(3, food);
 
@@ -415,9 +538,243 @@ public class DatabaseConnectionHandler {
 	}
 
 
+	// NESTED AGGREGATION WITH GROUP BY
 
+	public ArrayList<JSONObject> findOverweightAnimals() {
+		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
+		try {
+			String query = "CREATE VIEW temp AS SELECT animalType, AVG(weight) AS avgweight FROM Livestock_1 GROUP BY animalType; " +
+					"SELECT L4.animalType, L1.diet " +
+					"FROM Livestock_4 L4, Livestock_1 L1 " +
+					"WHERE L4.animalType = L1.animalType AND L4.weight = L1.weight " +
+					"GROUP BY L4.animalType, L1.diet " +
+					"HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType)";
 
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
 
+			while (rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("animalType", rs.getString("animalType"));
+				json.put("diet", rs.getObject("diet"));
+				livestock.add(json);
+			}
+
+			rs.close();
+			ps.close();
+		} catch(Exception e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return livestock;
+	}
+
+	// Division
+
+	// Need a param to indicate which query
+	public ArrayList<JSONObject> findAllFarmersDivision(int type) {
+		ArrayList<JSONObject> result = new ArrayList<JSONObject>();
+		try {
+			String query;
+			if (type == 1) {
+				 query = "SELECT * FROM Farmers_2 F2 WHERE NOT " +
+						"EXISTS (((SELECT tagID FROM Livestock_4) " +
+						"MINUS (SELECT tagID FROM Nurtures WHERE farmerID = F2.farmerID)))";
+			} else {
+				query = "SELECT * FROM Farmers_2 F2 " +
+						"WHERE NOT EXISTS(((SELECT plotNum FROM Fields_4)" +
+						"                MINUS" +
+						"                (SELECT plotNum FROM Tends WHERE farmerID = F2.farmerID)))";
+			}
+
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				JSONObject json = new JSONObject();
+				json.put("farmerID", rs.getInt("farmerID"));
+				json.put("fullName", rs.getString("fullName"));
+				json.put("yearsOfEmployment", rs.getInt("yearsOfEmployment"));
+				result.add(json);
+			}
+
+			rs.close();
+			ps.close();
+
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+		return result;
+	}
+	// ================ GENERAL PROJECTION FUNCTIONS ===================================
+	public ArrayList<String> getUserTables() {
+		ArrayList<String> tables = new ArrayList<String>();
+
+		try {
+			String query = "select table_name from user_tables";
+
+			PrintablePreparedStatement ps =
+					new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				tables.add(rs.getString("table_name"));
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return tables;
+	}
+	public ArrayList<String> getTableColumns(String tableName) {
+		ArrayList<String> columns = new ArrayList<String>();
+
+		try {
+			String query = "select column_name from ALL_TAB_COLUMNS WHERE table_name= ?";
+
+			PrintablePreparedStatement ps =
+					new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, tableName.toUpperCase());
+
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()) {
+				columns.add(rs.getString("column_name"));
+			}
+
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+		}
+
+		return columns;
+	}
+
+	// ================ FUNCTION FOR POPULATING DATABASE ===============================
+	public boolean insertLivestock_3(Livestock_3_Model model) {
+		try {
+			String query = "INSERT INTO Livestock_3(animalType, age, harvestable) " +
+					"VALUES (?, ?, ?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, model.getAnimalType().toString().toLowerCase());
+			ps.setInt(2, model.getAge());
+			ps.setBoolean(3, model.isHarvestable());
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		// Succesfully inserted without errors
+		return true;
+
+	}
+	public boolean insertLivestock_1(Livestock_1_Model model) {
+		try {
+			String query = "INSERT INTO Livestock_1(animalType, weight, diet) " +
+					"VALUES (?, ?, ?)";
+			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+			ps.setString(1, model.getAnimalType().toString().toLowerCase());
+			ps.setDouble(2, model.getWeight());
+			ps.setString(3, model.getDiet().toString().toLowerCase());
+
+			ps.executeUpdate();
+			connection.commit();
+
+			ps.close();
+		} catch (SQLException e) {
+			System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+			rollbackConnection();
+			return false;
+		}
+		// Succesfully inserted without errors
+		return true;
+	}
+	private void populateLivestock_3() {
+		try {
+			// Insert values for all animal types ages 1-15
+			for (int i = 1; i <= 15; i++) {
+				// insert cows
+				Livestock_3_Model temp = new Livestock_3_Model(AnimalType.COW, i, getRandomBool());
+				insertLivestock_3(temp);
+
+				// insert pigs
+				temp = new Livestock_3_Model(AnimalType.PIG, i, getRandomBool());
+				insertLivestock_3(temp);
+
+				// insert chicken
+				temp = new Livestock_3_Model(AnimalType.CHICKEN, i, getRandomBool());
+				insertLivestock_3(temp);
+
+				// insert sheep
+				temp = new Livestock_3_Model(AnimalType.SHEEP, i, getRandomBool());
+				insertLivestock_3(temp);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	private void populateLivestock_1() {
+		try {
+
+			for (int i = 0; i <= 40; i++) {
+				// Insert cows weighted 300-500 kg (increments of 5) (40 cows total)
+				Livestock_1_Model temp = new Livestock_1_Model(AnimalType.COW, getRandomCropType(), (5*i+300));
+				insertLivestock_1(temp);
+
+				// insert pigs weighted 50-250 kg (increments of 5)  (40 pigs total)
+				temp = new Livestock_1_Model(AnimalType.PIG, getRandomCropType(), 5*i+50);
+				insertLivestock_1(temp);
+
+				// insert chicken weighted 1-41 kg (increments of 1) (40 chickens total)
+				temp = new Livestock_1_Model(AnimalType.CHICKEN, getRandomCropType(), i+1);
+				insertLivestock_1(temp);
+
+				// insert sheep weighted 50-250 kg (increments of 5)  (40 sheeps total)
+				temp = new Livestock_1_Model(AnimalType.SHEEP, getRandomCropType(), 5*i+50);
+				insertLivestock_1(temp);
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	public void populateLivestock() {
+		populateLivestock_3();
+		populateLivestock_1();
+	}
+	public boolean getRandomBool() {
+		Random random = new Random();
+		return random.nextBoolean();
+	}
+	public CropType getRandomCropType() {
+		Random random = new Random();
+		int crop = random.nextInt(0, 6);
+
+		switch (crop) {
+			case 0:
+				return CropType.MUSTARD;
+			case 1:
+				return CropType.CANOLA;
+			case 2:
+				return CropType.WHEAT;
+			case 3:
+				return CropType.CORN;
+			case 4:
+				return CropType.POTATOES;
+			case 5:
+				return CropType.COCONUT;
+		}
+		return CropType.WHEAT;
+	}
 
 	//============================= FROM TUTORIAL ===================================
 	public void deleteBranch(int branchId) {

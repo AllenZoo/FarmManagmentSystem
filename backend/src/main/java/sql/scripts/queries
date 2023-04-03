@@ -143,10 +143,9 @@ HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?
  Can have a button that specifies two different options for the >= operator.
  */
 
-CREATE VIEW temp AS SELECT animalType, AVG(weight) AS avgweight FROM Livestock_1 GROUP BY animalType
-
+CREATE VIEW temp AS SELECT animalType, AVG(weight) AS avgweight FROM Livestock_1 GROUP BY animalType;
 SELECT L4.animalType, L1.diet
-FROM Livestock_4 AS L4, Livestock_1 AS L1
+FROM Livestock_4 L4, Livestock_1 L1
 WHERE L4.animalType = L1.animalType AND L4.weight = L1.weight
 GROUP BY L4.animalType, L1.diet
 HAVING AVG(L4.weight) >= (SELECT avgweight FROM temp WHERE animalType = L4.animalType);

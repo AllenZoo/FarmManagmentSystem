@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 
 import NavBar from '@components/NavBar';
 
@@ -9,38 +8,13 @@ import {
   HOUSING_PATHNAME,
 } from '@config/routes';
 
-
-/* -------------------------------------------------------------------------- */
-/*                                   STYLING                                  */
-/* -------------------------------------------------------------------------- */
+import ViewHousingPanel from './ViewHousingPanel';
+import ManageHousingPanel from './ManageHousingPanel';
 
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
 /* -------------------------------------------------------------------------- */
-/**
- * Renders the 'View Housing' panel of Housing
- */
-const ViewHousingPanel = () => {
-  return (
-    <>
-      View Housing
-    </>
-  );
-};
-
-/**
- * Renders the 'Manage Housing' panel of Housing
- */
-const ManageHousingPanel = () => {
-  return (
-    <>
-      Manage Housing
-    </>
-  );
-};
-
-
 const Housing = () => {
   const [panel, setPanel] = useState<React.ReactElement | null>(null);
   const location = useLocation();

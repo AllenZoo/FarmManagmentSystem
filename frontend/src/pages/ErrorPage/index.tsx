@@ -1,15 +1,6 @@
-import styled from 'styled-components';
-
 import NavBar from '@components/NavBar';
 
-
-/* -------------------------------------------------------------------------- */
-/*                                   STYLING                                  */
-/* -------------------------------------------------------------------------- */
-const StyledErrorPage = styled.div`
-  color: #fff;
-  text-align: center;
-`;
+import styles from './index.module.scss';
 
 
 /* -------------------------------------------------------------------------- */
@@ -17,7 +8,7 @@ const StyledErrorPage = styled.div`
 /* -------------------------------------------------------------------------- */
 const ErrorPage = () => {
   return (
-    <StyledErrorPage>
+    <div className={styles.ErrorPage}>
       <NavBar />
 
       <h1>404</h1>
@@ -28,7 +19,7 @@ const ErrorPage = () => {
         As a result, all of your plants wilted and died because you couldn't water them in time. <br />
         Better luck next time!
       </p>
-    </StyledErrorPage>
+    </div>
   );
 }
 

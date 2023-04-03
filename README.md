@@ -18,3 +18,10 @@ The timeline/task breakdown can be found [here.](./_deliverables/TIMELINE.md)
 ## Credits / Acknowledgements
 - Backgrounds generated using Stable Diffusion
 - Livestock images from [https://www.flaticon.com/packs/agriculture-54](https://www.flaticon.com/packs/agriculture-54)
+- Crop images:
+  - Corn [https://www.flaticon.com/free-icon/corn_9432700?term=corn&related_id=9432700](https://www.flaticon.com/free-icon/corn_9432700?term=corn&related_id=9432700)
+  - Wheat [https://www.flaticon.com/free-icon/grain_575435?term=wheat&related_id=575435](https://www.flaticon.com/free-icon/grain_575435?term=wheat&related_id=575435)
+  - Potatoes [https://www.flaticon.com/free-icon/potato_1652077?term=potato&related_id=1652077](https://www.flaticon.com/free-icon/potato_1652077?term=potato&related_id=1652077)
+  - Coconut [https://www.flaticon.com/free-icon/coconut_1475932?term=coconut&related_id=1475932](https://www.flaticon.com/free-icon/coconut_1475932?term=coconut&related_id=1475932)
+  - Mustard [https://www.flaticon.com/free-icon/mustard_1407631?term=mustard&related_id=1407631](https://www.flaticon.com/free-icon/mustard_1407631?term=mustard&related_id=1407631)
+  - Canola (this is just a recolour of the mustard image)

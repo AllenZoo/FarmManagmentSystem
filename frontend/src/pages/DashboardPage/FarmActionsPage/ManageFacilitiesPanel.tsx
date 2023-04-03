@@ -1,23 +1,24 @@
-import { StyledPanel } from '.';
+import styles from './NurtureAnimalsPanel.module.scss';
+
 
 /**
  * Renders the 'Manage Facilities' panel of Farmer Actions
  */
 const ManageFacilitiesPanel = () => {
   return (
-    <StyledPanel>
+    <div className={styles.Panel}>
       <main>
         {/* CONTROL PANEL */}
-        <div className="ControlPanel">
+        <div className={styles.ControlPanel}>
           <h2>Manage Facilities</h2>
         </div>
 
         {/* DISPLAY PANEL */}
-        <div className="DisplayPanel">
+        <div className={styles.DisplayPanel}>
 
         </div>
       </main>
-    </StyledPanel>
+    </div>
   );
 };
 

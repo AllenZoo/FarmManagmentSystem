@@ -72,10 +72,10 @@ CREATE TABLE Crops (
       'coconut'
     )
   ),
-  variant VARCHAR(10) CHECK(variant IN ('pollinated', 'hybrids')),
-  plantStatus VARCHAR(10) CHECK(plantStatus IN ('planted', 'harvested')),
+  cropVariant VARCHAR(10) CHECK(cropVariant IN ('pollinated', 'hybrids')),
+  cropStatus VARCHAR(10) CHECK(cropStatus IN ('planted', 'harvested')),
   quantity INTEGER,
-  PRIMARY KEY (cropType, variant)
+  PRIMARY KEY (cropType, cropVariant)
 );
 
 CREATE TABLE Fields_3 (
@@ -204,6 +204,7 @@ CREATE TABLE Contains (
   PRIMARY KEY (facilityID, tagID),
   FOREIGN KEY (facilityID) REFERENCES Pen (facilityID),
   FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE Nurtures (
@@ -214,6 +215,7 @@ CREATE TABLE Nurtures (
   PRIMARY KEY (farmerID, tagID),
   FOREIGN KEY (farmerID) REFERENCES Farmers_2 (farmerID),
   FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE Creates (
@@ -232,7 +234,8 @@ CREATE TABLE Creates (
   amount INTEGER,
   dateProduced DATE,
   PRIMARY KEY (productType, tagID),
-  FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID),
+  FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
+      ON DELETE CASCADE,
   FOREIGN KEY (productType) REFERENCES LivestockProduce (productType)
 );
 
@@ -247,7 +250,7 @@ CREATE TABLE Tends (
 
 CREATE TABLE Buys (
   buyerID INTEGER,
-  variant VARCHAR(10) CHECK(variant IN ('pollinated', 'hybrids')),
+  cropVariant VARCHAR(10) CHECK(cropVariant IN ('pollinated', 'hybrids')),
   cropType VARCHAR(10) CHECK(
     cropType IN (
       'canola',
@@ -272,10 +275,10 @@ CREATE TABLE Buys (
   quantity INTEGER,
   price INTEGER,
   transactionID INTEGER,
-  PRIMARY KEY (productType, buyerID, variant, cropType),
+  PRIMARY KEY (productType, buyerID, cropVariant, cropType),
   FOREIGN KEY (buyerID) REFERENCES Buyers_DealsWith (buyerID),
   FOREIGN KEY (productType) REFERENCES LivestockProduce (productType),
-  FOREIGN KEY (cropType, variant) REFERENCES Crops (cropType, variant)
+  FOREIGN KEY (cropType, cropVariant) REFERENCES Crops (cropType, cropVariant)
 );
 
 CREATE TABLE IsGrowing (
@@ -290,13 +293,13 @@ CREATE TABLE IsGrowing (
       'coconut'
     )
   ),
-  variant VARCHAR(10) CHECK(variant IN ('pollinated', 'hybrids')),
+  cropVariant VARCHAR(10) CHECK(cropVariant IN ('pollinated', 'hybrids')),
   lastWatered DATE,
   plantedDate DATE,
   harvestDate DATE,
-  PRIMARY KEY (plotNum, variant, cropType),
+  PRIMARY KEY (plotNum, cropVariant, cropType),
   FOREIGN KEY (plotNum) REFERENCES Fields_4 (plotNum),
-  FOREIGN KEY (cropType, variant) REFERENCES Crops (cropType, variant)
+  FOREIGN KEY (cropType, cropVariant) REFERENCES Crops (cropType, cropVariant)
 );
 
 /* -------------------------------------------------------------------------- */
@@ -318,11 +321,11 @@ INSERT INTO Housing (facilityID, name, age, maxCapacity,upkeep, rent, distanceTo
 INSERT INTO Housing (facilityID, name, age, maxCapacity,upkeep, rent, distanceToFields, distanceFromPens) VALUES (3005, 'Crop Cottage', 25, 20, 600, 600, 4, 5);
 
 
-INSERT INTO Crops (cropType, variant, plantStatus, quantity) VALUES ('canola', 'pollinated', 'planted', 100);
-INSERT INTO Crops (cropType, variant, plantStatus, quantity) VALUES ('wheat', 'hybrids', 'harvested', 200);
-INSERT INTO Crops (cropType, variant, plantStatus, quantity) VALUES ('corn', 'pollinated', 'planted', 150);
-INSERT INTO Crops (cropType, variant, plantStatus, quantity) VALUES ('wheat', 'pollinated', 'planted', 50);
-INSERT INTO Crops (cropType, variant, plantStatus, quantity) VALUES ('canola', 'hybrids', 'harvested', 300);
+INSERT INTO Crops (cropType, cropVariant, cropStatus, quantity) VALUES ('canola', 'pollinated', 'planted', 100);
+INSERT INTO Crops (cropType, cropVariant, cropStatus, quantity) VALUES ('wheat', 'hybrids', 'harvested', 200);
+INSERT INTO Crops (cropType, cropVariant, cropStatus, quantity) VALUES ('corn', 'pollinated', 'planted', 150);
+INSERT INTO Crops (cropType, cropVariant, cropStatus, quantity) VALUES ('wheat', 'pollinated', 'planted', 50);
+INSERT INTO Crops (cropType, cropVariant, cropStatus, quantity) VALUES ('canola', 'hybrids', 'harvested', 300);
 
 
 INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (1, 50000);
@@ -384,15 +387,16 @@ INSERT INTO Fields_4 (plotNum, nutrientLevels, capacity, state) VALUES (5005, 45
 INSERT INTO LivestockProduce (productType, quantity) VALUES ('eggs', 21);
 INSERT INTO LivestockProduce (productType, quantity) VALUES ('manure', 731);
 INSERT INTO LivestockProduce (productType, quantity) VALUES ('wool', 121);
-INSERT INTO LivestockProduce (productType, quantity) VALUES ('beef', 22);INSERT INTO LivestockProduce (productType, quantity) VALUES ('poultry', 26);
+INSERT INTO LivestockProduce (productType, quantity) VALUES ('beef', 22);
+INSERT INTO LivestockProduce (productType, quantity) VALUES ('poultry', 26);
 INSERT INTO LivestockProduce (productType, quantity) VALUES ('milk', 20);
 
  
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6001, 1002, '4523 Elmwood Avenue, Philadelphia, PA 19103', 'Ethan Williams', '(604) 123-4567', '2023-06-11');
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6002, 1005, '7281 8th Street, Miami, FL 33130',  'Sophia Thompson', '(604) 555-1212', '2024-01-03');
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6003, 1001, '2128 Linden Avenue, Seattle, WA 98101', 'Luke Carter', '(604) 867-5309', '2022-11-24');
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6004, 1005, '9911 Oakwood Drive, San Francisco, CA 94107', 'Olivia Wright', '(604) 987-6543', '2023-09-01');
-INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6005, 1005, '6316 Maple Street, Houston, TX 77030', 'Benjamin Cooper', '(604) 246-8242', '2024-03-12');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6001, 1002, '4523 Elmwood Avenue, Philadelphia, PA 19103', 'Ethan Williams', '(604) 123-4567', DATE '2023-06-11');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6002, 1005, '7281 8th Street, Miami, FL 33130',  'Sophia Thompson', '(604) 555-1212', DATE '2024-01-03');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6003, 1001, '2128 Linden Avenue, Seattle, WA 98101', 'Luke Carter', '(604) 867-5309', DATE '2022-11-24');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6004, 1005, '9911 Oakwood Drive, San Francisco, CA 94107', 'Olivia Wright', '(604) 987-6543', DATE '2023-09-01');
+INSERT INTO Buyers_DealsWith (buyerID, farmerID, address, dealer_name, phoneNumber, purchase_date) VALUES (6005, 1005, '6316 Maple Street, Houston, TX 77030', 'Benjamin Cooper', '(604) 246-8242', DATE '2024-03-12');
 
 
 INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) VALUES (4001, 6001, DATE '2022-07-12', 'healthy');
@@ -404,18 +408,18 @@ INSERT INTO VeterinaryRecords_Has (tagID, recordID, record_date, healthStatus) V
 /* -------------------------------------------------------------------------- */
 /*                       Insert Into Relationship Tables                      */
 /* -------------------------------------------------------------------------- */
-INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3001, 1001, '2022-01-15');
-INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3002, 1002, '2022-01-25');
-INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3003, 1003, '2022-01-20');
-INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3004, 1004, '2022-01-12');
-INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3005, 1005, '2022-01-18');
+INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3001, 1001, DATE '2022-01-15');
+INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3002, 1002, DATE '2022-01-25');
+INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3003, 1003, DATE '2022-01-20');
+INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3004, 1004, DATE '2022-01-12');
+INSERT INTO Manages_Housing (facilityID, farmerID, lastMaintained) VALUES (3005, 1005, DATE '2022-01-18');
 
 
-INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2001, 1001, '2022-01-15');
-INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2002, 1002, '2022-01-25');
-INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2003, 1003, '2022-01-20');
-INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2004, 1004, '2022-01-12');
-INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2005, 1005, '2022-01-18');
+INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2001, 1001, DATE '2022-01-15');
+INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2002, 1002, DATE '2022-01-25');
+INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2003, 1003, DATE '2022-01-20');
+INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2004, 1004, DATE '2022-01-12');
+INSERT INTO Manages_Pen (facilityID, farmerID, lastMaintained) VALUES (2005, 1005, DATE '2022-01-18');
 
 
 INSERT INTO Lives (facilityID, farmerID, farmersHoused) VALUES (3001, 1001, 4);
@@ -439,11 +443,11 @@ INSERT INTO Nurtures (farmerID, tagID, waterSpent, foodSpent) VALUES (1004, 4004
 INSERT INTO Nurtures (farmerID, tagID, waterSpent, foodSpent) VALUES (1005, 4005, 25, 30);
 
 
-INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('milk', 4001, 100, '2022-01-01');
-INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('eggs', 4002, 50, '2022-01-02');
-INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('beef', 4003, 200, '2022-01-05');
-INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('poultry', 4004, 100, '2022-01-07');
-INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('wool', 4005, 75, '2022-01-10');    	
+INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('milk', 4001, 100, DATE '2022-01-01');
+INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('eggs', 4002, 50, DATE '2022-01-02');
+INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('beef', 4003, 200, DATE '2022-01-05');
+INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('poultry', 4004, 100, DATE '2022-01-07');
+INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('wool', 4005, 75, DATE '2022-01-10');
 
 
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1001, 5001, 10);
@@ -451,17 +455,21 @@ INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1002, 5002, 20);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1003, 5003, 15);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1004, 5004, 5);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5005, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5001, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5002, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5003, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5004, 25);
 
 
-INSERT INTO Buys (buyerID, cropType, variant, productType, quantity, price, transactionID) VALUES (6001, 'canola', 'hybrids', 'milk', 20, 50, 1);
-INSERT INTO Buys (buyerID, cropType, variant, productType, quantity, price, transactionID) VALUES (6002, 'wheat', 'pollinated', 'eggs', 30, 20, 2);
-INSERT INTO Buys (buyerID, cropType, variant, productType, quantity, price, transactionID) VALUES (6003, 'corn', 'pollinated', 'beef', 15, 100, 3);
-INSERT INTO Buys (buyerID, cropType, variant, productType, quantity, price, transactionID) VALUES (6004, 'wheat', 'pollinated', 'poultry', 10, 40, 4); 
-INSERT INTO Buys (buyerID, cropType, variant, productType, quantity, price, transactionID) VALUES (6005, 'canola', 'pollinated', 'manure', 50, 5, 5);
+INSERT INTO Buys (buyerID, cropType, cropVariant, productType, quantity, price, transactionID) VALUES (6001, 'canola', 'hybrids', 'milk', 20, 50, 1);
+INSERT INTO Buys (buyerID, cropType, cropVariant, productType, quantity, price, transactionID) VALUES (6002, 'wheat', 'pollinated', 'eggs', 30, 20, 2);
+INSERT INTO Buys (buyerID, cropType, cropVariant, productType, quantity, price, transactionID) VALUES (6003, 'corn', 'pollinated', 'beef', 15, 100, 3);
+INSERT INTO Buys (buyerID, cropType, cropVariant, productType, quantity, price, transactionID) VALUES (6004, 'wheat', 'pollinated', 'poultry', 10, 40, 4); 
+INSERT INTO Buys (buyerID, cropType, cropVariant, productType, quantity, price, transactionID) VALUES (6005, 'canola', 'pollinated', 'manure', 50, 5, 5);
 
 
-INSERT INTO IsGrowing (plotNum, cropType, variant, lastWatered, plantedDate, harvestDate) VALUES (5001, 'canola', 'pollinated', '2023-01-28', '2023-01-01', '2023-04-01');
-INSERT INTO IsGrowing (plotNum, cropType, variant, lastWatered, plantedDate, harvestDate) VALUES (5002, 'wheat', 'hybrids', '2023-01-29', '2023-01-02', '2023-04-02');
-INSERT INTO IsGrowing (plotNum, cropType, variant, lastWatered, plantedDate, harvestDate) VALUES (5003, 'corn', 'pollinated', '2023-01-30', '2023-01-03', '2023-04-03');
-INSERT INTO IsGrowing (plotNum, cropType, variant, lastWatered, plantedDate, harvestDate) VALUES (5004, 'wheat', 'pollinated', '2023-01-28', '2023-01-04', '2023-04-04');
-INSERT INTO IsGrowing (plotNum, cropType, variant, lastWatered, plantedDate, harvestDate) VALUES (5005, 'canola', 'hybrids', '2023-01-29', '2023-01-05', '2023-04-05');
+INSERT INTO IsGrowing (plotNum, cropType, cropVariant, lastWatered, plantedDate, harvestDate) VALUES (5001, 'canola', 'pollinated', DATE '2023-01-28', DATE '2023-01-01', DATE '2023-04-01');
+INSERT INTO IsGrowing (plotNum, cropType, cropVariant, lastWatered, plantedDate, harvestDate) VALUES (5002, 'wheat', 'hybrids', DATE '2023-01-29', DATE '2023-01-02', DATE '2023-04-02');
+INSERT INTO IsGrowing (plotNum, cropType, cropVariant, lastWatered, plantedDate, harvestDate) VALUES (5003, 'corn', 'pollinated', DATE '2023-01-30', DATE '2023-01-03', DATE '2023-04-03');
+INSERT INTO IsGrowing (plotNum, cropType, cropVariant, lastWatered, plantedDate, harvestDate) VALUES (5004, 'wheat', 'pollinated', DATE '2023-01-28', DATE '2023-01-04', DATE '2023-04-04');
+INSERT INTO IsGrowing (plotNum, cropType, cropVariant, lastWatered, plantedDate, harvestDate) VALUES (5005, 'canola', 'hybrids', DATE '2023-01-29', DATE '2023-01-05', DATE '2023-04-05');

@@ -1,15 +1,18 @@
 package actions;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import model.enums.ActionType;
 import model.enums.AnimalType;
+import model.enums.CropStatus;
 import model.enums.CropType;
+import model.enums.CropVariant;
+import model.filters.CropsFilterModel;
 import model.filters.LivestockFilterModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import database.DatabaseConnectionHandler;
-import model.LivestockModel;
+import model.models.livestock.Livestock_4_Model;
 
 import java.util.ArrayList;
 
@@ -41,10 +44,41 @@ public class FarmingSystem {
 
     }
 
+
+    /* -------------------------------------------------------------------------- */
+    /*                               CROPS REQUESTS                               */
+    /* -------------------------------------------------------------------------- */
+    /**
+     * Retrieves all crops data from database
+     */
+    public JSONArray getCrops() {
+      ArrayList<JSONObject> crops = dbHandler.getCrops();
+      JSONArray cropsArray = new JSONArray(crops);
+      return cropsArray;
+    }
+
+    public JSONArray getCrops(HttpServletRequest req) {
+      ArrayList<JSONObject> crops = dbHandler.getCrops();
+      JSONArray cropsArray = new JSONArray(crops);
+      return cropsArray;
+    }
+
+    public JSONArray getFilteredCrops(CropType cropType, CropVariant cropVariant, CropStatus cropStatus, int minQuantity,
+        int maxQuantity) {
+      CropsFilterModel model = new CropsFilterModel(cropType, cropVariant, cropStatus, minQuantity,
+          maxQuantity);
+
+      ArrayList<JSONObject> crops = dbHandler.getFilteredCrops(model);
+      JSONArray cropsArray = new JSONArray(crops);
+      return cropsArray;
+    }
+    
+
+    /* -------------------------------------------------------------------------- */
+    /*                             LIVESTOCK REQUESTS                             */
+    /* -------------------------------------------------------------------------- */
     /**
      * Retrieves all livestock data from database
-     * 
-     * TODO: overload this method to allow for filtering
      */
     public JSONArray getLivestock() {
         ArrayList<JSONObject> livestock = dbHandler.getLivestock();
@@ -61,7 +95,7 @@ public class FarmingSystem {
     public JSONArray getFilteredLivestock(String harvestable, AnimalType animalType, CropType diet, int minAge, int maxAge) {
         LivestockFilterModel model = new LivestockFilterModel(harvestable, animalType, diet, minAge, maxAge);
 
-        ArrayList<JSONObject> livestock =         dbHandler.getFilteredLivestock(model);
+        ArrayList<JSONObject> livestock = dbHandler.getFilteredLivestock(model);
         JSONArray livestockArray = new JSONArray(livestock);
         return livestockArray;
     }
@@ -73,7 +107,7 @@ public class FarmingSystem {
     /**
      * Insert a livestock given info
      */
-    public boolean insertLivestock(LivestockModel model) {
+    public boolean insertLivestock(Livestock_4_Model model) {
         return dbHandler.insertLivestock(model);
     }
 
@@ -81,8 +115,8 @@ public class FarmingSystem {
      * Update a livestock with given info
      */
 
-    public boolean updateLivestock(LivestockModel model) {
-        return dbHandler.updateLivestock(model);
+    public boolean updateLivestock(Livestock_4_Model model, ActionType actionType) {
+        return dbHandler.updateLivestock(model, actionType);
     }
 
 
@@ -111,9 +145,59 @@ public class FarmingSystem {
     /**
      * Aggregation with group by -> count animal types
      */
-    public JSONArray getAnimalCountType(int age) {
-        ArrayList<JSONObject> data = dbHandler.findCountedTypesSold(age);
+    public JSONArray getAnimalCountType() {
+        ArrayList<JSONObject> data = dbHandler.findCountedTypesSold();
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
+    }
+
+    public JSONArray getAnimalCountTypeByAge(int age) {
+        ArrayList<JSONObject> data = dbHandler.findCountedTypesSoldByAge(age);
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
+
+
+    /**
+     * Aggregation with having
+     */
+    public JSONArray getWateredAndFed(AnimalType animal, int water, int food) {
+        ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animal, water, food);
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
+
+
+    /**
+     * Projection Functions
+     */
+    public JSONArray getUserTables() {
+        ArrayList<String> tables = dbHandler.getUserTables();
+        JSONArray tablesJSONArray = new JSONArray(tables);
+        return tablesJSONArray;
+    }
+
+    public JSONArray getTableColumns(String tableName) {
+        ArrayList<String> columns = dbHandler.getTableColumns(tableName);
+        JSONArray columnsJSONArray = new JSONArray(columns);
+        return columnsJSONArray;
+    }
+
+    /**
+     * Nested aggregation
+     */
+    public JSONArray findOverweightAnimals() {
+        ArrayList<JSONObject> data = dbHandler.findOverweightAnimals();
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
+
+    /**
+     * Division query
+     */
+    public JSONArray findAllFarmerDivision(int param) {
+        ArrayList<JSONObject> data = dbHandler.findAllFarmersDivision(param);
+        JSONArray dataArray = new JSONArray(data);
+        return  dataArray;
     }
 }

@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import { GiWheat } from 'react-icons/gi';
-import styled from 'styled-components';
 
 import { login } from '@controllers/loginController';
 
@@ -8,111 +7,7 @@ import BackgroundContext from '@contexts/backgroundContext';
 
 import BackgroundImg from '@assets/backgrounds/background2.png';
 
-
-/* -------------------------------------------------------------------------- */
-/*                                   STYLING                                  */
-/* -------------------------------------------------------------------------- */
-const StyledLoginPage = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100vw;
-  color: #fff;
-  text-align: center;
-
-  .wheatIcon {
-    font-size: 30vh;
-    margin: 1rem 0 0 0;
-    animation: pulse 5s linear infinite;
-    stroke: #ff0;
-    fill: #ff0;
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-  }
-
-  h1 {
-    font-size: 2.5rem;
-    font-weight: semibold;
-    margin: 1rem 0 0 0;
-    padding: 1rem;
-  }
-
-  h3 {
-    margin: 0 0 1rem 0;
-  }
-`;
-
-const StyledLoginForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100vw;
-  gap: 2rem;
-  margin: 2rem 0;
-
-  div {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    margin-right: 1rem;
-  }
-
-  label {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 500;
-  }
-
-  input {
-    margin: 0.5rem;
-    padding: 0.5rem;
-    min-width: 25vw;
-    background-color: transparent;
-    border: 2px solid #fff;
-    border-radius: 5px;
-    outline: none;
-    color: #fff;
-    font-size: 1.5rem;
-    transition: 0.4s ease;
-
-    &:hover,
-    &:focus {
-      background: rgba(0, 0, 0, 0.1);
-      transition: 0.4s ease;
-    }
-  }
-
-  button {
-    padding: 0.5rem;
-    font-size: 1.5rem;
-    width: 10rem;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    background: transparent;
-    outline: 2px solid #fff;
-    font-weight: bold;
-    color: #fff;
-    transition: 0.4s ease;
-
-    &:hover {
-      outline: 2px solid #5f5;
-      background: rgba(0, 255, 0, 0.1);
-      transition: 0.4s ease;
-    }
-  }
-`;
+import styles from './index.module.scss';
 
 
 /* -------------------------------------------------------------------------- */
@@ -148,12 +43,12 @@ const LoginPage = () => {
   }, []);
 
   return (
-    <StyledLoginPage>
+    <div className={styles.LoginPage}>
       <h1>Totalitarian Farming System&trade; Login</h1>
       <h3>The best way to control and manage your farm!</h3>
-      <GiWheat className="wheatIcon" />
+      <GiWheat className={styles.WheatIcon} />
 
-      <StyledLoginForm>
+      <form className={styles.LoginForm}>
         <div>
           <label htmlFor="user">Username</label>
           <input
@@ -182,8 +77,8 @@ const LoginPage = () => {
         >
           Login
         </button>
-      </StyledLoginForm>
-    </StyledLoginPage>
+      </form>
+    </div>
   );
 }
 
