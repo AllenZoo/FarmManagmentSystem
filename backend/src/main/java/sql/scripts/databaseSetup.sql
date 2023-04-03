@@ -451,6 +451,10 @@ INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1002, 5002, 20);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1003, 5003, 15);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1004, 5004, 5);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5005, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5001, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5002, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5003, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5004, 25);
 
 
 INSERT INTO Buys (buyerID, cropType, variant, productType, quantity, price, transactionID) VALUES (6001, 'canola', 'hybrids', 'milk', 20, 50, 1);

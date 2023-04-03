@@ -487,11 +487,11 @@ public class DatabaseConnectionHandler {
 		try {
 			String query;
 			if (type == 1) {
-				 query = "SELECT F2.farmerID FROM Farmers_2 F2 WHERE NOT " +
+				 query = "SELECT * FROM Farmers_2 F2 WHERE NOT " +
 						"EXISTS (((SELECT tagID FROM Livestock_4) " +
 						"MINUS (SELECT tagID FROM Nurtures WHERE farmerID = F2.farmerID)))";
 			} else {
-				query = "SELECT F2.farmerID FROM Farmers_2 F2 " +
+				query = "SELECT * FROM Farmers_2 F2 " +
 						"WHERE NOT EXISTS(((SELECT plotNum FROM Fields_4)" +
 						"                MINUS" +
 						"                (SELECT plotNum FROM Tends WHERE farmerID = F2.farmerID)))";
@@ -503,6 +503,8 @@ public class DatabaseConnectionHandler {
 			while(rs.next()) {
 				JSONObject json = new JSONObject();
 				json.put("farmerID", rs.getInt("farmerID"));
+				json.put("fullName", rs.getString("fullName"));
+				json.put("yearsOfEmployment", rs.getInt("yearsOfEmployment"));
 				result.add(json);
 			}
 
