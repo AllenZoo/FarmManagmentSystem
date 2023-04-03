@@ -15,13 +15,13 @@ const ViewCompanyInfoPanel = () => {
   async function getFeedingFarmers() {
     let farmers = await getFarmers(1);
     setFarmers(farmers);
-    console.log(farmers);
+    // console.log(farmers);
   }
 
   async function getTendingFarmers() {
     let farmers = await getFarmers(2);
     setFarmers(farmers);
-    console.log(farmers);
+    // console.log(farmers);
   }
 
   // Create table of farmers
@@ -38,13 +38,19 @@ const ViewCompanyInfoPanel = () => {
     // Create body
     for (let i = 0; i < farmers.length; i++) {
       let row = [];
-      row.push(<td key={farmers[i].farmer_id}>{farmers[i].farmerID}</td>);
-      row.push(<td key={farmers[i].farmer_name}>{farmers[i].fullName}</td>);
+      row.push(<td key={farmers[i].farmerID}>{farmers[i].farmerID}</td>);
       row.push(
-        <td key={farmers[i].farmer_name}>{farmers[i].yearsOfEmployment}</td>
+        <td key={farmers[i].farmerID + farmers[i].fullName}>
+          {farmers[i].fullName}
+        </td>
+      );
+      row.push(
+        <td key={farmers[i].farmerID + farmers[i].yearsOfEmployment}>
+          {farmers[i].yearsOfEmployment}
+        </td>
       );
 
-      body.push(<tr key={farmers[i].farmer_id}>{row}</tr>);
+      body.push(<tr key={farmers[i].farmerID}>{row}</tr>);
     }
 
     table.push(<thead key="thead">{header}</thead>);
