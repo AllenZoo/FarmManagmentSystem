@@ -189,7 +189,7 @@ public class MainController {
     /**
      * Gets the animal count for each animal type
      */
-    @RequestMapping(value = "/livestock/get/animalCount", method = GET)
+    @RequestMapping(value = "/livestock/get/animalCount", method = POST)
     public void getAnimalCountType(HttpServletResponse res) throws IOException {
         JSONArray livestock = system.getAnimalCountType();
 
