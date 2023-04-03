@@ -4,12 +4,8 @@
 /**
  * Renders the 'View Profile' panel of User Info
  */
-const ViewProfilePanel = () => {
-  return (
-    <>
-      View Profile
-    </>
-  );
+export const ViewProfilePanel = () => {
+  return <>View Profile</>;
 };
 
 export default ViewProfilePanel;
