@@ -116,6 +116,23 @@ export const updateLivestock = async (livestock: Livestock, action: ActionTypes)
 };
 
 /**
+ * Retrieves resources spent on a livestock
+ */
+export const getResourcesSpent = async (livestock: Livestock) => {
+  const res = await axios.post(`${PATH}/get/foodWaterSpent`, livestock, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+
+  if (res.data) return res.data[0];
+  else
+    throw new Error(
+      `Failed to retrieve resources spent on livestock with tagID #${livestock.tagID}!`
+    );
+};
+
+/**
  * Retrieves the count of a livestock
  */
 export const getVetRecords = async (livestock: Livestock) => {

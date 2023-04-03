@@ -307,8 +307,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 4rem;
-  height: 4rem;
+  width: 3.5rem;
+  height: 3.5rem;
   margin: 0;
   padding: 0.25rem;
   text-align: center;
@@ -363,6 +363,15 @@
     svg {
       stroke: #8f8 !important;
       fill: #8f8 !important;
+    }
+  }
+
+  &[id="resourcesSpent"] {
+    border-color: #fc8;
+
+    svg {
+      stroke: #fc8 !important;
+      fill: #fc8 !important;
     }
   }
 

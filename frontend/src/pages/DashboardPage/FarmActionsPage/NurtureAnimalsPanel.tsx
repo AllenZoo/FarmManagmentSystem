@@ -4,6 +4,7 @@ import {
   GiMedicalPack,
   GiBloodySword,
   GiGrain,
+  GiPowderBag,
 } from "react-icons/gi";
 import { FaFilter } from "react-icons/fa";
 
@@ -12,6 +13,7 @@ import ModalContext from "@contexts/modalContext";
 import {
   deleteLivestock,
   getLivestockCount,
+  getResourcesSpent,
   getVetRecords,
   insertLivestock,
   retrieveFilteredLivestock,
@@ -212,6 +214,44 @@ const NurtureAnimalsPanel = () => {
   };
 
   /**
+   * Loads resources spent on livestock
+   */
+  const lookUpResourcesSpent = async (livestock: Livestock) => {
+    try {
+      await getResourcesSpent(livestock).then((resourcesSpent) => {
+        modalContext.setModal(
+          <>
+            <h1>
+              Resources Spent On {livestock.animalType} (ID #{livestock.tagID})
+            </h1>
+
+            {resourcesSpent ? (
+              <div>
+                <h2>Total Food Consumed: {resourcesSpent.totalFoodConsumed}</h2>
+                <h2>Total Water Consumed: {resourcesSpent.totalWaterConsumed}</h2>
+              </div>
+            ) : (
+              <h2>This animal has been neglected...deprived of food and water :D</h2>
+            )}
+
+            <button
+              className={styles.Button}
+              type="button"
+              onClick={() => {
+                modalContext.clearModal();
+              }}
+            >
+              Close
+            </button>
+          </>
+        );
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  /**
    * Loads vet records for livestock
    */
   const lookUpVetRecords = async (livestock: Livestock) => {
@@ -220,8 +260,7 @@ const NurtureAnimalsPanel = () => {
         modalContext.setModal(
           <>
             <h1>
-              Veterinary Records For {livestock.animalType} (ID #
-              {livestock.tagID})
+              Veterinary Records For {livestock.animalType} (ID #{livestock.tagID})
             </h1>
 
             { vetRecords ? (
@@ -690,6 +729,16 @@ const NurtureAnimalsPanel = () => {
                     disabled={!livestock.harvestable}
                   >
                     <GiBasket />
+                  </button>
+
+                  <button
+                    className={styles.ActionButton}
+                    type="button"
+                    onClick={() => lookUpResourcesSpent(livestock)}
+                    id="resourcesSpent"
+                    title={`Read Resources Spent on #${livestock.tagID}`}
+                  >
+                    <GiPowderBag />
                   </button>
 
                   <button
