@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { getDataValues, getTableColumns, getUserTables } from "@controllers/userInfoControllers";
+import {
+  getDataValues,
+  getTableColumns,
+  getUserTables,
+} from "@controllers/userInfoControllers";
 
 import styles from "./ViewUserInventoryPanel.module.scss";
-
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
@@ -29,18 +32,16 @@ const ViewInventoryPanel = () => {
           {tables[i]}
         </option>
       );
-      //here I will be creating my options dynamically based on
-      //what props are currently passed to the parent component
     }
     return items;
-  }
+  };
 
   const onSelectTable = async (e: any) => {
     const data = await getTableColumns(e.target.value);
     setColumns(data);
     setSelectedTable(e.target.value);
     setSelectedColumns([]);
-  }
+  };
 
   const createSelectColumnItems = () => {
     let items = [];
@@ -52,7 +53,7 @@ const ViewInventoryPanel = () => {
       );
     }
     return items;
-  }
+  };
 
   const onSelectColumn = (e: any) => {
     let value = Array.from(
@@ -61,7 +62,7 @@ const ViewInventoryPanel = () => {
     );
 
     setSelectedColumns(value);
-  }
+  };
 
   const getTables = async () => {
     const data = await getUserTables();
@@ -71,7 +72,7 @@ const ViewInventoryPanel = () => {
   const getData = async () => {
     const data = await getDataValues(selectedTable, selectedColumns);
     setData(data);
-  }
+  };
 
   const createTable = () => {
     let table = [];
@@ -87,7 +88,7 @@ const ViewInventoryPanel = () => {
       table.push(<tr>{children}</tr>);
     }
     return table;
-  }
+  };
 
   const selectOptions = useMemo(() => {
     return createSelectColumnItems();
