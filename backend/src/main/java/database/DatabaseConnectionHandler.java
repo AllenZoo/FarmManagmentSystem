@@ -508,8 +508,6 @@ public class DatabaseConnectionHandler {
 	}
 
 
-
-
 	// Gets the total amount of water and food spent given a livestock id.
 	public ArrayList<JSONObject> getWaterAndFoodSpentOfLivestock(int tagID) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
@@ -634,7 +632,6 @@ public class DatabaseConnectionHandler {
 	}
 
 	// Division
-
 	// Need a param to indicate which query
 	public ArrayList<JSONObject> findAllFarmersDivision(int type) {
 		ArrayList<JSONObject> result = new ArrayList<JSONObject>();
@@ -725,12 +722,12 @@ public class DatabaseConnectionHandler {
 					"    n int := 0; " +
 					"BEGIN " +
 					"    SELECT count(*) into n " +
-					"    from Livestock_3 where animalType = ? AND " +
-					"                           age = ? " +
+					"    from Livestock_3 " +
+					"    where animalType = ? AND age = ?; " +
 					"    if n = 0 then " +
 					"        insert into Livestock_3(animalType, age, harvestable) VALUES (?, ?, ?); " +
 					"    end if; " +
-					"end;";
+					"END; ";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, model.getAnimalType().toString().toLowerCase());
 			ps.setInt(2, model.getAge());
