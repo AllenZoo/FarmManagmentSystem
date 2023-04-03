@@ -160,6 +160,7 @@ public class DatabaseConnectionHandler {
 	// DELETE QUERY
 	public boolean deleteLivestock(int tagID) {
 		try {
+			// Delete livestock
 			String query = "DELETE FROM Livestock_4 WHERE tagID = ?";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setInt(1, tagID);

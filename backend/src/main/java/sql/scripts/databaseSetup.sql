@@ -204,6 +204,7 @@ CREATE TABLE Contains (
   PRIMARY KEY (facilityID, tagID),
   FOREIGN KEY (facilityID) REFERENCES Pen (facilityID),
   FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE Nurtures (
@@ -214,6 +215,7 @@ CREATE TABLE Nurtures (
   PRIMARY KEY (farmerID, tagID),
   FOREIGN KEY (farmerID) REFERENCES Farmers_2 (farmerID),
   FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
+      ON DELETE CASCADE
 );
 
 CREATE TABLE Creates (
@@ -232,7 +234,8 @@ CREATE TABLE Creates (
   amount INTEGER,
   dateProduced DATE,
   PRIMARY KEY (productType, tagID),
-  FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID),
+  FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
+      ON DELETE CASCADE,
   FOREIGN KEY (productType) REFERENCES LivestockProduce (productType)
 );
 
