@@ -59,10 +59,15 @@ const ViewInventoryPanel = () => {
     return items;
   }
 
-  // TODO: fix to process multiple selects.
-  const onSelectColumn = (e: any) => {
-    console.log("User selected column: ", e.target.value);
-    setSelectedColumns([...columns, e.target.value]);
+  function OnSelectColumn(e: any) {
+    let value = Array.from(
+      e.target.selectedOptions,
+      (option: any) => option.value
+    );
+
+    console.log("User selected column: ", value);
+
+    setSelectedColumns(value);
   }
 
   const getTables = async () => {
@@ -83,22 +88,52 @@ const ViewInventoryPanel = () => {
     createSelectColumnItems();
   }, [columns]);
 
+  const createTable = () => {
+    let table = [];
+
+    // Outer loop to create parent
+    for (let i = 0; i < data.length; i++) {
+      let children = [];
+      //Inner loop to create children
+      for (let j = 0; j < selectedColumns.length; j++) {
+        children.push(<td>{data[i][selectedColumns[j]]}</td>);
+      }
+      //Create the parent and add the children
+      table.push(<tr>{children}</tr>);
+    }
+    return table;
+  }
+
   return (
     <div>
-      <h1>View Inventory</h1>
-      <select className={styles.Select} onChange={onSelectTable}>
-        {createSelectTableItems()}
-      </select>
-      <select
-        className={styles.Select}
-        onChange={onSelectColumn}
-        multiple={true}
-      >
-        {selectOptions}
-      </select>
-      <button className={styles.Button} onClick={getData}>
-        View
-      </button>
+      <div>
+        <h1>View Inventory</h1>
+        <select className={styles.Select} onChange={onSelectTable}>
+          {createSelectTableItems()}
+        </select>
+        <select
+          className={styles.Select}
+          onChange={OnSelectColumn}
+          multiple={true}
+        >
+          {selectOptions}
+        </select>
+        <button className={styles.Button} onClick={getData}>
+          View
+        </button>
+      </div>
+      <div>
+        <table className={styles.Table}>
+          <thead>
+            <tr>
+              {selectedColumns.map((column) => (
+                <th>{column}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>{createTable()}</tbody>
+        </table>
+      </div>
     </div>
   );
 };
