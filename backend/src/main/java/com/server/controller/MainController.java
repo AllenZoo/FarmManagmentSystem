@@ -216,8 +216,6 @@ public class MainController {
     }
 
 
-    // For Ref!
-
     /**
      * Does nested aggregation
      */
@@ -234,6 +232,16 @@ public class MainController {
 
     /**
      * Does division
+     *
+     * if:
+     * type = 1 -> get all farmers who have nurtured all livestock
+     * otherwise -> get all farmers who have tended all fields
+     *
+     * RECEIVES:
+     * {
+     *     param: 1 OR 2
+     * }
+     *
      */
     @RequestMapping(value = "/get/farmerDiv", method = POST)
     public void getAllFarmersDivision(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
