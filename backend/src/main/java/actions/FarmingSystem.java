@@ -115,9 +115,30 @@ public class FarmingSystem {
         return dataArray;
     }
 
+    /**
+     * Aggregation with having
+     */
     public JSONArray getWateredAndFed(String animal, int water, int food) {
         ArrayList<JSONObject> data = dbHandler.findWateredAndFed(animal, water, food);
         JSONArray dataArray = new JSONArray(data);
         return dataArray;
+    }
+
+    /**
+     * Nested aggregation
+     */
+    public JSONArray findOverweightAnimals() {
+        ArrayList<JSONObject> data = dbHandler.findOverweightAnimals();
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
+
+    /**
+     * Division query
+     */
+    public JSONArray findAllFarmerDivision(int param) {
+        ArrayList<JSONObject> data = dbHandler.findAllFarmersDivision(param);
+        JSONArray dataArray = new JSONArray(data);
+        return  dataArray;
     }
 }
