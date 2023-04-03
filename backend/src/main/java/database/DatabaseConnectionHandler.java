@@ -700,7 +700,7 @@ public class DatabaseConnectionHandler {
 					"    from Livestock_1 where animalType = ? AND " +
 					"                           WEIGHT = ?; " +
 					"    if n = 0 then " +
-					"        insert into Livestock_3(animalType, age, harvestable) VALUES (?, ?, ?); " +
+					"        insert into Livestock_1(animalType, weight, diet) VALUES (?, ?, ?); " +
 					"    end if; " +
 					"end;";
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
