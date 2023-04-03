@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { GiBasket, GiBloodySword, GiGrain } from 'react-icons/gi';
+import { GiBasket, GiMedicalPack, GiBloodySword, GiGrain } from 'react-icons/gi';
 import { FaFilter } from 'react-icons/fa';
 
 import ModalContext from '@contexts/modalContext';
@@ -7,6 +7,7 @@ import ModalContext from '@contexts/modalContext';
 import {
   deleteLivestock,
   getLivestockCount,
+  getVetRecords,
   insertLivestock,
   retrieveFilteredLivestock,
   retrieveLivestock,
@@ -184,13 +185,36 @@ const NurtureAnimalsPanel = () => {
   };
 
   /**
+   * Loads vet records for livestock
+   * 
+   * TODO: Implement this
+   */
+  const lookUpVetRecords = async (livestock: Livestock) => {
+    try {
+      const vetRecords = await getVetRecords(livestock);
+      console.log(vetRecords);
+      modalContext.setModal(
+        <>
+          <h1>Veterinary Records For {livestock.animalType} (ID #{livestock.tagID})</h1>
+
+          <div>
+            N/A
+          </div>
+        </>
+      );
+    } catch (err) {
+      console.error(err);
+    };
+  };
+
+  /**
    * Terminate the livestock
    */
   const terminateLivestock = async (livestock: Livestock) => {
     try {
       modalContext.setModal(
         <>
-          Are you sure you want to terminate this livestock?
+          <h1>Are you sure you want to terminate {livestock.animalType} (ID #{livestock.tagID})?</h1>
 
           <button
             className={styles.Button}
@@ -467,6 +491,16 @@ const NurtureAnimalsPanel = () => {
                   disabled={!livestock.harvestable}
                 >
                   <GiBasket />
+                </button>
+
+                <button
+                  className={styles.ActionButton}
+                  type="button"
+                  onClick={() => lookUpVetRecords(livestock)}
+                  id="vetRecords"
+                  title={`Read Vet Records of #${livestock.tagID}`}
+                >
+                  <GiMedicalPack />
                 </button>
 
                 <button

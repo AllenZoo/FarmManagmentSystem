@@ -348,6 +348,15 @@
     }
   }
 
+  &[id="vetRecords"] {
+    border-color: #8ff;
+
+    svg {
+      stroke: #8ff !important;
+      fill: #8ff !important;
+    }
+  }
+
   &[id="terminate"] {
     border-color: #f88;
 

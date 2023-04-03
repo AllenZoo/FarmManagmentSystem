@@ -79,6 +79,20 @@ export const updateLivestock = async (livestock: Livestock, action: ActionTypes)
 /**
  * Retrieves the count of a livestock
  */
+export const getVetRecords = async (livestock: Livestock) => {
+	const res = await axios.post(`/api/get/vetRecords`, livestock, {
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+
+	if (res.data) return res.data;
+	else throw new Error(`Failed to retrieve vet records of livestock with tagID #${livestock.tagID}!`);
+};
+
+/**
+ * Retrieves the count of a livestock
+ */
 export const getLivestockCount = async (age: number) => {
   const res = await axios.post(`${PATH}/get/animalCount`, age, {
     headers: {
