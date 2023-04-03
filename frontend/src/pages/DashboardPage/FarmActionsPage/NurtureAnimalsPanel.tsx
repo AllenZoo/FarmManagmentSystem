@@ -196,16 +196,19 @@ const NurtureAnimalsPanel = () => {
   const lookUpVetRecords = async (livestock: Livestock) => {
     try {
       await getVetRecords(livestock).then((vetRecords) => {
-        console.log(vetRecords);
         modalContext.setModal(
           <>
             <h1>Veterinary Records For {livestock.animalType} (ID #{livestock.tagID})</h1>
 
-            <div>
-              <h2>Record ID: #{vetRecords.recordID}</h2>
-              <h2>Health Status: {vetRecords.healthstatus}</h2>
-              <h2>Record Date: {vetRecords.record_date}</h2>
-            </div>
+            { vetRecords ? (
+              <div>
+                <h2>Record ID: #{vetRecords.recordID}</h2>
+                <h2>Health Status: {vetRecords.healthstatus}</h2>
+                <h2>Record Date: {vetRecords.record_date}</h2>
+              </div>
+            ) : (
+              <h2>No records found</h2>
+            )}
 
             <button
               className={styles.Button}
