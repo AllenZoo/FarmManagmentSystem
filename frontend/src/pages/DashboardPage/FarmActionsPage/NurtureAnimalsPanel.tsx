@@ -195,6 +195,7 @@ const NurtureAnimalsPanel = () => {
     try {
       setLivestockCount([]); // Reset the count
 
+<<<<<<< HEAD
       Object.values(AnimalType).forEach(async (animalType) => {
         await getLivestockCount(animalType).then((count) => {
           count.forEach((c: any) => {
@@ -203,6 +204,14 @@ const NurtureAnimalsPanel = () => {
               { type: c.animalType, count: c.count },
             ]);
           });
+=======
+      await getLivestockCount().then((count) => {
+        count.forEach((c: any) => {
+          setLivestockCount((prevCount) => [
+            ...prevCount,
+            { type: c.animalType, count: c.count },
+          ]);
+>>>>>>> 5f82655656efbcb1fc3c8230d33caf234fcd2ba3
         });
       });
       console.log(livestockCount);
