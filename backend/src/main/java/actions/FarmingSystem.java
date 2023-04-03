@@ -8,6 +8,7 @@ import model.enums.CropType;
 import model.enums.CropVariant;
 import model.filters.CropsFilterModel;
 import model.filters.LivestockFilterModel;
+import model.models.livestock.LivestockModel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -107,7 +108,7 @@ public class FarmingSystem {
     /**
      * Insert a livestock given info
      */
-    public boolean insertLivestock(Livestock_4_Model model) {
+    public boolean insertLivestock(LivestockModel model) {
         return dbHandler.insertLivestock(model);
     }
 
