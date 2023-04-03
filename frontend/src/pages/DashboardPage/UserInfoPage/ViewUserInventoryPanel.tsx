@@ -20,10 +20,6 @@ const ViewInventoryPanel = () => {
 
   const [data, setData] = useState<any>([]);
 
-  const selectOptions = useMemo(() => {
-    return createSelectColumnItems();
-  }, [columns]);
-
   // Inpsired by: https://stackoverflow.com/questions/36205673/how-do-i-create-a-dynamic-drop-down-list-with-react-bootstrap
   const createSelectTableItems = () => {
     let items = [];
@@ -40,7 +36,6 @@ const ViewInventoryPanel = () => {
   }
 
   const onSelectTable = async (e: any) => {
-    console.log("User selected table: ", e.target.value);
     const data = await getTableColumns(e.target.value);
     setColumns(data);
     setSelectedTable(e.target.value);
@@ -59,13 +54,11 @@ const ViewInventoryPanel = () => {
     return items;
   }
 
-  function OnSelectColumn(e: any) {
+  const onSelectColumn = (e: any) => {
     let value = Array.from(
       e.target.selectedOptions,
       (option: any) => option.value
     );
-
-    console.log("User selected column: ", value);
 
     setSelectedColumns(value);
   }
@@ -79,14 +72,6 @@ const ViewInventoryPanel = () => {
     const data = await getDataValues(selectedTable, selectedColumns);
     setData(data);
   }
-
-  useEffect(() => {
-    getTables();
-  }, []);
-
-  useEffect(() => {
-    createSelectColumnItems();
-  }, [columns]);
 
   const createTable = () => {
     let table = [];
@@ -104,6 +89,18 @@ const ViewInventoryPanel = () => {
     return table;
   }
 
+  const selectOptions = useMemo(() => {
+    return createSelectColumnItems();
+  }, [columns]);
+
+  useEffect(() => {
+    getTables();
+  }, []);
+
+  useEffect(() => {
+    createSelectColumnItems();
+  }, [columns]);
+
   return (
     <div>
       <div>
@@ -113,7 +110,7 @@ const ViewInventoryPanel = () => {
         </select>
         <select
           className={styles.Select}
-          onChange={OnSelectColumn}
+          onChange={onSelectColumn}
           multiple={true}
         >
           {selectOptions}
