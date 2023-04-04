@@ -332,7 +332,12 @@ INSERT INTO Crops (cropType, cropVariant, cropStatus, quantity) VALUES ('canola'
 INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (1, 50000);
 INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (2, 75000);
 INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (3, 90000);
+INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (4, 90000);
 INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (5, 120000);
+INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (6, 120500);
+INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (7, 125000);
+INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (8, 130000);
+INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (9, 120500);
 INSERT INTO Farmers_1 (yearsOfEmployment, salary) VALUES (10, 150000);
 
 
@@ -341,6 +346,11 @@ INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1002, 'Emi
 INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1003, 'Michael Johnson', 5);
 INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1004, 'Maria Hernandez', 2);
 INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1005, 'David Kim', 10);
+INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1006, 'Sarah Lee', 4);
+INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1007, 'Daniel Rodriguez', 2);
+INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1008, 'Lisa Chen', 8);
+INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1009, 'Matthew Wong', 6);
+INSERT INTO Farmers_2 (farmerID, fullName, yearsOfEmployment) VALUES (1010, 'Jessica Kim', 3);
 
 
 INSERT INTO Livestock_1 (animalType, weight, diet) VALUES ('chicken', 10, 'corn');
@@ -465,6 +475,33 @@ INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALU
 INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1002, 4004, DATE '2022-01-05', 25, 30);
 INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4002, DATE '2022-03-05', 15, 20);
 
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4001, DATE '2023-01-01', 10, 15);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4002, DATE '2023-01-02', 20, 25);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4003, DATE '2023-01-03', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4004, DATE '2023-01-04', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4005, DATE '2023-01-05', 25, 30);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4006, DATE '2023-01-03', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4007, DATE '2023-01-04', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4008, DATE '2023-01-05', 25, 30);
+
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1008, 4001, DATE '2023-01-01', 10, 15);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1008, 4002, DATE '2023-01-02', 20, 25);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1008, 4003, DATE '2023-01-03', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1008, 4004, DATE '2023-01-04', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1008, 4005, DATE '2023-01-05', 25, 30);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1008, 4006, DATE '2023-01-03', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1008, 4007, DATE '2023-01-04', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1008, 4008, DATE '2023-01-05', 25, 30);
+
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1010, 4001, DATE '2023-01-01', 10, 15);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1010, 4002, DATE '2023-01-02', 20, 25);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1010, 4003, DATE '2023-01-03', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1010, 4004, DATE '2023-01-04', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1010, 4005, DATE '2023-01-05', 25, 30);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1010, 4006, DATE '2023-01-03', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1010, 4007, DATE '2023-01-04', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1010, 4008, DATE '2023-01-05', 25, 30);
+
 
 INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('milk', 4001, 100, DATE '2022-01-01');
 INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('eggs', 4002, 50, DATE '2022-01-02');
@@ -477,11 +514,21 @@ INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1001, 5001, 10);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1002, 5002, 20);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1003, 5003, 15);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1004, 5004, 5);
-INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5005, 25);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5001, 25);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5002, 25);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5003, 25);
 INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5004, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1005, 5005, 25);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1007, 5001, 15);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1007, 5002, 65);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1007, 5003, 55);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1007, 5004, 45);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1007, 5005, 35);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1009, 5001, 15);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1009, 5002, 65);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1009, 5003, 55);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1009, 5004, 45);
+INSERT INTO Tends (farmerID, plotNum, waterSpent) VALUES (1009, 5005, 35);
 
 
 INSERT INTO Buys (buyerID, cropType, cropVariant, productType, quantity, price, transactionID) VALUES (6001, 'canola', 'hybrids', 'milk', 20, 50, 1);

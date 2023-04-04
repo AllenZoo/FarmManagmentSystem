@@ -184,7 +184,7 @@ public class DatabaseConnectionHandler {
     return livestock;
   }
 
-  // INSERT QUERY
+    // INSERT QUERY
 	public boolean insertLivestock(LivestockModel model) {
 		try {
 			Livestock_1_Model model1 = new Livestock_1_Model(model.getAnimalType(), model.getDiet(), model.getWeight());
@@ -316,7 +316,7 @@ public class DatabaseConnectionHandler {
 			String subquery = "";
 			// Check to see if we need to do aggregation query having
 			if (model.getMinWaterSpent() <= -1 && model.getMinFoodSpent() <= -1) {
-				// Don't need Join with Nurtures
+				// Don't need Join with Nurtures (selection query)
 				subquery =
 						" SELECT l4.tagID AS tagID, " +
 								"       l4.animalType AS animalType, " +
@@ -330,7 +330,7 @@ public class DatabaseConnectionHandler {
 								" INNER JOIN LIVESTOCK_3 l3 ON l4.animalType = l3.animalType AND l4.age = l3.age " +
 								" INNER JOIN LIVESTOCK_1 l1 ON l1.animalType = l4.animalType AND l1.weight = l4.weight ";
 			} else {
-				// Need Join with Nurtures
+				// Need Join with Nurtures (aggregation with having query)
 				subquery =
 						" SELECT l4.tagID AS tagID, " +
 								"       l4.animalType AS animalType, " +
