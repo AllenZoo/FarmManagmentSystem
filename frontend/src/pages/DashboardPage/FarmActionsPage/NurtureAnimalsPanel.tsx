@@ -164,6 +164,7 @@ const NurtureAnimalsPanel = () => {
 
     try {
       await insertLivestock(newLivestock);
+      window.alert("Livestock added successfully");
     } catch (err) {
       window.alert("Failed to add livestock");
     }
