@@ -547,27 +547,23 @@ public class DatabaseConnectionHandler {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
 			String query =
-					"SELECT l4.tagID AS tagID, " +
+					" SELECT l4.tagID AS tagID, " +
 					"       l4.animalType AS animalType, " +
 					"       l4.age AS age, " +
 					"       l1.diet AS diet, " +
 					"       l4.weight AS weight, " +
 					"       l4.lastFed AS lastFed, " +
-					"       l3.harvestable AS harvestable," +
-					"       l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods " +
-					"FROM LIVESTOCK_1 l1, LIVESTOCK_3 l3, LIVESTOCK_4 l4 " +
-					"WHERE l4.animalType = l3.animalType " +
-					"AND   l4.animalType = l1.animalType " +
-					"AND   l4.age        = l3.age        " +
-					"AND   l4.weight     = l1.weight     " +
-					"AND   l4.tagID IN ( " +
-					"    SELECT N.tagID " +
-					"    FROM Nurtures N, Livestock_4 L4 " +
-					"    WHERE N.tagID = L4.tagID " +
-					"    AND L4.animalType = ? " +
-					"    GROUP BY N.tagID " +
-					"    HAVING SUM(N.waterSpent) >= ? AND SUM(N.foodSpent) >= ? " +
-					") ";
+					"       l3.harvestable AS harvestable, " +
+					"       l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods, " +
+					"       SUM(N.waterSpent) AS totalWaterSpent, " +
+					"       SUM(N.foodSpent) AS totalFoodSpent " +
+					" FROM LIVESTOCK_4 l4 " +
+					" INNER JOIN LIVESTOCK_3 l3 ON l4.animalType = l3.animalType AND l4.age = l3.age " +
+					" INNER JOIN LIVESTOCK_1 l1 ON l1.animalType = l4.animalType AND l1.weight = l4.weight " +
+					" INNER JOIN Nurtures N ON l4.tagID = N.tagID " +
+					" WHERE l4.animalType = ? " +
+					" GROUP BY l4.tagID, l4.animalType, l4.age, l1.diet, l4.weight, l4.lastFed, l3.harvestable, l4.lastViolatedForHarvestedGoods " +
+					" HAVING SUM(N.waterSpent) >= ? AND SUM(N.foodSpent) >= ? ";
 
 			PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 			ps.setString(1, animalType.toString().toLowerCase());
@@ -577,16 +573,18 @@ public class DatabaseConnectionHandler {
 			ResultSet rs = ps.executeQuery();
 
 			while(rs.next()) {
-				LivestockModel model = new LivestockModel(
-						rs.getInt("tagID"),
-						AnimalType.valueOf(rs.getString("animalType").toUpperCase()),
-						rs.getInt("age"),
-						CropType.valueOf(rs.getString("diet").toUpperCase()),
-						rs.getDouble("weight"),
-						rs.getDate("lastFed"),
-						rs.getBoolean("harvestable"),
-						rs.getDate("lastViolatedForHarvestedGoods"));
-				livestock.add(model.toJSON());
+				JSONObject json = new JSONObject();
+				json.put("tagID", rs.getInt("tagID"));
+				json.put("animalType", AnimalType.valueOf(rs.getString("animalType").toUpperCase()));
+				json.put("age", rs.getInt("age"));
+				json.put("diet", CropType.valueOf(rs.getString("diet").toUpperCase()));
+				json.put("weight", rs.getDouble("weight"));
+				json.put("lastFed", rs.getDate("lastFed"));
+				json.put("harvestable", rs.getBoolean("harvestable"));
+				json.put("lastViolatedForHarvestedGoods", rs.getDate("lastViolatedForHarvestedGoods"));
+				json.put("totalWaterSpent", rs.getInt("totalWaterSpent"));
+				json.put("totalFoodSpent", rs.getInt("totalFoodSpent"));
+				livestock.add(json);
 			}
 
 
