@@ -143,20 +143,20 @@ public class DatabaseConnectionHandler {
 
     try {
       String query =
-          "SELECT  l4.tagID AS tagID, " +
-              "l4.animalType AS animalType, " +
-              "l4.age AS age, " +
-              "l1.diet AS diet, " +
-              "l4.weight AS weight, " +
-              "l4.lastFed AS lastFed, " +
-              "l3.harvestable AS harvestable," +
-              "l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods " +
-          "FROM LIVESTOCK_1 l1, LIVESTOCK_3 l3, LIVESTOCK_4 l4 " +
-          "WHERE l4.animalType = l3.animalType " +
-          "AND   l4.animalType = l1.animalType " +
-          "AND   l4.age        = l3.age        " +
-          "AND   l4.weight     = l1.weight     ";
-
+          " SELECT  l4.tagID AS tagID, " +
+              " l4.animalType AS animalType, " +
+              " l4.age AS age, " +
+              " l1.diet AS diet, " +
+              " l4.weight AS weight, " +
+              " l4.lastFed AS lastFed, " +
+              " l3.harvestable AS harvestable," +
+              " l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods " +
+          " FROM LIVESTOCK_1 l1, LIVESTOCK_3 l3, LIVESTOCK_4 l4 " +
+          " WHERE l4.animalType = l3.animalType " +
+          " AND   l4.animalType = l1.animalType " +
+          " AND   l4.age        = l3.age        " +
+          " AND   l4.weight     = l1.weight     " +
+	      " ORDER BY l4.tagID ";
       PrintablePreparedStatement ps =
           new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
       ResultSet rs = ps.executeQuery();
@@ -313,25 +313,45 @@ public class DatabaseConnectionHandler {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 
 		try {
-			String subquery =
-					" SELECT l4.tagID AS tagID, " +
-							"       l4.animalType AS animalType, " +
-							"       l4.age AS age, " +
-							"       l1.diet AS diet, " +
-							"       l4.weight AS weight, " +
-							"       l4.lastFed AS lastFed, " +
-							"       l3.harvestable AS harvestable, " +
-							"       l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods, " +
-							"       SUM(N.waterSpent) AS totalWaterSpent, " +
-							"       SUM(N.foodSpent) AS totalFoodSpent " +
-							" FROM LIVESTOCK_4 l4 " +
-							" INNER JOIN LIVESTOCK_3 l3 ON l4.animalType = l3.animalType AND l4.age = l3.age " +
-							" INNER JOIN LIVESTOCK_1 l1 ON l1.animalType = l4.animalType AND l1.weight = l4.weight " +
-							" INNER JOIN Nurtures N ON l4.tagID = N.tagID " +
-							" GROUP BY l4.tagID, l4.animalType, l4.age, l1.diet, l4.weight, l4.lastFed, l3.harvestable, l4.lastViolatedForHarvestedGoods ";
+			String subquery = "";
+			// Check to see if we need to do aggregation query having
+			if (model.getMinWaterSpent() <= -1 && model.getMinFoodSpent() <= -1) {
+				// Don't need Join with Nurtures
+				subquery =
+						" SELECT l4.tagID AS tagID, " +
+								"       l4.animalType AS animalType, " +
+								"       l4.age AS age, " +
+								"       l1.diet AS diet, " +
+								"       l4.weight AS weight, " +
+								"       l4.lastFed AS lastFed, " +
+								"       l3.harvestable AS harvestable, " +
+								"       l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods " +
+								" FROM LIVESTOCK_4 l4 " +
+								" INNER JOIN LIVESTOCK_3 l3 ON l4.animalType = l3.animalType AND l4.age = l3.age " +
+								" INNER JOIN LIVESTOCK_1 l1 ON l1.animalType = l4.animalType AND l1.weight = l4.weight ";
+			} else {
+				// Need Join with Nurtures
+				subquery =
+						" SELECT l4.tagID AS tagID, " +
+								"       l4.animalType AS animalType, " +
+								"       l4.age AS age, " +
+								"       l1.diet AS diet, " +
+								"       l4.weight AS weight, " +
+								"       l4.lastFed AS lastFed, " +
+								"       l3.harvestable AS harvestable, " +
+								"       l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods, " +
+								"       SUM(N.waterSpent) AS totalWaterSpent, " +
+								"       SUM(N.foodSpent) AS totalFoodSpent " +
+								" FROM LIVESTOCK_4 l4 " +
+								" INNER JOIN LIVESTOCK_3 l3 ON l4.animalType = l3.animalType AND l4.age = l3.age " +
+								" INNER JOIN LIVESTOCK_1 l1 ON l1.animalType = l4.animalType AND l1.weight = l4.weight " +
+								" INNER JOIN Nurtures N ON l4.tagID = N.tagID " +
+								" GROUP BY l4.tagID, l4.animalType, l4.age, l1.diet, l4.weight, l4.lastFed, l3.harvestable, l4.lastViolatedForHarvestedGoods ";
+			}
 
-			//  HAVING SUM(N.waterSpent) >= ? AND SUM(N.foodSpent) >= ?
-			String query = "SELECT * FROM (" + subquery + " " + model.getHavingFilter() + ") " + model.getQueryString();
+			//  model.getHavingFilter only returns if minWaterSpent or minFoodSpent != -1
+			String query = "SELECT * FROM (" + subquery + " " + model.getHavingFilter() + ") " + model.getQueryString()
+					+ " ORDER BY tagID ";
 
 			PrintablePreparedStatement ps =
 					new PrintablePreparedStatement(connection.prepareStatement(query), query, false);

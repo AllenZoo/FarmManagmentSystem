@@ -12,6 +12,9 @@ public class LivestockFilterModel {
     private final int maxAge;
     private final int minTagID;
     private final int maxTagID;
+
+
+
     private final int minWaterSpent;
     private final int minFoodSpent;
 
@@ -90,13 +93,15 @@ public class LivestockFilterModel {
      *
      * @return something in the form of:
      * " HAVING SUM(waterSpent) >= minWaterSpent AND SUM(foodSpent) >= minFoodSpent
+     *  OR
+     *  "" when neither minWaterSpent and minFoodSpent is provided.
      */
     public String getHavingFilter() {
         String query = " HAVING ";
 
         if (minWaterSpent <= -1 && minFoodSpent <= -1) {
             // no having query required.
-            query += " SUM(waterSpent) >= 0";
+            return " ";
         } else if (minWaterSpent > -1 && minFoodSpent <= -1) {
             // minWaterSpent valid
             query += " SUM(waterSpent) >= " + minWaterSpent + " ";
@@ -140,4 +145,11 @@ public class LivestockFilterModel {
         return maxTagID;
     }
 
+    public int getMinWaterSpent() {
+        return minWaterSpent;
+    }
+
+    public int getMinFoodSpent() {
+        return minFoodSpent;
+    }
 }
