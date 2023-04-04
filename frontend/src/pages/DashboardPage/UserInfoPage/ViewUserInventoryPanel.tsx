@@ -103,35 +103,44 @@ const ViewInventoryPanel = () => {
   }, [columns]);
 
   return (
-    <div>
-      <div>
-        <h1>View Inventory</h1>
-        <select className={styles.Select} onChange={onSelectTable}>
-          {createSelectTableItems()}
-        </select>
-        <select
-          className={styles.Select}
-          onChange={onSelectColumn}
-          multiple={true}
-        >
-          {selectOptions}
-        </select>
-        <button className={styles.Button} onClick={getData}>
-          View
-        </button>
-      </div>
-      <div>
-        <table className={styles.Table}>
-          <thead>
-            <tr>
-              {selectedColumns.map((column) => (
-                <th>{column}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>{createTable()}</tbody>
-        </table>
-      </div>
+    <div className={styles.Panel}>
+      <main>
+        <div className={styles.ControlPanel}>
+          <h1>View Inventory</h1>
+          <div className={styles.Controls}>
+            <select
+              className={styles.Select}
+              onChange={onSelectTable}
+            >
+              {createSelectTableItems()}
+            </select>
+            <select
+              className={styles.Select}
+              id="selectColumn"
+              onChange={onSelectColumn}
+              multiple={true}
+            >
+              {selectOptions}
+            </select>
+            <button className={styles.Button} onClick={getData}>
+              View
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.DisplayPanel}>
+          <table className={styles.Table}>
+            <thead>
+              <tr>
+                {selectedColumns.map((column) => (
+                  <th>{column}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>{createTable()}</tbody>
+          </table>
+        </div>
+      </main>
     </div>
   );
 };
