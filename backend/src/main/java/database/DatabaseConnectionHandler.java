@@ -624,6 +624,45 @@ public class DatabaseConnectionHandler {
 
 
 	// NESTED AGGREGATION WITH GROUP BY
+
+    /**
+     *
+     * @return the farmers that have nurtured animals = to max count times that anyone has nurtured a livestock.
+     */
+    public ArrayList<JSONObject> findMaxCountNurtureFarmers() {
+      ArrayList<JSONObject> farmers = new ArrayList<>();
+      try {
+          String query =
+                  " SELECT f2.farmerID, f2.fullName, f2.yearsOfEmployment COUNT(*) AS maxCount " +
+                  " FROM FARMERS_2 f2, Nurtures n " +
+                  " WHERE f2.farmerID = n.farmerID " +
+                  " GROUP BY f2.farmerID, f2.fullName, f2.yearsOfEmployment " +
+                  " HAVING maxCount = (" +
+                          " SELECT MAX(count)" +
+                          " FROM ( SELECT f2Temp.farmerID, COUNT(*) AS count " +
+                                 " FROM f2.farmerID f2Temp, Nurtures nTemp " +
+                                 " WHERE f2Temp.farmerID = nTemp.farmerID " +
+                                 " GROUP BY f2Temp.farmerID ";
+          PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
+
+          ResultSet rs = ps.executeQuery();
+
+          while(rs.next()) {
+              JSONObject json = new JSONObject();
+              json.put("farmerID", rs.getInt("tagID"));
+              json.put("fullName", rs.getString("fullName"));
+              json.put("yearsOfEmployment", rs.getInt("yearsOfEmployment"));
+              json.put("maxCount", rs.getInt("maxCount"));
+              farmers.add(json);
+          }
+
+      } catch (SQLException e) {
+          System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+      }
+
+      return farmers;
+    }
+
 	public ArrayList<JSONObject> findOverweightAnimals() {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
