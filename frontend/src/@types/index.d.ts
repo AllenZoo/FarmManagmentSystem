@@ -15,19 +15,14 @@ interface Livestock {
 };
 
 interface FilteredLivestock {
-	minTagID?: int | null;
-	maxTagID?: int | null;
+  tagID?: { min: int | null, max: int | null } | null;
 	animalType?: AnimalType | null;
-	minAge?: int | null;
-	maxAge?: int | null;
 	diet?: CropType | null;
-	minWeight?: double | null;
-	maxWeight?: double | null;
-	minLastFed?: String | null;
-	maxLastFed?: String | null;
+  age?: { min: int | null, max: int | null } | null;
+  weight?: { min: double | null, max: double | null } | null;
+  lastFed?: { min: String | null, max: String | null } | null;
+  lastViolatedForHarvestedGoods?: { min: String | null, max: String | null } | null;
 	harvestable?: boolean | String | null;
-	minLastViolatedForHarvestedGoods?: String | null;
-	maxLastViolatedForHarvestedGoods?: String | null;
 	minFoodSpent?: int | null;
 	minWaterSpent?: int | null;
 	// orderBy?: String | null;
@@ -42,11 +37,10 @@ interface Crop {
 };
 
 interface FilteredCrop {
-  cropType?: CropType | null;
-  cropVariant?: CropVariant | null;
-  cropStatus?: CropStatus | null;
-  minQuantity?: int | null;
-  maxQuantity?: int | null;
-  // orderBy?: String | null;
-  // order?: boolean | null;
+	cropType?: CropType | null;
+	cropVariant?: CropVariant | null;
+	cropStatus?: CropStatus | null;
+	quantity?: { min: int | null; max: int | null } | null;
+	// orderBy?: String | null;
+	// order?: boolean | null;
 };

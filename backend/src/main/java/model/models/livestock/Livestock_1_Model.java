@@ -4,8 +4,6 @@ import model.enums.AnimalType;
 import model.enums.CropType;
 import org.json.JSONObject;
 
-import java.sql.Date;
-
 public class Livestock_1_Model {
     private final AnimalType animalType;
     private final CropType diet;

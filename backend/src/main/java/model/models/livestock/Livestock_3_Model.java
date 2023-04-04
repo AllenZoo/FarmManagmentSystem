@@ -1,10 +1,7 @@
 package model.models.livestock;
 
 import model.enums.AnimalType;
-import model.enums.CropType;
 import org.json.JSONObject;
-
-import java.sql.Date;
 
 public class Livestock_3_Model {
 

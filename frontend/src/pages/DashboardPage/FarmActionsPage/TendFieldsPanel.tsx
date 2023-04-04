@@ -1,7 +1,5 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { FaFilter } from 'react-icons/fa';
-
-import ModalContext from '@contexts/modalContext';
 
 import {
   retrieveCrops,
@@ -59,8 +57,6 @@ const TendFieldsPanel = () => {
   const [minQuantityFilter, setMinQuantityFilter] = useState<number>(-1);
   const [maxQuantityFilter, setMaxQuantityFilter] = useState<number>(-1);
 
-  const modalContext = useContext(ModalContext);
-
   /**
    * Clears all filters
    */
@@ -84,8 +80,7 @@ const TendFieldsPanel = () => {
         cropType: cropTypeFilter,
         cropVariant: cropVariantFilter,
         cropStatus: cropStatusFilter,
-        minQuantity: minQuantityFilter,
-        maxQuantity: maxQuantityFilter,
+        quantity: { min: minQuantityFilter, max: maxQuantityFilter},
       }
 
       // Check if all filters are not set

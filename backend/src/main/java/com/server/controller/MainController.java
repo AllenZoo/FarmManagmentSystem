@@ -84,14 +84,16 @@ public class MainController {
      */
     @RequestMapping(value = "/crops/filteredValues", method = POST)
     @ResponseBody
+    @SuppressWarnings("unchecked")
     public void getFilteredCrops(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
       // Check for if null for these values.
       CropType cropType = CropType.valueOf(map.get("cropType").toString().toUpperCase());
       CropVariant cropVariant = CropVariant.valueOf(map.get("cropVariant").toString().toUpperCase());
       CropStatus cropStatus = CropStatus.valueOf(map.get("cropStatus").toString().toUpperCase());
 
-      int minQuantity = (int) map.get("minQuantity");
-      int maxQuantity = (int) map.get("maxQuantity");
+      Map<String, Object> quantity = (Map<String, Object>) map.get("quantity");
+      int minQuantity = (int) quantity.get("min");
+      int maxQuantity = (int) quantity.get("max");
 
       JSONArray crops = system.getFilteredCrops(cropType, cropVariant, cropStatus, minQuantity, maxQuantity);
       PrintWriter out = res.getWriter();
@@ -124,21 +126,23 @@ public class MainController {
      */
     @RequestMapping(value = "/livestock/filteredValues", method = POST)
     @ResponseBody
+    @SuppressWarnings("unchecked")
     public void getFilteredLivestock(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
         // Check for if null for these values.
-        String harvestable = (map.get("harvestable").toString().toUpperCase());
+        String harvestable = map.get("harvestable").toString().toUpperCase();
         AnimalType animalType = AnimalType.valueOf(map.get("animalType").toString().toUpperCase());
         CropType diet = CropType.valueOf(map.get("diet").toString().toUpperCase());
 
-        int minTagID = (int) map.get("minTagID");
-        int maxTagID = (int) map.get("maxTagID");
+        Map<String, Object> tagID = (Map<String, Object>) map.get("tagID");
+        int minTagID = (int) tagID.get("min");
+        int maxTagID = (int) tagID.get("max");
 
-        int minAge = (int) map.get("minAge");
-        int maxAge = (int) map.get("maxAge");
+        Map<String, Object> age = (Map<String, Object>) map.get("age");
+        int minAge = (int) age.get("min");
+        int maxAge = (int) age.get("max");
 
         int minWaterSpent = (int) map.get("minWaterSpent");
         int minFoodSpent = (int) map.get("minFoodSpent");
-
 
         JSONArray livestock = system.getFilteredLivestock(harvestable, animalType, diet, minAge, maxAge,
                 minTagID, maxTagID, minWaterSpent, minFoodSpent);
@@ -295,6 +299,7 @@ public class MainController {
      * }
      */
     @RequestMapping(value = "/get/values", method = POST)
+    @SuppressWarnings("unchecked")
     public void doSelection(@RequestBody Map<String, Object> map, HttpServletResponse res) throws IOException {
         ArrayList<String> columnsToSelect = (ArrayList<String>) map.get("columns");
         String tableToFrom = map.get("table").toString();

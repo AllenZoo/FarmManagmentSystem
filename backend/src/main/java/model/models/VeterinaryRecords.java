@@ -22,7 +22,9 @@ public class VeterinaryRecords {
     }
 
 
-    private int getTagID() {return tagID;}
+    private int getTagID() {
+        return tagID;
+    }
 
     public int getRecordID() {
         return recordID;

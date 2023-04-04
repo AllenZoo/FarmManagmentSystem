@@ -108,11 +108,9 @@ const NurtureAnimalsPanel = () => {
   const getLivestock = async (override?: boolean) => {
     try {
       const filteredData: FilteredLivestock = {
-        minTagID: minTagIDFilter,
-        maxTagID: maxTagIDFilter,
+        tagID: { min: minTagIDFilter, max: maxTagIDFilter },
         animalType: animalTypeFilter,
-        minAge: minAgeFilter,
-        maxAge: maxAgeFilter,
+        age: { min: minAgeFilter, max: maxAgeFilter },
         diet: dietFilter,
         harvestable: harvestableFilter,
         minFoodSpent: minFoodSpentFilter,
