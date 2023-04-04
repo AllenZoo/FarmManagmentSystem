@@ -308,25 +308,30 @@ public class DatabaseConnectionHandler {
 		return true;
 	}
 
-	// SELECTION QUERY
+	// SELECTION QUERY + HAVING QUERY
 	public ArrayList<JSONObject> getFilteredLivestock(LivestockFilterModel model) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 
 		try {
-			String subquery = "SELECT  l4.tagID AS tagID, " +
-					"l4.animalType AS animalType, " +
-					"l4.age AS age, " +
-					"l1.diet AS diet, " +
-					"l4.weight AS weight, " +
-					"l4.lastFed AS lastFed, " +
-					"l3.harvestable AS harvestable," +
-					"l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods " +
-					"FROM LIVESTOCK_1 l1, LIVESTOCK_3 l3, LIVESTOCK_4 l4 " +
-					"WHERE l4.animalType = l3.animalType " +
-					"AND   l4.animalType = l1.animalType " +
-					"AND   l4.age        = l3.age        " +
-					"AND   l4.weight     = l1.weight     ";
-			String query = "SELECT * FROM (" + subquery + ") " + model.getQueryString();
+			String subquery =
+					" SELECT l4.tagID AS tagID, " +
+							"       l4.animalType AS animalType, " +
+							"       l4.age AS age, " +
+							"       l1.diet AS diet, " +
+							"       l4.weight AS weight, " +
+							"       l4.lastFed AS lastFed, " +
+							"       l3.harvestable AS harvestable, " +
+							"       l4.lastViolatedForHarvestedGoods AS lastViolatedForHarvestedGoods, " +
+							"       SUM(N.waterSpent) AS totalWaterSpent, " +
+							"       SUM(N.foodSpent) AS totalFoodSpent " +
+							" FROM LIVESTOCK_4 l4 " +
+							" INNER JOIN LIVESTOCK_3 l3 ON l4.animalType = l3.animalType AND l4.age = l3.age " +
+							" INNER JOIN LIVESTOCK_1 l1 ON l1.animalType = l4.animalType AND l1.weight = l4.weight " +
+							" INNER JOIN Nurtures N ON l4.tagID = N.tagID " +
+							" GROUP BY l4.tagID, l4.animalType, l4.age, l1.diet, l4.weight, l4.lastFed, l3.harvestable, l4.lastViolatedForHarvestedGoods ";
+
+			//  HAVING SUM(N.waterSpent) >= ? AND SUM(N.foodSpent) >= ?
+			String query = "SELECT * FROM (" + subquery + " " + model.getHavingFilter() + ") " + model.getQueryString();
 
 			PrintablePreparedStatement ps =
 					new PrintablePreparedStatement(connection.prepareStatement(query), query, false);

@@ -119,7 +119,8 @@ public class MainController {
     }
 
     /**
-     * Handles Filtering Livestock By: harvestable, animalType, min Age, max Age, diet
+     * Handles Filtering Livestock By: harvestable, animalType, min Age, max Age, diet, min tagID, max tagID,
+     *                                  minWaterSpent, minFoodSpent
      */
     @RequestMapping(value = "/livestock/filteredValues", method = POST)
     @ResponseBody
@@ -135,8 +136,12 @@ public class MainController {
         int minAge = (int) map.get("minAge");
         int maxAge = (int) map.get("maxAge");
 
+        int minWaterSpent = (int) map.get("minWaterSpent");
+        int minFoodSpent = (int) map.get("minFoodSpent");
 
-        JSONArray livestock = system.getFilteredLivestock(harvestable, animalType, diet, minAge, maxAge, minTagID, maxTagID);
+
+        JSONArray livestock = system.getFilteredLivestock(harvestable, animalType, diet, minAge, maxAge,
+                minTagID, maxTagID, minWaterSpent, minFoodSpent);
         PrintWriter out = res.getWriter();
         res.setContentType("application/json");
         res.setCharacterEncoding("UTF-8");

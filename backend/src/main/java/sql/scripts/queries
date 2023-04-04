@@ -130,8 +130,6 @@ HAVING AVG(N.waterSpent) > ? AND AVG(N.foodSpent) > ?
 
 
 
-
-
 /*Nested aggregation with group by*/
 
 /*

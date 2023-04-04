@@ -12,8 +12,11 @@ public class LivestockFilterModel {
     private final int maxAge;
     private final int minTagID;
     private final int maxTagID;
+    private final int minWaterSpent;
+    private final int minFoodSpent;
 
-    public LivestockFilterModel(String harvestable, AnimalType animalType, CropType diet, int minAge, int maxAge, int minTagID, int maxTagID) {
+    public LivestockFilterModel(String harvestable, AnimalType animalType, CropType diet, int minAge, int maxAge,
+                                int minTagID, int maxTagID, int minWaterSpent, int minFoodSpent) {
         this.harvestable = harvestable.toLowerCase();
         this.animalType = animalType;
         this.diet = diet;
@@ -21,6 +24,8 @@ public class LivestockFilterModel {
         this.maxAge = maxAge;
         this.minTagID = minTagID;
         this.maxTagID = maxTagID;
+        this.minWaterSpent = minWaterSpent;
+        this.minFoodSpent = minFoodSpent;
     }
 
     /**
@@ -77,7 +82,34 @@ public class LivestockFilterModel {
             queryString += " AND (diet = '" + diet.toString().toLowerCase() + "') ";
         }
 
+
         return queryString;
+    }
+
+    /**
+     *
+     * @return something in the form of:
+     * " HAVING SUM(waterSpent) >= minWaterSpent AND SUM(foodSpent) >= minFoodSpent
+     */
+    public String getHavingFilter() {
+        String query = " HAVING ";
+
+        if (minWaterSpent <= -1 && minFoodSpent <= -1) {
+            // no having query required.
+            query += " SUM(waterSpent) >= 0";
+        } else if (minWaterSpent > -1 && minFoodSpent <= -1) {
+            // minWaterSpent valid
+            query += " SUM(waterSpent) >= " + minWaterSpent + " ";
+
+        } else if (minWaterSpent <= -1 && minFoodSpent > -1) {
+            // minFoodSpent valid
+            query += " SUM(foodSpent) >= " + minFoodSpent + " ";
+        } else {
+            // both valid
+            query += " SUM(waterSpent) >= " + minWaterSpent + " " + "AND" + " SUM(foodSpent) >= " + minFoodSpent + " ";
+        }
+
+        return query;
     }
 
     public String isHarvestable() {
