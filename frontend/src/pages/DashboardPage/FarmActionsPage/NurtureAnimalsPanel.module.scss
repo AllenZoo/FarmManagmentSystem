@@ -54,12 +54,14 @@
 
       .AddLivestockForm {
         display: flex;
+        flex-direction: row;
+        align-items: center;
         justify-content: center;
-        width: 95%;
+        gap: 0.5rem;
+        width: 90%;
 
         button {
-          min-width: none;
-          width: 100%;
+          min-width: 100%;
         }
       }
 
@@ -85,6 +87,18 @@
         button {
           min-width: 4rem;
           font-size: 1.2rem;
+
+          &[id="addLivestockButton"] {
+            margin-top: 0.5rem;
+            align-self: center;
+            border: 2px solid #8f8;
+            transition: 0.2s ease;
+
+            &:hover {
+              background:rgba(0, 0, 0, 0.1);
+              transition: 0.2s ease;
+            }
+          }
         }
 
         section {
@@ -107,6 +121,11 @@
             text-align: center;
             font-size: 1.2rem;
             transition: 0.2s ease;
+
+            &[type="date"] {
+              max-width: 12rem;
+              color-scheme: dark;
+            }
           }
         }
 
@@ -394,7 +413,7 @@
   }
 }
 
-.Select {
+select {
   color: #fff;
   font-size: 1.2rem;
   text-align: center;
@@ -405,7 +424,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 10rem;
+  min-width: 10rem;
   margin: 0;
   padding: 0.25rem;
   text-align: center;

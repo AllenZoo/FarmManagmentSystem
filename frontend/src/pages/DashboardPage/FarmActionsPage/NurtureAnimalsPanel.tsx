@@ -412,7 +412,6 @@ const NurtureAnimalsPanel = () => {
                 <section>
                   <label htmlFor="animalType">Animal Type</label>
                   <select
-                    className={styles.Select}
                     name="animalType"
                     id="animalType"
                     defaultValue={"all"}
@@ -431,7 +430,6 @@ const NurtureAnimalsPanel = () => {
                 <section>
                   <label htmlFor="diet">Diet</label>
                   <select
-                    className={styles.Select}
                     name="diet"
                     id="diet"
                     defaultValue={"all"}
@@ -449,7 +447,6 @@ const NurtureAnimalsPanel = () => {
                 <section>
                   <label htmlFor="harvestable">Harvestable</label>
                   <select
-                    className={styles.Select}
                     name="harvestable"
                     id="harvestable"
                     defaultValue={"all"}
@@ -579,7 +576,6 @@ const NurtureAnimalsPanel = () => {
                 <section>
                   <label htmlFor="animalType">Animal Type</label>
                   <select
-                    className={styles.Select}
                     name="animalType"
                     id="animalType"
                     defaultValue={"cow"}
@@ -597,7 +593,6 @@ const NurtureAnimalsPanel = () => {
                 <section>
                   <label htmlFor="diet">Diet</label>
                   <select
-                    className={styles.Select}
                     name="diet"
                     id="diet"
                     defaultValue={"cow"}
@@ -645,25 +640,27 @@ const NurtureAnimalsPanel = () => {
                 <section>
                   <label htmlFor="lastFed">Last Fed</label>
                   <input
-                    type="string"
+                    type="date"
                     name="lastFed"
                     id="lastFed"
-                    defaultValue={new Date().toLocaleDateString()}
+                    defaultValue={new Date().toISOString().split("T")[0]}
+                    max={new Date().toISOString().split("T")[0]}
                     onChange={(e) => {
-                      setLastFedAdd(e.target.value as unknown as Date);
+                      setLastFedAdd(new Date(e.target.value));
                     }}
                   />
                 </section>
 
                 <section>
-                  <label htmlFor="lastViolatedForHarvestedGoods">Last Violated For Harvested Goods</label>
+                  <label htmlFor="lastViolatedForHarvestedGoods">Last Harvested</label>
                   <input
-                    type="string"
+                    type="date"
                     name="lastViolatedForHarvestedGoods"
                     id="lastViolatedForHarvestedGoods"
-                    defaultValue={new Date().toLocaleDateString()}
+                    defaultValue={new Date().toISOString().split("T")[0]}
+                    max={new Date().toISOString().split("T")[0]}
                     onChange={(e) => {
-                      setLastViolatedForHarvestedGoodsAdd(e.target.value as unknown as Date);
+                      setLastViolatedForHarvestedGoodsAdd(new Date(e.target.value));
                     }}
                   />
                 </section>
@@ -671,7 +668,6 @@ const NurtureAnimalsPanel = () => {
                 <section>
                   <label htmlFor="harvestable">Harvestable</label>
                   <select
-                    className={styles.Select}
                     name="harvestable"
                     id="harvestable"
                     defaultValue={"true"}
@@ -687,12 +683,13 @@ const NurtureAnimalsPanel = () => {
                 <button
                   className={styles.Button}
                   type="button"
+                  id="addLivestockButton"
                   onClick={() => {
                     addLivestock();
                     syncData();
                   }}
                 >
-                  Add Livestock
+                  Add Livestock #{tagIDAdd}
                 </button>
               </form>
             )}
