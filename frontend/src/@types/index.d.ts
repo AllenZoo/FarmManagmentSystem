@@ -10,6 +10,8 @@ interface Livestock {
 	harvestable: boolean;
 	lastFed: String | null;
 	lastViolatedForHarvestedGoods: String | null;
+  foodSpent?: int | null;
+  waterSpent?: int | null;
 };
 
 interface FilteredLivestock {
@@ -26,6 +28,8 @@ interface FilteredLivestock {
 	harvestable?: boolean | String | null;
 	minLastViolatedForHarvestedGoods?: String | null;
 	maxLastViolatedForHarvestedGoods?: String | null;
+	minFoodSpent?: int | null;
+	minWaterSpent?: int | null;
 	// orderBy?: String | null;
 	// order?: boolean | null;
 };

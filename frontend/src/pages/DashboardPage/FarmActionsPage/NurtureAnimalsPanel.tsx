@@ -68,6 +68,8 @@ const NurtureAnimalsPanel = () => {
   const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>("all");
   const [minAgeFilter, setMinAgeFilter] = useState<number>(-1);
   const [maxAgeFilter, setMaxAgeFilter] = useState<number>(-1);
+  const [minFoodSpentFilter, setMinFoodSpentFilter] = useState<number>(-1);
+  const [minWaterSpentFilter, setMinWaterSpentFilter] = useState<number>(-1);
 
   // Add livestock states
   const [addEnabled, setAddEnabled] = useState<boolean>(false);
@@ -93,6 +95,8 @@ const NurtureAnimalsPanel = () => {
     setHarvestableFilter("all");
     setMinAgeFilter(-1);
     setMaxAgeFilter(-1);
+    setMinFoodSpentFilter(-1);
+    setMinWaterSpentFilter(-1);
     setFilterEnabled(false);
     getLivestock(true);
   };
@@ -111,6 +115,8 @@ const NurtureAnimalsPanel = () => {
         maxAge: maxAgeFilter,
         diet: dietFilter,
         harvestable: harvestableFilter,
+        minFoodSpent: minFoodSpentFilter,
+        minWaterSpent: minWaterSpentFilter,
       };
 
       // Check if all filters are not set
@@ -379,7 +385,7 @@ const NurtureAnimalsPanel = () => {
               <form className={styles.FilterLivestock}>
                 <h2>Filter Livestock</h2>
                 <section>
-                  <label htmlFor="minTagID">Min Tag ID</label>
+                  <label htmlFor="minTagID">Tag ID</label>
                   <input
                     type="number"
                     name="minTagID"
@@ -391,10 +397,7 @@ const NurtureAnimalsPanel = () => {
                       setMinTagIDFilter(parseInt(e.target.value));
                     }}
                   />
-                </section>
-
-                <section>
-                  <label htmlFor="maxTagID">Max Tag ID</label>
+                  <label htmlFor="maxTagID">to</label>
                   <input
                     type="number"
                     name="maxTagID"
@@ -467,7 +470,7 @@ const NurtureAnimalsPanel = () => {
                 </section>
 
                 <section>
-                  <label htmlFor="minAge">Min Age</label>
+                  <label htmlFor="minAge">Age</label>
                   <input
                     type="number"
                     name="minAge"
@@ -479,10 +482,7 @@ const NurtureAnimalsPanel = () => {
                       setMinAgeFilter(parseInt(e.target.value));
                     }}
                   />
-                </section>
-
-                <section>
-                  <label htmlFor="maxAge">Max Age</label>
+                  <label htmlFor="maxAge">to</label>
                   <input
                     type="number"
                     name="maxAge"
@@ -492,6 +492,34 @@ const NurtureAnimalsPanel = () => {
                     max={100}
                     onChange={(e) => {
                       setMaxAgeFilter(parseInt(e.target.value));
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="minFoodSpent">Min Food Spent</label>
+                  <input
+                    type="number"
+                    name="minFoodSpent"
+                    id="minFoodSpent"
+                    defaultValue={minFoodSpentFilter || -1}
+                    min={-1}
+                    onChange={(e) => {
+                      setMinFoodSpentFilter(parseInt(e.target.value));
+                    }}
+                  />
+                </section>
+
+                <section>
+                  <label htmlFor="minWaterSpent">Min Water Spent</label>
+                  <input
+                    type="number"
+                    name="minWaterSpent"
+                    id="minWaterSpent"
+                    defaultValue={minWaterSpentFilter || -1}
+                    min={-1}
+                    onChange={(e) => {
+                      setMinWaterSpentFilter(parseInt(e.target.value));
                     }}
                   />
                 </section>
@@ -710,34 +738,40 @@ const NurtureAnimalsPanel = () => {
                   <b>GENERAL</b>
                   <section>
                     <p>
-                      Type: <b>{livestock.animalType}</b>
+                      Type: <br /><b>{livestock.animalType}</b>
                     </p>
                     <p>
-                      Age: <b>{livestock.age} YEARS</b>
+                      Age: <br /><b>{livestock.age} YEARS</b>
                     </p>
                     <p>
-                      Weight: <b>{livestock.weight} KG</b>
+                      Weight: <br /><b>{livestock.weight} KG</b>
                     </p>
                   </section>
 
                   <b>FEEDING</b>
                   <section>
                     <p>
-                      Diet: <b>{livestock.diet}</b>
+                      Diet: <br /><b>{livestock.diet}</b>
                     </p>
                     <p>
-                      Last Fed: <b>{livestock.lastFed}</b>
+                      Last Fed: <br /><b>{livestock.lastFed}</b>
+                    </p>
+                    <p>
+                      Food Spent: <br /><b>{livestock.foodSpent ? livestock.foodSpent : "None"}</b>
+                    </p>
+                    <p>
+                      Water Spent: <br /><b>{livestock.waterSpent ? livestock.waterSpent : "None"}</b>
                     </p>
                   </section>
 
                   <b>HARVEST</b>
                   <section>
                     <p>
-                      Harvestable: <b>{livestock.harvestable ? "YES" : "NO"}</b>
+                      Harvestable: <br /><b>{livestock.harvestable ? "YES" : "NO"}</b>
                     </p>
                     <p>
                       Last Violated For Harvested Goods:{" "}
-                      <b>{livestock.lastViolatedForHarvestedGoods || "N/A"}</b>
+                      <br /><b>{livestock.lastViolatedForHarvestedGoods || "N/A"}</b>
                     </p>
                   </section>
                 </div>
