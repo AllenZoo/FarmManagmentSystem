@@ -210,9 +210,10 @@ CREATE TABLE Contains (
 CREATE TABLE Nurtures (
   farmerID INTEGER,
   tagID INTEGER,
+  dateNurtured DATE,
   waterSpent INTEGER,
   foodSpent INTEGER,
-  PRIMARY KEY (farmerID, tagID),
+  PRIMARY KEY (farmerID, tagID, dateNurtured),
   FOREIGN KEY (farmerID) REFERENCES Farmers_2 (farmerID),
   FOREIGN KEY (tagID) REFERENCES Livestock_4 (tagID)
       ON DELETE CASCADE
@@ -445,11 +446,24 @@ INSERT INTO Contains (facilityID, tagID, capacityOccupied) VALUES (2002, 4004, 3
 INSERT INTO Contains (facilityID, tagID, capacityOccupied) VALUES (2003, 4005, 40);
 
 
-INSERT INTO Nurtures (farmerID, tagID, waterSpent, foodSpent) VALUES (1001, 4001, 10, 15);
-INSERT INTO Nurtures (farmerID, tagID, waterSpent, foodSpent) VALUES (1002, 4002, 20, 25);
-INSERT INTO Nurtures (farmerID, tagID, waterSpent, foodSpent) VALUES (1003, 4003, 15, 20);
-INSERT INTO Nurtures (farmerID, tagID, waterSpent, foodSpent) VALUES (1004, 4004, 5, 10);
-INSERT INTO Nurtures (farmerID, tagID, waterSpent, foodSpent) VALUES (1005, 4005, 25, 30);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4001, DATE '2022-01-01', 10, 15);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1002, 4002, DATE '2022-01-02', 20, 25);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1003, 4003, DATE '2022-01-03', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1004, 4004, DATE '2022-01-04', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1005, 4005, DATE '2022-01-05', 25, 30);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1005, 4005, DATE '2022-02-05', 25, 30);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1005, 4005, DATE '2022-03-05', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4001, DATE '2022-01-06', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4001, DATE '2022-01-07', 5, 15);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4001, DATE '2022-01-08', 10, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4001, DATE '2022-01-09', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4001, DATE '2022-01-10', 20, 25);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1003, 4005, DATE '2022-01-01', 10, 15);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1005, 4003, DATE '2022-01-02', 20, 25);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1004, 4002, DATE '2022-01-03', 15, 20);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4001, DATE '2022-01-04', 5, 10);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1002, 4004, DATE '2022-01-05', 25, 30);
+INSERT INTO Nurtures (farmerID, tagID, dateNurtured, waterSpent, foodSpent) VALUES (1001, 4002, DATE '2022-03-05', 15, 20);
 
 
 INSERT INTO Creates (productType, tagID, amount, dateProduced) VALUES ('milk', 4001, 100, DATE '2022-01-01');
