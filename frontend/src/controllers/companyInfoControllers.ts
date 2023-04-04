@@ -17,3 +17,8 @@ export const getFarmers = async (type: number) => {
   );
   return res.data;
 };
+
+export const getGOATFarmers = async () => {
+  const res = await axios.get(`${PATH}/maxCountFarmers`);
+  return res.data;
+};
