@@ -59,20 +59,26 @@ const ViewCompanyInfoPanel = () => {
   };
 
   return (
-    <>
-      <div>
-        <h1>View Company Info</h1>
-        <button className={styles.Button} onClick={getFeedingFarmers}>
-          Get Farmers who have fed ALL Livestock :OO
-        </button>
-        <button className={styles.Button} onClick={getTendingFarmers}>
-          Get Farmers who have tended ALL Fields :OO
-        </button>
-      </div>
-      <div>
-        <table className={styles.Table}>{createFarmersTable()}</table>
-      </div>
-    </>
+    <div className={styles.Panel}>
+      <main>
+        <div className={styles.ControlPanel}>
+          <h1>View Company Info</h1>
+
+          <div className={styles.Controls}>
+            <button className={styles.Button} onClick={getFeedingFarmers}>
+              View Farmers Who Have Fed ALL Livestock
+            </button>
+            <button className={styles.Button} onClick={getTendingFarmers}>
+              View Farmers Who Have Tended ALL Fields
+            </button>
+          </div>
+        </div>
+        
+        <div className={styles.DisplayPanel}>
+          <table className={styles.Table}>{createFarmersTable()}</table>
+        </div>
+      </main>
+    </div>
   );
 };
 

@@ -1,3 +1,100 @@
+.Panel {
+  color: #fff;
+  text-align: center;
+
+  main {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    min-height: 50vh;
+    margin: 1rem 2rem;
+  }
+
+  .ControlPanel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 45%;
+    height: 80vh;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+    overflow-x: none;
+    transition: 0.2s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+      transition: 0.2s ease;
+    }
+
+    h2 {
+      padding: 0;
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .Controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      gap: 0.5rem;
+      padding: 1rem;
+      overflow-x: none;
+      overflow-y: scroll;
+      transition: 0.2s ease;
+
+      select[id="selectColumn"] {
+        gap: 0.5rem;
+        height: 50vh;
+        margin: 0;
+        padding: 0.25rem;
+        text-align: center;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: 0.2s ease;
+
+        option {
+          color: #fff;
+          background: rgba(0, 0, 0, 0.1);
+          border-radius: 0.5rem;
+          height: 1rem;
+          padding: 1rem;
+        }
+      }
+    }
+  }
+
+  .DisplayPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    height: 80vh;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: 0.2s ease;
+    overflow-y: scroll;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+      transition: 0.2s ease;
+    }
+
+    h2 {
+      padding: 0;
+      margin: 0;
+    }
+
+    thead,
+    tbody {
+      outline: 1px solid #fff;
+    }
+  }
+}
+
 .Button {
   color: #fff;
   font-size: 1.5rem;
