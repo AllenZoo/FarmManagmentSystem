@@ -195,6 +195,11 @@ public class FarmingSystem {
     /**
      * Nested aggregation
      */
+    public JSONArray findMaxCountNurtureFarmers() {
+        ArrayList<JSONObject> data = dbHandler.findMaxCountNurtureFarmers();
+        JSONArray dataArray = new JSONArray(data);
+        return dataArray;
+    }
     public JSONArray findOverweightAnimals() {
         ArrayList<JSONObject> data = dbHandler.findOverweightAnimals();
         JSONArray dataArray = new JSONArray(data);

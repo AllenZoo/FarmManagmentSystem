@@ -316,6 +316,17 @@ public class MainController {
     /**
      * Does nested aggregation
      */
+    @RequestMapping(value = "/get/maxCountFarmers", method = GET)
+    public void getMaxCountFarmers(HttpServletResponse res) throws IOException {
+        JSONArray data = system.findMaxCountNurtureFarmers();
+
+        PrintWriter out = res.getWriter();
+        res.setContentType("application/json");
+        res.setCharacterEncoding("UTF-8");
+        out.print(data);
+        out.flush();
+    }
+
     @RequestMapping(value = "/get/overweight", method = GET)
     public void getOverweightAnimals(HttpServletResponse res) throws IOException {
         JSONArray data = system.findOverweightAnimals();
