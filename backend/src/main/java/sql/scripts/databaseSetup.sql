@@ -347,6 +347,9 @@ INSERT INTO Livestock_1 (animalType, weight, diet) VALUES ('chicken', 5, 'canola
 INSERT INTO Livestock_1 (animalType, weight, diet) VALUES ('cow', 70, 'wheat');
 INSERT INTO Livestock_1 (animalType, weight, diet) VALUES ('sheep', 55, 'canola');
 INSERT INTO Livestock_1 (animalType, weight, diet) VALUES ('pig', 45, 'corn');
+INSERT INTO LIVESTOCK_1 (animalType, weight, diet) VALUES ('sheep', 32, 'canola');
+INSERT INTO Livestock_1 (animalType, weight, diet) VALUES ('cow', 90, 'corn');
+INSERT INTO Livestock_1 (animalType, weight, diet) VALUES ('pig', 20, 'canola');
 
 
 INSERT INTO Livestock_3 (animalType, age, harvestable) VALUES ('chicken', 1, 0);
@@ -354,6 +357,9 @@ INSERT INTO Livestock_3 (animalType, age, harvestable) VALUES ('chicken', 3, 1);
 INSERT INTO Livestock_3 (animalType, age, harvestable) VALUES ('cow', 4, 0);
 INSERT INTO Livestock_3 (animalType, age, harvestable) VALUES ('sheep', 6, 1);
 INSERT INTO Livestock_3 (animalType, age, harvestable) VALUES ('pig', 4, 1);
+INSERT INTO Livestock_3 (animalType, age, harvestable) VALUES ('sheep', 5, 0);
+INSERT INTO LIVESTOCK_3 (animalType, age, harvestable) VALUES ('cow', 14, 1);
+INSERT INTO Livestock_3 (animalType, age, harvestable) VALUES ('pig', 2, 0);
 
 
 INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4001, 'chicken', 1, 10, DATE '2022-04-12', DATE '2022-04-04');
@@ -361,6 +367,9 @@ INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedFo
 INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4003, 'cow', 4, 70,DATE '2022-04-10', DATE '2022-04-10');
 INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4004, 'sheep', 6, 55,DATE '2022-04-12', NULL);
 INSERT INTO Livestock_4(tagID, animalType, age,  weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4005, 'pig', 4, 45, DATE '2022-04-11', NULL);
+INSERT INTO Livestock_4(tagID, animalType, age, weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4006, 'sheep', 5, 32, DATE '2022-04-11', DATE '2022-03-29');
+INSERT INTO Livestock_4(tagID, animalType, age, weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4007, 'cow', 14, 90, DATE '2022-04-10', DATE '2022-03-12');
+INSERT INTO Livestock_4(tagID, animalType, age, weight, lastFed, lastViolatedForHarvestedGoods) VALUES (4008, 'pig', 2, 20, DATE '2022-04-12', NULL);
 
 
 INSERT INTO Fields_3 (suitableCrops, pesticidesAndChemicals) VALUES ('corn', 0);
