@@ -633,26 +633,26 @@ public class DatabaseConnectionHandler {
       ArrayList<JSONObject> farmers = new ArrayList<>();
       try {
           String query =
-                  " SELECT f2.farmerID, f2.fullName, f2.yearsOfEmployment COUNT(*) AS maxCount " +
+                  " SELECT f2.farmerID, f2.fullName, f2.yearsOfEmployment, COUNT(*) AS maxNurtureCount " +
                   " FROM FARMERS_2 f2, Nurtures n " +
                   " WHERE f2.farmerID = n.farmerID " +
                   " GROUP BY f2.farmerID, f2.fullName, f2.yearsOfEmployment " +
-                  " HAVING maxCount = (" +
-                          " SELECT MAX(count)" +
-                          " FROM ( SELECT f2Temp.farmerID, COUNT(*) AS count " +
-                                 " FROM f2.farmerID f2Temp, Nurtures nTemp " +
+                  " HAVING COUNT(*) = (" +
+                          " SELECT MAX(c)" +
+                          " FROM ( SELECT f2Temp.farmerID, COUNT(*) AS c " +
+                                 " FROM FARMERS_2 f2Temp, Nurtures nTemp " +
                                  " WHERE f2Temp.farmerID = nTemp.farmerID " +
-                                 " GROUP BY f2Temp.farmerID ";
+                                 " GROUP BY f2Temp.farmerID )) ";
           PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
 
           ResultSet rs = ps.executeQuery();
 
           while(rs.next()) {
               JSONObject json = new JSONObject();
-              json.put("farmerID", rs.getInt("tagID"));
+              json.put("farmerID", rs.getInt("farmerID"));
               json.put("fullName", rs.getString("fullName"));
               json.put("yearsOfEmployment", rs.getInt("yearsOfEmployment"));
-              json.put("maxCount", rs.getInt("maxCount"));
+              json.put("maxNurtureCount", rs.getInt("maxNurtureCount"));
               farmers.add(json);
           }
 
