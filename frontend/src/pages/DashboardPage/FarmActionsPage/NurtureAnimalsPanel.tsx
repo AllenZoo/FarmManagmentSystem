@@ -57,15 +57,21 @@ const getAnimalProfile = (animalType: AnimalType) => {
  */
 const NurtureAnimalsPanel = () => {
   const [livestock, setLivestock] = useState<Livestock[] | null>(null);
-  const [livestockCount, setLivestockCount] = useState<{ type: AnimalType; count: number }[]>([]);
+  const [livestockCount, setLivestockCount] = useState<
+    { type: AnimalType; count: number }[]
+  >([]);
 
   // Filter states
   const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
   const [minTagIDFilter, setMinTagIDFilter] = useState<number>(4000);
   const [maxTagIDFilter, setMaxTagIDFilter] = useState<number>(4999);
-  const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>("all");
+  const [animalTypeFilter, setAnimalTypeFilter] = useState<AnimalType | string>(
+    "all"
+  );
   const [dietFilter, setDietFilter] = useState<CropType | string>("all");
-  const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>("all");
+  const [harvestableFilter, setHarvestableFilter] = useState<boolean | string>(
+    "all"
+  );
   const [minAgeFilter, setMinAgeFilter] = useState<number>(-1);
   const [maxAgeFilter, setMaxAgeFilter] = useState<number>(-1);
   const [minFoodSpentFilter, setMinFoodSpentFilter] = useState<number>(-1);
@@ -74,12 +80,17 @@ const NurtureAnimalsPanel = () => {
   // Add livestock states
   const [addEnabled, setAddEnabled] = useState<boolean>(false);
   const [tagIDAdd, setTagIDAdd] = useState<number>(4000);
-  const [animalTypeAdd, setAnimalTypeAdd] = useState<AnimalType>(AnimalType.COW);
+  const [animalTypeAdd, setAnimalTypeAdd] = useState<AnimalType>(
+    AnimalType.COW
+  );
   const [dietAdd, setDietAdd] = useState<CropType>(CropType.CANOLA);
   const [ageAdd, setAgeAdd] = useState<number>(1);
   const [weightAdd, setWeightAdd] = useState<number>(5);
   const [lastFedAdd, setLastFedAdd] = useState<Date>(new Date());
-  const [lastViolatedForHarvestedGoodsAdd, setLastViolatedForHarvestedGoodsAdd] = useState<Date>(new Date());
+  const [
+    lastViolatedForHarvestedGoodsAdd,
+    setLastViolatedForHarvestedGoodsAdd,
+  ] = useState<Date>(new Date());
   const [harvestableAdd, setHarvestableAdd] = useState<boolean>(false);
 
   const modalContext = useContext(ModalContext);
@@ -163,8 +174,19 @@ const NurtureAnimalsPanel = () => {
       weight: weightAdd,
       lastFed: convertDateToSQL(lastFedAdd),
       harvestable: harvestableAdd,
-      lastViolatedForHarvestedGoods: convertDateToSQL(lastViolatedForHarvestedGoodsAdd),
+      lastViolatedForHarvestedGoods: convertDateToSQL(
+        lastViolatedForHarvestedGoodsAdd
+      ),
     };
+
+    let existingTags = livestock?.map((livestock) =>
+      livestock.tagID.toString()
+    );
+
+    if (existingTags?.includes(tagIDAdd.toString())) {
+      window.alert("Livestock with TagID already exists! Please re-enter.");
+      return;
+    }
 
     try {
       await insertLivestock(newLivestock);
@@ -239,10 +261,14 @@ const NurtureAnimalsPanel = () => {
             {resourcesSpent ? (
               <div>
                 <h2>Total Food Consumed: {resourcesSpent.totalFoodConsumed}</h2>
-                <h2>Total Water Consumed: {resourcesSpent.totalWaterConsumed}</h2>
+                <h2>
+                  Total Water Consumed: {resourcesSpent.totalWaterConsumed}
+                </h2>
               </div>
             ) : (
-              <h2>This animal has been neglected...deprived of food and water :D</h2>
+              <h2>
+                This animal has been neglected...deprived of food and water :D
+              </h2>
             )}
 
             <button
@@ -271,10 +297,11 @@ const NurtureAnimalsPanel = () => {
         modalContext.setModal(
           <>
             <h1>
-              Veterinary Records For {livestock.animalType} (ID #{livestock.tagID})
+              Veterinary Records For {livestock.animalType} (ID #
+              {livestock.tagID})
             </h1>
 
-            { vetRecords ? (
+            {vetRecords ? (
               <div>
                 <h2>Record ID: #{vetRecords.recordID}</h2>
                 <h2>Health Status: {vetRecords.healthstatus}</h2>
@@ -355,7 +382,6 @@ const NurtureAnimalsPanel = () => {
         <div className={styles.ControlPanel}>
           <h2>Nurture Animals</h2>
           <div className={styles.Controls}>
-
             {/* VIEW LIVESTOCK FORM */}
             <form className={styles.ViewLivestockForm}>
               <button
@@ -652,7 +678,9 @@ const NurtureAnimalsPanel = () => {
                 </section>
 
                 <section>
-                  <label htmlFor="lastViolatedForHarvestedGoods">Last Harvested</label>
+                  <label htmlFor="lastViolatedForHarvestedGoods">
+                    Last Harvested
+                  </label>
                   <input
                     type="date"
                     name="lastViolatedForHarvestedGoods"
@@ -660,7 +688,9 @@ const NurtureAnimalsPanel = () => {
                     defaultValue={new Date().toISOString().split("T")[0]}
                     max={new Date().toISOString().split("T")[0]}
                     onChange={(e) => {
-                      setLastViolatedForHarvestedGoodsAdd(new Date(e.target.value));
+                      setLastViolatedForHarvestedGoodsAdd(
+                        new Date(e.target.value)
+                      );
                     }}
                   />
                 </section>
@@ -672,7 +702,9 @@ const NurtureAnimalsPanel = () => {
                     id="harvestable"
                     defaultValue={"true"}
                     onChange={(e) => {
-                      setHarvestableAdd(e.target.value === "true" ? true : false);
+                      setHarvestableAdd(
+                        e.target.value === "true" ? true : false
+                      );
                     }}
                   >
                     <option value="true">Yes</option>
@@ -693,7 +725,7 @@ const NurtureAnimalsPanel = () => {
                 </button>
               </form>
             )}
-            
+
             {/* LIVESTOCK SUMMARY */}
             <div className={styles.LivestockSummary}>
               <h2>Livestock Summary</h2>
@@ -733,40 +765,52 @@ const NurtureAnimalsPanel = () => {
                   <b>GENERAL</b>
                   <section>
                     <p>
-                      Type: <br /><b>{livestock.animalType}</b>
+                      Type: <br />
+                      <b>{livestock.animalType}</b>
                     </p>
                     <p>
-                      Age: <br /><b>{livestock.age} YEARS</b>
+                      Age: <br />
+                      <b>{livestock.age} YEARS</b>
                     </p>
                     <p>
-                      Weight: <br /><b>{livestock.weight} KG</b>
+                      Weight: <br />
+                      <b>{livestock.weight} KG</b>
                     </p>
                   </section>
 
                   <b>FEEDING</b>
                   <section>
                     <p>
-                      Diet: <br /><b>{livestock.diet}</b>
+                      Diet: <br />
+                      <b>{livestock.diet}</b>
                     </p>
                     <p>
-                      Last Fed: <br /><b>{livestock.lastFed}</b>
+                      Last Fed: <br />
+                      <b>{livestock.lastFed}</b>
                     </p>
                     <p>
-                      Food Spent: <br /><b>{livestock.foodSpent ? livestock.foodSpent : "None"}</b>
+                      Food Spent: <br />
+                      <b>
+                        {livestock.foodSpent ? livestock.foodSpent : "None"}
+                      </b>
                     </p>
                     <p>
-                      Water Spent: <br /><b>{livestock.waterSpent ? livestock.waterSpent : "None"}</b>
+                      Water Spent: <br />
+                      <b>
+                        {livestock.waterSpent ? livestock.waterSpent : "None"}
+                      </b>
                     </p>
                   </section>
 
                   <b>HARVEST</b>
                   <section>
                     <p>
-                      Harvestable: <br /><b>{livestock.harvestable ? "YES" : "NO"}</b>
+                      Harvestable: <br />
+                      <b>{livestock.harvestable ? "YES" : "NO"}</b>
                     </p>
                     <p>
-                      Last Violated For Harvested Goods:{" "}
-                      <br /><b>{livestock.lastViolatedForHarvestedGoods || "N/A"}</b>
+                      Last Violated For Harvested Goods: <br />
+                      <b>{livestock.lastViolatedForHarvestedGoods || "N/A"}</b>
                     </p>
                   </section>
                 </div>
