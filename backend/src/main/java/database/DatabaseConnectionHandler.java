@@ -542,7 +542,7 @@ public class DatabaseConnectionHandler {
 
 	// AGGREGATION GROUP BY WITH HAVING
 	// Find all the animals (of an animal type) that have been fed well with water and food.
-	// (most plump animals?)
+	// (most plump animals?) :D
 	public ArrayList<JSONObject> findWateredAndFed(AnimalType animalType, int water, int food) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
