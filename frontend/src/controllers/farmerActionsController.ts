@@ -78,7 +78,7 @@ export const insertLivestock = async (livestock: Livestock) => {
   });
 
   if (res.data) return res.data;
-  else throw new Error(`Failed to insert a ${livestock.animalType}!`);
+  else throw new Error(`Failed to insert a ${livestock.animalType} with tag ID #${livestock.tagID}!`);
 };
 
 /**
@@ -93,7 +93,7 @@ export const deleteLivestock = async (livestock: Livestock) => {
 	});
 
 	if (res.data) return res.data;
-  else throw new Error(`Failed to delete livestock with tagID #${livestock.tagID}!`);
+  else throw new Error(`Failed to delete livestock with tag ID #${livestock.tagID}!`);
 };
 
 /**
@@ -109,10 +109,7 @@ export const updateLivestock = async (livestock: Livestock, action: ActionTypes)
   });
 
   if (res.data) return res.data;
-  else
-    throw new Error(
-      `Failed to delete livestock with tagID #${livestock.tagID}!`
-    );
+  else throw new Error(`Failed to delete livestock with tag ID #${livestock.tagID}!`);
 };
 
 /**
@@ -126,10 +123,7 @@ export const getResourcesSpent = async (livestock: Livestock) => {
 	});
 
   if (res.data) return res.data[0];
-  else
-    throw new Error(
-      `Failed to retrieve resources spent on livestock with tagID #${livestock.tagID}!`
-    );
+  else throw new Error(`Failed to retrieve resources spent on livestock with tag ID #${livestock.tagID}!`);
 };
 
 /**
@@ -143,10 +137,7 @@ export const getVetRecords = async (livestock: Livestock) => {
 	});
 
   if (res.data) return res.data[0];
-  else
-    throw new Error(
-      `Failed to retrieve vet records of livestock with tagID #${livestock.tagID}!`
-    );
+  else throw new Error(`Failed to retrieve vet records of livestock with tag ID #${livestock.tagID}!`);
 };
 
 /**

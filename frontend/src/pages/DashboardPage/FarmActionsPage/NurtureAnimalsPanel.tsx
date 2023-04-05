@@ -179,20 +179,11 @@ const NurtureAnimalsPanel = () => {
       ),
     };
 
-    let existingTags = livestock?.map((livestock) =>
-      livestock.tagID.toString()
-    );
-
-    if (existingTags?.includes(tagIDAdd.toString())) {
-      window.alert("Livestock with TagID already exists! Please re-enter.");
-      return;
-    }
-
     try {
       await insertLivestock(newLivestock);
-      window.alert("Livestock added successfully");
-    } catch (err) {
-      window.alert("Failed to add livestock");
+      window.alert(`Livestock #${newLivestock.tagID} successfully added to database!`);
+    } catch (err: any) {
+      window.alert(`Failed to add Livestock #${newLivestock.tagID} to database!`);
     }
   };
 
@@ -203,8 +194,9 @@ const NurtureAnimalsPanel = () => {
     try {
       updateLivestock(livestock, ActionTypes.FEED);
       syncData();
+      window.alert(`Successfully fed livestock! \n ${livestock.animalType} #${livestock.tagID} says: "Mmm! That was delicious!"`);
     } catch (err) {
-      console.error(err);
+      window.alert(`Failed to feed livestock! \n ${livestock.animalType} #${livestock.tagID} says: "Welp! Guess I'll just starve."`);
     }
   };
 
@@ -216,8 +208,9 @@ const NurtureAnimalsPanel = () => {
       console.log(livestock);
       updateLivestock(livestock, ActionTypes.HARVEST);
       syncData();
+      window.alert(`Successfully harvested livestock! \n ${livestock.animalType} #${livestock.tagID} says: "AAAAAAAAAAAAHHHHHHHHHHH!!!"`);
     } catch (err) {
-      console.error(err);
+      window.alert(`Failed to harvest livestock! \n ${livestock.animalType} #${livestock.tagID} says: "Thank the heavens!"`);
     }
   };
 
@@ -344,7 +337,13 @@ const NurtureAnimalsPanel = () => {
             className={styles.Button}
             type="button"
             onClick={() => {
-              deleteLivestock(livestock);
+              try {
+                deleteLivestock(livestock);
+                window.alert(`Successfully terminated livestock #${livestock.tagID}!`);
+              } catch(err: any) {
+                window.alert(`Could not terminate livestock #${livestock.tagID}!`);
+              };
+
               modalContext.clearModal();
               syncData();
             }}
@@ -359,7 +358,7 @@ const NurtureAnimalsPanel = () => {
               modalContext.clearModal();
             }}
           >
-            No
+            Not Now!
           </button>
         </>
       );
