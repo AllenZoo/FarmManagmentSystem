@@ -1,10 +1,12 @@
 import { useState } from "react";
-import styles from "./ViewCompanyInfoPanel.module.scss";
-import axios from "axios";
+
 import {
   getFarmers,
   getGOATFarmers,
 } from "@controllers/companyInfoControllers";
+
+import styles from "./ViewCompanyInfoPanel.module.scss";
+
 
 /* -------------------------------------------------------------------------- */
 /*                                  COMPONENT                                 */
@@ -16,96 +18,61 @@ const ViewCompanyInfoPanel = () => {
   const [farmers, setFarmers] = useState<any[]>([]);
   const [goatFarmers, setGOATFarmers] = useState<any[]>([]);
 
-  async function getFeedingFarmers() {
-    let farmers = await getFarmers(1);
-    setFarmers(farmers);
-    // console.log(farmers);
-  }
+  const [viewFarmers, setViewFarmers] = useState<boolean>(false);
+  const [viewGOATFarmers, setViewGOATFarmers] = useState<boolean>(false);
 
-  async function getTendingFarmers() {
-    let farmers = await getFarmers(2);
-    setFarmers(farmers);
-    // console.log(farmers);
-  }
-
-  async function fetchGOATFarmers() {
-    let farmers = await getGOATFarmers();
-    setGOATFarmers(farmers);
-  }
-
-  // Create table of farmers
-  const createFarmersTable = () => {
-    let table = [];
-    let header = [];
-    let body = [];
-
-    // Create header
-    header.push(<th key="farmer_id">Farmer ID</th>);
-    header.push(<th key="farmer_name">Full Name</th>);
-    header.push(<th key="farmer_yoe">Years of Employment</th>);
-
-    // Create body
-    for (let i = 0; i < farmers.length; i++) {
-      let row = [];
-      row.push(<td key={farmers[i].farmerID}>{farmers[i].farmerID}</td>);
-      row.push(
-        <td key={farmers[i].farmerID + farmers[i].fullName}>
-          {farmers[i].fullName}
-        </td>
-      );
-      row.push(
-        <td key={farmers[i].farmerID + farmers[i].yearsOfEmployment}>
-          {farmers[i].yearsOfEmployment}
-        </td>
-      );
-
-      body.push(<tr key={farmers[i].farmerID}>{row}</tr>);
+  /**
+   * Gets the farmers info
+   * @param type 1 = livestock, 2 = fields, 3 = GOAT farmers
+   */
+  const getFarmersInfo = async (type: number) => {
+    if (type !== 3) {
+      const farmers = await getFarmers(type);
+      setFarmers(farmers);
+      setViewFarmers(true);
+      setViewGOATFarmers(false);
+    } else {
+      const farmers = await getGOATFarmers();
+      setGOATFarmers(farmers);
+      setViewFarmers(false);
+      setViewGOATFarmers(true);
     }
+  }
 
-    table.push(<thead key="thead">{header}</thead>);
-    table.push(<tbody key="tbody">{body}</tbody>);
-    return table;
-  };
+  /**
+   * Creates a table of farmers
+   * @param isGoated if the table is for GOAT farmers
+   */
+  const createFarmersTable = (isGoated?: boolean) => {
+    const farmersData = isGoated ? goatFarmers : farmers;
 
-  const createGoatEmployeesTable = () => {
-    let table = [];
-    let header = [];
-    let body = [];
+    return (
+      <table className={styles.Table}>
+        <thead>
+          <th key="farmer_id">Farmer ID</th>
+          <th key="farmer_name">Full Name</th>
+          <th key="farmer_yoe">Years of Employment</th>
+          {isGoated && <th key="farmer_count">Nurture Count </th>}
+        </thead>
 
-    // Create header
-    header.push(<th key="farmer_id">Farmer ID</th>);
-    header.push(<th key="farmer_name">Full Name</th>);
-    header.push(<th key="farmer_yoe">Years of Employment</th>);
-    header.push(<th key="farmer_count">Nurture Count </th>);
-
-    // Create body
-    for (let i = 0; i < goatFarmers.length; i++) {
-      let row = [];
-      row.push(
-        <td key={goatFarmers[i].farmerID}>{goatFarmers[i].farmerID}</td>
-      );
-      row.push(
-        <td key={goatFarmers[i].farmerID + goatFarmers[i].fullName}>
-          {goatFarmers[i].fullName}
-        </td>
-      );
-      row.push(
-        <td key={goatFarmers[i].farmerID + goatFarmers[i].yearsOfEmployment}>
-          {goatFarmers[i].yearsOfEmployment}
-        </td>
-      );
-      row.push(
-        <td key={goatFarmers[i].farmerID + goatFarmers[i].maxNurtureCount}>
-          {goatFarmers[i].maxNurtureCount}
-        </td>
-      );
-
-      body.push(<tr key={goatFarmers[i].farmerID}>{row}</tr>);
-    }
-
-    table.push(<thead key="thead">{header}</thead>);
-    table.push(<tbody key="tbody">{body}</tbody>);
-    return table;
+        <tbody>
+          {farmersData.map((farmer) => (
+            <tr key={farmer.farmerID}>
+              <td key={farmer.farmerID}>{farmer.farmerID}</td>
+              <td key={farmer.farmerID + farmer.fullName}>{farmer.fullName}</td>
+              <td key={farmer.farmerID + farmer.yearsOfEmployment}>
+                {farmer.yearsOfEmployment}
+              </td>
+              { isGoated && (
+                <td key={farmer.farmerID + farmer.maxNurtureCount}>
+                  {farmer.maxNurtureCount}
+                </td>
+              )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
   };
 
   return (
@@ -115,27 +82,32 @@ const ViewCompanyInfoPanel = () => {
           <h1>View Company Info</h1>
 
           <div className={styles.Controls}>
-            <button className={styles.Button} onClick={getFeedingFarmers}>
+            <button
+              className={styles.Button}
+              onClick={() => getFarmersInfo(1)}
+            >
               View Farmers Who Have Fed ALL Livestock
             </button>
-            <button className={styles.Button} onClick={getTendingFarmers}>
+
+            <button
+              className={styles.Button}
+              onClick={() => getFarmersInfo(2)}
+            >
               View Farmers Who Have Tended ALL Fields
             </button>
-
-            <div>
-              <h2> The GOAT Employee! (or employees :D)</h2>
-              <button className={styles.Button} onClick={fetchGOATFarmers}>
-                Get the GOAT FARMERS!
-              </button>
-              <table className={styles.Table}>
-                {createGoatEmployeesTable()}
-              </table>
-            </div>
+            
+            <button
+              className={styles.Button}
+              onClick={() => getFarmersInfo(3)}
+            >
+              View The GOATED! Farmers' Leaderboard
+            </button>
           </div>
         </div>
 
         <div className={styles.DisplayPanel}>
-          <table className={styles.Table}>{createFarmersTable()}</table>
+          {viewFarmers && createFarmersTable()}
+          {viewGOATFarmers && createFarmersTable(true)}
         </div>
       </main>
     </div>

@@ -62,6 +62,7 @@ const ViewInventoryPanel = () => {
     );
 
     setSelectedColumns(value);
+    setData([]);
   };
 
   const getTables = async () => {
@@ -75,19 +76,24 @@ const ViewInventoryPanel = () => {
   };
 
   const createTable = () => {
-    let table = [];
-
-    // Outer loop to create parent
-    for (let i = 0; i < data.length; i++) {
-      let children = [];
-      //Inner loop to create children
-      for (let j = 0; j < selectedColumns.length; j++) {
-        children.push(<td>{data[i][selectedColumns[j]]}</td>);
-      }
-      //Create the parent and add the children
-      table.push(<tr>{children}</tr>);
-    }
-    return table;
+    return (
+      <table className={styles.Table}>
+        <thead>
+          <tr>
+            { selectedColumns.map((column) => <th>{column}</th>) }
+          </tr>
+        </thead>
+        <tbody>
+          { data.map((row: any) => {
+            return (
+              <tr>
+                { selectedColumns.map((column) => <td>{row[column]}</td>) }
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    );
   };
 
   const selectOptions = useMemo(() => {
@@ -123,22 +129,13 @@ const ViewInventoryPanel = () => {
               {selectOptions}
             </select>
             <button className={styles.Button} onClick={getData}>
-              View
+              View Selected
             </button>
           </div>
         </div>
 
         <div className={styles.DisplayPanel}>
-          <table className={styles.Table}>
-            <thead>
-              <tr>
-                {selectedColumns.map((column) => (
-                  <th>{column}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>{createTable()}</tbody>
-          </table>
+          { createTable() }
         </div>
       </main>
     </div>
