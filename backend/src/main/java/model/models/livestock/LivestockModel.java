@@ -80,15 +80,29 @@ public class  LivestockModel {
     }
 
     public static LivestockModel fromJSON(JSONObject json) {
+        Date lastFed;
+        try {
+          lastFed = Date.valueOf(json.getString("lastFed"));
+        } catch (Exception e) {
+          lastFed = null;
+        }
+
+        Date lastViolatedForHarvestedGoods;
+        try {
+          lastViolatedForHarvestedGoods = Date.valueOf(json.getString("lastViolatedForHarvestedGoods"));
+        } catch (Exception e) {
+          lastViolatedForHarvestedGoods = null;
+        }
+
         return new LivestockModel(
                 json.getInt("tagID"),
                 AnimalType.valueOf(json.getString("animalType").toUpperCase()),
                 json.getInt("age"),
                 CropType.valueOf(json.getString("diet").toUpperCase()),
                 json.getDouble("weight"),
-                Date.valueOf(json.getString("lastFed")),
+                lastFed,
                 json.getBoolean("harvestable"),
-                Date.valueOf(json.getString("lastViolatedForHarvestedGoods"))
+                lastViolatedForHarvestedGoods
         );
     }
 }

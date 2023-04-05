@@ -87,10 +87,7 @@ const NurtureAnimalsPanel = () => {
   const [ageAdd, setAgeAdd] = useState<number>(1);
   const [weightAdd, setWeightAdd] = useState<number>(5);
   const [lastFedAdd, setLastFedAdd] = useState<Date>(new Date());
-  const [
-    lastViolatedForHarvestedGoodsAdd,
-    setLastViolatedForHarvestedGoodsAdd,
-  ] = useState<Date>(new Date());
+  const [lastViolatedForHarvestedGoodsAdd, setLastViolatedForHarvestedGoodsAdd] = useState<Date>(new Date());
   const [harvestableAdd, setHarvestableAdd] = useState<boolean>(false);
 
   const modalContext = useContext(ModalContext);
@@ -205,7 +202,6 @@ const NurtureAnimalsPanel = () => {
    */
   const harvestLivestock = async (livestock: Livestock) => {
     try {
-      console.log(livestock);
       updateLivestock(livestock, ActionTypes.HARVEST);
       syncData();
       window.alert(`Successfully harvested livestock! \n ${livestock.animalType} #${livestock.tagID} says: "AAAAAAAAAAAAHHHHHHHHHHH!!!"`);
@@ -233,7 +229,6 @@ const NurtureAnimalsPanel = () => {
           });
         });
       });
-      console.log(livestockCount);
     } catch (err) {
       console.error(err);
     }
@@ -785,9 +780,9 @@ const NurtureAnimalsPanel = () => {
                     </p>
                     <p>
                       Last Fed: <br />
-                      <b>{livestock.lastFed}</b>
+                      <b>{livestock.lastFed || "N/A"}</b>
                     </p>
-                    <p>
+                    {/* <p>
                       Food Spent: <br />
                       <b>
                         {livestock.foodSpent ? livestock.foodSpent : "None"}
@@ -798,7 +793,7 @@ const NurtureAnimalsPanel = () => {
                       <b>
                         {livestock.waterSpent ? livestock.waterSpent : "None"}
                       </b>
-                    </p>
+                    </p> */}
                   </section>
 
                   <b>HARVEST</b>

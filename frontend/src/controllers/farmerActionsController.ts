@@ -26,8 +26,6 @@ export const retrieveCrops = async () => {
  * Retrieves the filtered crops
  */
 export const retrieveFilteredCrops = async (filteredData: FilteredCrop) => {
-  // console.log(filteredData);
-
 	const res = await axios.post(`${CROP_PATH}/filteredValues`, filteredData, {
 		headers: {
 			"Content-Type": "application/json",
@@ -101,7 +99,6 @@ export const deleteLivestock = async (livestock: Livestock) => {
  */
 export const updateLivestock = async (livestock: Livestock, action: ActionTypes) => {
   const livestockJson = JSON.stringify(livestock);
-  console.log(livestockJson);
   const res = await axios.post(`${LIVESTOCK_PATH}/update`, {actionType: action, livestock: livestockJson}, {
     headers: {
       "Content-Type": "application/json",
