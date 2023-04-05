@@ -290,23 +290,6 @@ public class DatabaseConnectionHandler {
           return false;
       }
 
-      // String query = "UPDATE Livestock_4 SET tagID = ?," +
-      //     "animalType = ?," +
-      //     "age = ?," +
-      //     "weight = ?," +
-      //     "lastFed = ?," +
-      //     "lastViolatedForHarvestedGoods = ?," +
-      //     "WHERE tagID = ?";
-      // PrintablePreparedStatement ps = new PrintablePreparedStatement(connection.prepareStatement(query), query, false);
-      // ps.setInt(1, model.getTagID());
-      // ps.setString(2, model.getAnimalType().toString().toLowerCase());
-      // ps.setInt(3, model.getAge());
-      // ps.setDouble(4, model.getWeight());
-      // ps.setDate(5, model.getLastFed());
-      // ps.setDate(6, model.getLastViolatedForHarvestedGoods());
-      // ps.setInt(7, model.getTagID());
-      // ps.executeUpdate();
-
 			connection.commit();
 			ps.close();
 		} catch (SQLException e) {
@@ -390,9 +373,7 @@ public class DatabaseConnectionHandler {
 		return livestock;
 	}
 
-	// SELECTION Query
 	// Finds the animals that are ready to sell with user specified weight
-	// TODO: Figure out what needs to be passed into this function for weight
 	public ArrayList<JSONObject> findAnimalToSell(Livestock_4_Model model) {
 		ArrayList<JSONObject> livestock = new ArrayList<JSONObject>();
 		try {
